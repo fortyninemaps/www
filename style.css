@@ -4,7 +4,7 @@ body {
 }
 
 .display {
-  width: 450px;
+  width: 95%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10%;
@@ -12,10 +12,15 @@ body {
 }
 
 .copy {
-  width: 40%;
-  max-width: 30em;
+  width: 95%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.slogan {
+  font-style: italic;
+  color: dimgrey;
+  margin-bottom: 3em;
 }
 
 @font-face{
@@ -25,3 +30,14 @@ body {
   src:local('Raleway Regular'),url(http://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff');
 }
 
+@media screen and (min-width: 600px) {
+  .display {
+    width: 450px;
+  }
+
+  .copy {
+    width: 40%;
+    min-width: 500px;
+    max-width: 30em;
+  }
+}
