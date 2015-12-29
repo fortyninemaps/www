@@ -1,14 +1,15 @@
 body {
   font-family: 'Raleway', sans-serif;
   font-size: 14pt;
+  margin: 0;
 }
 
 .display {
-  width: 95%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 10%;
-  padding-bottom: 2em;
+  margin-top: 0%;
+  padding-bottom: 1em;
 }
 
 .copy {
@@ -20,7 +21,8 @@ body {
 .slogan {
   font-style: italic;
   color: dimgrey;
-  margin-bottom: 3em;
+  margin-bottom: 1em;
+  font-size: 16pt;
 }
 
 @font-face{
@@ -31,13 +33,21 @@ body {
 }
 
 @media screen and (min-width: 600px) {
+  body {
+    font-size: 18pt;
+  }
+
   .display {
-    width: 450px;
+    width: 100%;
+  }
+
+  .slogan {
+    font-size: 24pt;
   }
 
   .copy {
     width: 40%;
     min-width: 500px;
-    max-width: 30em;
+    max-width: 800px;
   }
 }
