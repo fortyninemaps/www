@@ -1,3 +1,43 @@
+@font-face{
+  font-family:'Lato';
+  font-style:normal;
+  font-weight:200;
+  src:local('Lato Thin'),
+    url(http://brick.a.ssl.fastly.net/fonts/lato/200.woff) format('woff')
+}
+
+@font-face{
+  font-family:'Raleway';
+  font-style:normal;
+  font-weight:400;
+  src:local('Raleway Regular'),
+    url(http://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
+}
+
+@font-face{
+  font-family:'Raleway Bold';
+  font-style:normal;
+  font-weight:700;
+  src:local('Raleway Regular'),
+    url(http://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
+}
+
+#FORTYNINE {
+  font-family: 'Lato';
+}
+
+#MAPS {
+  font-family: 'Raleway Bold';
+  font-weight: 700;
+}
+
+#topname {
+  font-size: 50pt;
+  color: rgba(255,255,255,0.7);
+  padding-left: 0.2em;
+  padding-top: 0.5em;
+}
+
 body {
   font-family: 'Raleway', sans-serif;
   font-size: 14pt;
@@ -6,16 +46,23 @@ body {
 
 .display {
   width: 100%;
+  height: 480px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 0%;
   padding-bottom: 1em;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%,  rgba(10, 25, 40, 1)),
+    url(logo/banner.svg);
+  background-size: cover;
+  background-position: center;
+
 }
 
 .copy {
   width: 95%;
   margin-left: auto;
   margin-right: auto;
+  
 }
 
 .slogan {
@@ -33,6 +80,14 @@ body {
 }
 
 @media screen and (min-width: 600px) {
+  
+  
+  #topname {
+    font-size: 120pt;
+    text-align: center;
+    padding-left: 0.0em;
+  }
+  
   body {
     font-size: 18pt;
   }
@@ -50,4 +105,15 @@ body {
     min-width: 500px;
     max-width: 800px;
   }
+}
+
+@media screen and (min-width: 1200px) {
+  
+  #topname {
+    font-size: 240pt;
+    text-align: center;
+    padding-left: 0.0em;
+    padding-top: 0.1em;
+  }
+  
 }
