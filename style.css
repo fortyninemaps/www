@@ -41,7 +41,9 @@
 body {
   font-family: 'Raleway', sans-serif;
   font-size: 14pt;
+  color: rgba(180, 180, 180, 1);
   margin: 0;
+  background-color: rgba(10,25,40,1);
 }
 
 .display {
@@ -66,7 +68,7 @@ body {
 
 .slogan {
   font-style: italic;
-  color: dimgrey;
+  color: rgba(220, 220, 220, 1);
   margin-bottom: 1em;
   font-size: 16pt;
 }
