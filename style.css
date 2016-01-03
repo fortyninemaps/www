@@ -73,16 +73,32 @@ body {
   font-size: 16pt;
 }
 
-@font-face{
-  font-family:'Raleway';
-  font-style:normal;
-  font-weight:400;
-  src:local('Raleway Regular'),url(http://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff');
+.copy {
+  padding-bottom: 2em;
+}
+
+.footer {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 12pt;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+a {
+  color: rgba(180, 180, 180, 1);
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+a:hover {
+  color: rgba(240, 240, 240, 1);
+  text-decoration: underline;
+  transition: 0.1s;
 }
 
 @media screen and (min-width: 600px) {
-  
-  
+
   #topname {
     font-size: 110pt;
     text-align: center;
@@ -91,7 +107,7 @@ body {
   }
   
   body {
-    font-size: 18pt;
+    font-size: 16pt;
   }
 
   .display {
@@ -115,7 +131,7 @@ body {
   }
 
   .slogan {
-    font-size: 24pt;
+    font-size: 20pt;
   }
 }
 
