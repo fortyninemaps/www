@@ -12,8 +12,10 @@
 
 
   <div class="display">
-    <div id="topname"><span id="FORTYNINE">49</span><span id="MAPS">MAPS</span></div>
-    <p class="slogan">Scalable geospatial analytics, visualization, and cartography</p>
+    <div class="bannerText">
+      <div id="topname"><span id="FORTYNINE">49</span><span id="MAPS">MAPS</span></div>
+      <p class="slogan">Scalable geospatial analytics, visualization, and cartography</p>
+    </div>
   </div>
 
   <div class="container">
@@ -56,26 +58,50 @@
   </div>
 
   <script>
+
     var yscroll = 0,
         ticking = false;
 
     function setBannerStyle(yscroll) {
       var height = window.innerHeight,
-          opacity = Math.max(0.0, 1.0-yscroll/(0.3*height));
-      document.getElementById("topname").style["opacity"] = opacity;
+          opacity,
+          bannerElements = document.getElementsByClassName("bannerText");
+
+      if (yscroll > 0.4*height) {
+        opacity = 0.0;
+      } else if (yscroll > 0.1*height) {
+        opacity = 0.6;
+      } else {
+        opacity = 1.0;
+      }
+
+      for (var i=0; i!=bannerElements.length; i++) {
+        bannerElements[i].style["opacity"] = opacity;
+      }
     }
+
+    setBannerStyle(0);
 
     window.addEventListener('scroll', function(event) {
       yscroll = window.scrollY;
-      if (!ticking) {
+      setBannerStyle(yscroll);  /* unthrottled */
+      /*if (!ticking) {
         window.requestAnimationFrame( function() {
           setBannerStyle(yscroll);
           ticking = true;
         });
       }
-      ticking = false;
+      ticking = false;*/
     });
   </script>
+
+  <noscript>
+    <style>
+      .bannerText {
+        opacity: 1.0;
+      }
+    </style>
+  </noscript>
 
 </body>
 </html>
