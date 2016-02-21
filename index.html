@@ -13,38 +13,28 @@
 
   <div class="display">
     <div id="topname"><span id="FORTYNINE">49</span><span id="MAPS">MAPS</span></div>
+    <p class="slogan">Scalable geospatial analytics, visualization, and cartography</p>
   </div>
 
   <div class="container">
     <div class="copy">
-      <p class="slogan">Scalable geospatial analytics, visualization, and cartography</p>
       <p>We're still setting things up.</p>
       <p>Follow <a href="https://twitter.com/fortyninemaps">@49maps</a> on Twitter. We'll let you know when we're ready.</p>
 
       <h3>Services</h3>
       <ul>
         <li>Geospatial and scientific data analysis</li>
-        <li>Satellite image and aerial photo registration and orthorectification</li>
-        <li>Interactive and display map-making</li>
-        <li>Code development</li>
+        <li>Aerial and satellite image registration and orthorectification</li>
+        <li>Interactive and static cartography</li>
+        <li>Code and processing pipeline development</li>
       </ul>
-
-      <!--<h3>Experience</h3>
-      <ul>
-        <li>Ground-penetrating radar data<br>
-          <em>Simon Fraser University, Burnaby, BC</em></li>
-        <li>Ground-penetrating radar data<br>
-          <em>Carleton University, Ottawa, ON</em></li>
-        <li>Hydrographic datasets<br>
-          <em>Woods Hole Oceanographic Institute, Woods Hole, MA</em></li>
-      </ul>-->
-    </div>
+    </div> <!-- /copy -->
 
     <div class="social">
       <p><a href="https://twitter.com/fortyninemaps" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @fortyninemaps</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
     </div>
-  </div>
+  </div> <!-- /container -->
 
   <div style="clear: both;"></div>
 
@@ -64,6 +54,28 @@
       <div style="clear: both;"></div>
     </div>
   </div>
+
+  <script>
+    var yscroll = 0,
+        ticking = false;
+
+    function setBannerStyle(yscroll) {
+      var height = window.innerHeight,
+          opacity = Math.max(0.0, 1.0-yscroll/(0.3*height));
+      document.getElementById("topname").style["opacity"] = opacity;
+    }
+
+    window.addEventListener('scroll', function(event) {
+      yscroll = window.scrollY;
+      if (!ticking) {
+        window.requestAnimationFrame( function() {
+          setBannerStyle(yscroll);
+          ticking = true;
+        });
+      }
+      ticking = false;
+    });
+  </script>
 
 </body>
 </html>
