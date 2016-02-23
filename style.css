@@ -32,10 +32,10 @@
 }
 
 #topname {
-  font-size: 50pt;
-  padding-left: 0.2em;
+  font-size: 48pt;
   padding-top: 0.5em;
   margin-bottom: -0.2em;
+  text-align: center;
 }
 
 .bannerText {
@@ -51,23 +51,22 @@
   font-style: italic;
   margin-bottom: 1em;
   font-size: 16pt;
-  text-align: left;
+  text-align: center;
   padding-left: 0.2em;
 }
 
 body {
   font-family: 'Raleway', sans-serif;
-  font-size: 14pt;
+  font-size: 16pt;
   color: rgba(180, 180, 180, 1);
   margin: 0;
   background-color: rgba(10,25,40,1);
 }
 
 h3 {
-  font-style: italic;
   color: rgba(220, 220, 220, 1);
   margin-bottom: 1em;
-  font-size: 16pt;
+  font-size: 22pt;
 }
 
 .display {
@@ -97,7 +96,7 @@ h3 {
 .footer {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  font-size: 12pt;
+  font-size: 16pt;
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -114,7 +113,19 @@ a:hover {
   transition: 0.1s;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 550px) {
+  
+  #topname {
+    font-size: 96pt;
+    padding-top: 0.2em;
+  }
+  
+  .slogan {
+    font-size: 18pt;
+  }
+}
+
+@media screen and (min-width: 800px) {
 
   #topname {
     font-size: 110pt;
