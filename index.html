@@ -14,21 +14,21 @@
   <div class="display">
     <div class="bannerText">
       <div id="topname"><span id="FORTYNINE">49</span><span id="MAPS">MAPS</span></div>
-      <p class="slogan">Scalable geospatial analytics, visualization, and cartography</p>
+      <p class="slogan">Custom geospatial analytics, visualization, and cartography</p>
     </div>
   </div>
 
   <div class="container">
     <div class="copy">
-      <p>We're still setting things up.</p>
       <p>Follow <a href="https://twitter.com/fortyninemaps">@49maps</a> on Twitter. We'll let you know when we're ready.</p>
 
       <h3>Services</h3>
       <ul>
         <li>Geospatial and scientific data analysis</li>
         <li>Aerial and satellite image registration and orthorectification</li>
-        <li>Interactive and static cartography</li>
-        <li>Code and processing pipeline development</li>
+        <li>Custom satellite image monitoring</li>
+        <li>Interactive and display cartography</li>
+        <li>Data pipeline development</li>
       </ul>
     </div> <!-- /copy -->
 
@@ -47,6 +47,7 @@
         <!--<p>Monday &mdash; Friday<br>
           9 AM &mdash; 4 PM</p>-->
         <!--<p><a href="mailto:contact@fortyninemaps.com">contact@fortyninemaps.com</a></p>-->
+        <p>&nbsp;</p>
         <p>Based in Vancouver, BC</p>
       </div>
       <div style="float: right; width: 50%; text-align: right;">
@@ -58,9 +59,6 @@
   </div>
 
   <script>
-
-    var yscroll = 0,
-        ticking = false;
 
     function setBannerStyle(yscroll) {
       var height = window.innerHeight,
@@ -82,16 +80,18 @@
 
     setBannerStyle(0);
 
+    var yscroll = 0,
+        ticking = false;
+
     window.addEventListener('scroll', function(event) {
       yscroll = window.scrollY;
-      setBannerStyle(yscroll);  /* unthrottled */
-      /*if (!ticking) {
+      if (!ticking) {
         window.requestAnimationFrame( function() {
           setBannerStyle(yscroll);
           ticking = true;
         });
       }
-      ticking = false;*/
+      ticking = false;
     });
   </script>
 
