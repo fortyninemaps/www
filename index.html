@@ -63,7 +63,8 @@
     function setBannerStyle(yscroll) {
       var height = window.innerHeight,
           opacity,
-          bannerElements = document.getElementsByClassName("bannerText");
+          bannerElements = document.getElementsByClassName("bannerText"),
+          displayElement = document.getElementsByClassName("display")[0];
 
       if (yscroll > 0.4*height) {
         opacity = 0.0;
@@ -73,19 +74,21 @@
         opacity = 1.0;
       }
 
+      displayElement.style["padding-top"] = String(Math.max(0, 200-5*yscroll))+"px";
+
       for (var i=0; i!=bannerElements.length; i++) {
         bannerElements[i].style["opacity"] = opacity;
       }
     }
 
-    setBannerStyle(0);
-
     var yscroll = 0,
         ticking = false;
 
+    setBannerStyle(yscroll);    // initialize
+
     window.addEventListener('scroll', function(event) {
-      yscroll = window.scrollY;
       if (!ticking) {
+        yscroll = window.scrollY;
         window.requestAnimationFrame( function() {
           setBannerStyle(yscroll);
           ticking = true;
