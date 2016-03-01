@@ -40,7 +40,7 @@
 }
 
 #topname {
-  font-size: 48pt;
+  font-size: 60pt;
   padding-top: 0.5em;
   margin-bottom: -0.2em;
   text-align: center;
@@ -68,7 +68,7 @@
 
 body {
   font-family: 'Lato', sans-serif;
-  font-size: 16pt;
+  font-size: 18pt;
   color: rgba(220, 220, 220, 1);
   margin: 0;
   background-color: rgba(10,25,40,1);
@@ -82,19 +82,16 @@ h3 {
 
 .display {
   width: 100%;
-  height: 240px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 0%;
-  padding-bottom: 1em;
+  padding-top: 4em;
+  padding-bottom: 4em;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%,  rgba(10, 25, 40, 1)),
     url(logo/banner-sat.jpg);
-  background-size: cover;
+  background-size: 150%;
   background-position: center;
-  padding-top: 200px;
-  transition-duration: 0.5s;
-  -moz-transition-duration: 0.5s;
-  -webkit-transition-duration: 0.5s;
+  background-attachment: fixed;
 }
 
 .container {
@@ -127,7 +124,7 @@ a:hover {
   transition: 0.1s;
 }
 
-@media screen and (min-width: 550px) {
+@media screen and (min-width: 769px) {
 
   #topname {
     font-size: 96pt;

@@ -79,7 +79,8 @@
         opacity = 1.0;
       }
 
-      displayElement.style["padding-top"] = String(Math.max(0, 200-5*yscroll))+"px";
+      displayElement.style["background-size"] = String(Math.max(100, 150-0.1*yscroll))+"%";
+      displayElement.style["background-position"] = "center "+String(-0.3*yscroll)+"px";
 
       for (var i=0; i!=bannerElements.length; i++) {
         bannerElements[i].style["opacity"] = opacity;
