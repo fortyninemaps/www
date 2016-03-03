@@ -13,7 +13,9 @@
 
   <div class="display">
     <div class="bannerText">
-      <div id="topname"><span id="FORTYNINE">49</span><span id="MAPS">MAPS</span></div>
+      <div id="topname">
+        <span id="FORTYNINE">49</span><span id="MAPS">MAPS</span>
+      </div>
       <p class="slogan">Custom geospatial data acquisition, analytics, and visualization</p>
     </div>
   </div>
@@ -71,36 +73,25 @@
           bannerElements = document.getElementsByClassName("bannerText"),
           displayElement = document.getElementsByClassName("display")[0];
 
-      if (yscroll > 0.4*height) {
+      if (yscroll > 0.5*height) {
         opacity = 0.0;
       } else if (yscroll > 0.1*height) {
-        opacity = 0.6;
+        opacity = 0.8;
       } else {
         opacity = 1.0;
       }
 
-      displayElement.style["background-size"] = String(Math.max(100, 150-0.1*yscroll))+"%";
-      displayElement.style["background-position"] = "center "+String(-0.3*yscroll)+"px";
+      displayElement.style["background-position"] = "center "+String(-0.5*yscroll)+"px";
 
       for (var i=0; i!=bannerElements.length; i++) {
         bannerElements[i].style["opacity"] = opacity;
       }
     }
 
-    var yscroll = 0,
-        ticking = false;
-
-    setBannerStyle(yscroll);    // initialize
+    setBannerStyle(window.scrollY);    // initialize
 
     window.addEventListener('scroll', function(event) {
-      if (!ticking) {
-        yscroll = window.scrollY;
-        window.requestAnimationFrame( function() {
-          setBannerStyle(yscroll);
-          ticking = true;
-        });
-      }
-      ticking = false;
+      setBannerStyle(window.scrollY);
     });
   </script>
 

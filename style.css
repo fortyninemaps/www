@@ -30,42 +30,6 @@
     url(http://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
 }
 
-#FORTYNINE {
-  font-family: 'Lato Thin';
-}
-
-#MAPS {
-  font-family: 'Raleway Bold';
-  font-weight: 700;
-}
-
-#topname {
-  font-size: 60pt;
-  padding-top: 0.5em;
-  margin-bottom: -0.2em;
-  text-align: center;
-}
-
-.bannerText {
-  color: rgba(255,255,255,0.9);
-  opacity: 0;
-  transition-duration: 0.5s;
-  transition-delay: 0.2s;
-  -moz-transition-duration: 0.5s;
-  -moz-transition-delay: 0.2s;
-  -webkit-transition-duration: 0.5s;
-  -webkit-transition-delay: 0.2s;
-}
-
-.slogan {
-  font-family: 'Raleway', sans-serif;
-  font-style: italic;
-  margin-bottom: 1em;
-  font-size: 16pt;
-  text-align: center;
-  padding-left: 0.2em;
-}
-
 body {
   font-family: 'Lato', sans-serif;
   font-size: 18pt;
@@ -81,17 +45,50 @@ h3 {
 }
 
 .display {
+  display: table;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 0%;
-  padding-top: 4em;
-  padding-bottom: 4em;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%,  rgba(10, 25, 40, 1)),
-    url(logo/banner-sat.jpg);
-  background-size: 150%;
+  height: 100vh;
+  background: url(logo/banner-sat.jpg);
+  background-size: cover;
   background-position: center;
   background-attachment: fixed;
+}
+
+.bannerText {
+  display: table-cell;
+  vertical-align: middle;
+  color: rgba(255,255,255,0.9);
+  opacity: 0;
+
+  transition-duration: 0.5s;
+  transition-delay: 0.2s;
+  -moz-transition-duration: 0.5s;
+  -moz-transition-delay: 0.2s;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-delay: 0.2s;
+}
+
+#FORTYNINE {
+  font-family: 'Lato Thin';
+}
+
+#MAPS {
+  font-family: 'Raleway Bold';
+  font-weight: 700;
+}
+
+#topname {
+  font-size: 60pt;
+  text-align: center;
+}
+
+.slogan {
+  font-family: 'Raleway', sans-serif;
+  font-style: italic;
+  margin-bottom: 1em;
+  font-size: 16pt;
+  text-align: center;
+  padding-left: 0.2em;
 }
 
 .container {
@@ -115,20 +112,25 @@ h3 {
 a {
   color: rgba(200, 220, 250, 1);
   text-decoration: none;
-  transition: 0.3s;
+
+  transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-duration: 0.3s;
 }
 
 a:hover {
   color: rgba(240, 240, 240, 1);
   text-decoration: underline;
-  transition: 0.1s;
+
+  transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  -webkit-transition-duration: 0.1s;
 }
 
 @media screen and (min-width: 769px) {
 
   #topname {
     font-size: 96pt;
-    padding-top: 0.2em;
   }
 
   .slogan {
@@ -140,23 +142,14 @@ a:hover {
 
   #topname {
     font-size: 110pt;
-    text-align: center;
-    padding-left: 0.0em;
-    padding-top: 1em;
   }
 
   .slogan {
     font-size: 20pt;
-    text-align: center;
-    padding-left: 0.0em;
   }
 
   body {
     font-size: 16pt;
-  }
-
-  .display {
-    height: 480px;
   }
 
   .container {
@@ -180,9 +173,6 @@ a:hover {
 
   #topname {
     font-size: 220pt;
-    text-align: center;
-    padding-left: 0.0em;
-    padding-top: 0.2em;
   }
 
 }
