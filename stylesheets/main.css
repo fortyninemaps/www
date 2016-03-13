@@ -101,6 +101,10 @@ h3 {
   padding-bottom: 2em;
 }
 
+.social {
+  text-align: center;
+}
+
 .footer {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
