@@ -13,7 +13,7 @@ body {
   background-size: cover;
   background-image: url('../images/sermilik.jpg');
   color: rgba(255, 255, 255, 0.9);
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 div.display {
@@ -32,7 +32,7 @@ h2, h3 {
 }
 
 h1 {
-  font-size: 72pt;
+  font-size: 96pt;
 }
 
 h2 {
