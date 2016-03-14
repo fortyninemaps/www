@@ -81,6 +81,7 @@
             
             
                 <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Karta tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Package reference</a></li>
@@ -145,9 +146,11 @@
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
@@ -156,15 +159,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIError">AAIError</a>
+  <dt><a href="reference.html#karta.raster._aai.AAIIOError">AAIIOError</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid">AAIGrid (class in karta.raster.aaigrid)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.raster.read.aairead">aairead() (in module karta.raster.read)</a>
+  <dt><a href="reference.html#karta.raster._aai.aairead">aairead() (in module karta.raster._aai)</a>
   </dt>
 
       
@@ -191,8 +190,6 @@
   <dt><a href="reference.html#karta.vector.geojson.GeoJSONWriter.add_properties">add_properties() (karta.vector.geojson.GeoJSONWriter method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.vector.geometry.Geometry.add_property">add_property() (karta.vector.geometry.Geometry method)</a>
   </dt>
@@ -212,6 +209,18 @@
 
         
   <dt><a href="reference.html#karta.vector.Polygon.add_property">(karta.vector.Polygon method)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.vector.quadtree.addpt">addpt() (in module karta.vector.quadtree)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="reference.html#karta.vector.quadtree.QuadTree.addpt">(karta.vector.quadtree.QuadTree method)</a>
   </dt>
 
       </dl></dd>
@@ -310,17 +319,23 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.clip">clip() (karta.raster.aaigrid.AAIGrid method)</a>
+  <dt><a href="reference.html#karta.raster._aai.check_header">check_header() (in module karta.raster._aai)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.RegularGrid.clip">(karta.raster.grid.RegularGrid method)</a>
+      
+  <dt><a href="reference.html#karta.geodesy.check_in_segment_range">check_in_segment_range() (in module karta.geodesy)</a>
   </dt>
 
-      </dl></dd>
+      
+  <dt><a href="reference.html#karta.raster.grid.RegularGrid.clip">clip() (karta.raster.grid.RegularGrid method)</a>
+  </dt>
+
       
   <dt><a href="reference.html#karta.vector.Polygon.contains">contains() (karta.vector.Polygon method)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.rtree.contains_geom">contains_geom() (in module karta.vector.rtree)</a>
   </dt>
 
       
@@ -363,18 +378,12 @@
   </dt>
 
       </dl></dd>
-      
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.coordmesh">coordmesh() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.RegularGrid.coordmesh">(karta.raster.grid.RegularGrid method)</a>
-  </dt>
-
-      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.raster.grid.RegularGrid.coordmesh">coordmesh() (karta.raster.grid.RegularGrid method)</a>
+  </dt>
+
       
   <dt><a href="reference.html#karta.vector.Point.coordsxy">coordsxy() (karta.vector.Point method)</a>
   </dt>
@@ -510,11 +519,23 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#karta.crs.EllipsoidalCRS">EllipsoidalCRS (class in karta.crs)</a>
+  <dt><a href="reference.html#karta.geodesy.ellipsoidal_area">ellipsoidal_area() (in module karta.geodesy)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.geodesy.ellipsoidal_forward">ellipsoidal_forward() (in module karta.geodesy)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.geodesy.ellipsoidal_inverse">ellipsoidal_inverse() (in module karta.geodesy)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.crs.EllipsoidalCRS">EllipsoidalCRS (class in karta.crs)</a>
+  </dt>
+
       
   <dt><a href="reference.html#karta.vector.Line.extend">extend() (karta.vector.Line method)</a>
   </dt>
@@ -576,15 +597,11 @@
 
       </dl></dd>
       
-  <dt><a href="reference.html#karta.vector.read.from_shape">from_shape() (in module karta.vector.read)</a>
+  <dt><a href="reference.html#karta.vector.read.from_shape">from_shape() (in module karta.vector.read)</a>, <a href="reference.html#karta.vector.read.from_shape">[1]</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.fromarray">fromarray() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.fromfile">fromfile() (karta.raster.aaigrid.AAIGrid method)</a>
+  <dt><a href="reference.html#karta.geodesy.fzero_brent">fzero_brent() (in module karta.geodesy)</a>
   </dt>
 
   </dl></td>
@@ -593,6 +610,14 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.raster._gtiff.gdal_type">gdal_type() (in module karta.raster._gtiff)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.raster._gtiff.GdalBandArrayInterface">GdalBandArrayInterface (class in karta.raster._gtiff)</a>
+  </dt>
+
       
   <dt><a href="reference.html#karta.crs.GeographicalCRS">GeographicalCRS (class in karta.crs)</a>
   </dt>
@@ -639,6 +664,8 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.raster.grid.RegularGrid.get_data_extent">get_data_extent() (karta.raster.grid.RegularGrid method)</a>
   </dt>
@@ -662,39 +689,19 @@
 
       </dl></dd>
       
-  <dt><a href="reference.html#karta.vector.read.get_filenames">get_filenames() (in module karta.vector.read)</a>
+  <dt><a href="reference.html#karta.vector.read.get_filenames">get_filenames() (in module karta.vector.read)</a>, <a href="reference.html#karta.vector.read.get_filenames">[1]</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.vector.shp.get_geometry_type">get_geometry_type() (in module karta.vector.shp)</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.get_indices">get_indices() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.RegularGrid.get_indices">(karta.raster.grid.RegularGrid method)</a>
-  </dt>
-
-      </dl></dd>
-      
-  <dt><a href="reference.html#karta.raster.grid.get_nodata">get_nodata() (in module karta.raster.grid)</a>
+  <dt><a href="reference.html#karta.raster.grid.RegularGrid.get_indices">get_indices() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
       
   <dt><a href="reference.html#karta.raster.grid.RegularGrid.get_positions">get_positions() (karta.raster.grid.RegularGrid method)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.get_profile">get_profile() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.get_region">get_region() (karta.raster.aaigrid.AAIGrid method)</a>
   </dt>
 
       
@@ -716,15 +723,17 @@
 
       </dl></dd>
       
+  <dt><a href="reference.html#karta.vector.quadtree.getfrombbox">getfrombbox() (in module karta.vector.quadtree)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="reference.html#karta.vector.quadtree.QuadTree.getfrombbox">(karta.vector.quadtree.QuadTree method)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="reference.html#karta.raster.grid.Grid">Grid (class in karta.raster.grid)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.raster.grid.gridpoints">gridpoints() (in module karta.raster.grid)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.raster.read.gtiffread">gtiffread() (in module karta.raster.read)</a>
   </dt>
 
   </dl></td>
@@ -748,6 +757,10 @@
   </dt>
 
       
+  <dt><a href="reference.html#karta.geodesy.intersection_spherical">intersection_spherical() (in module karta.geodesy)</a>
+  </dt>
+
+      
   <dt><a href="reference.html#karta.vector.Line.intersections">intersections() (karta.vector.Line method)</a>
   </dt>
 
@@ -767,8 +780,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.crs.CartesianCRS.inverse">inverse() (karta.crs.CartesianCRS static method)</a>
   </dt>
@@ -792,11 +803,29 @@
 
       </dl></dd>
       
+  <dt><a href="reference.html#karta.geodesy.isbetween_circular">isbetween_circular() (in module karta.geodesy)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
   <dt><a href="reference.html#karta.vector.Polygon.isclockwise">isclockwise() (karta.vector.Polygon method)</a>
   </dt>
 
       
   <dt><a href="reference.html#karta.vector.Polygon.ispolar">ispolar() (karta.vector.Polygon method)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.rtree.itergeoms">itergeoms() (in module karta.vector.rtree)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.rtree.iterleaves">iterleaves() (in module karta.vector.rtree)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.rtree.iternodes">iternodes() (in module karta.vector.rtree)</a>
   </dt>
 
   </dl></td>
@@ -810,7 +839,15 @@
   </dt>
 
       
-  <dt><a href="reference.html#module-karta.raster.aaigrid">karta.raster.aaigrid (module)</a>
+  <dt><a href="reference.html#module-karta.geodesy">karta.geodesy (module)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#module-karta.raster._aai">karta.raster._aai (module)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#module-karta.raster._gtiff">karta.raster._gtiff (module)</a>
   </dt>
 
       
@@ -822,15 +859,11 @@
   </dt>
 
       
-  <dt><a href="reference.html#module-karta.raster.read">karta.raster.read (module)</a>
+  <dt><a href="reference.html#module-karta.vector.geojson">karta.vector.geojson (module)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="reference.html#module-karta.vector.geojson">karta.vector.geojson (module)</a>
-  </dt>
-
       
   <dt><a href="reference.html#module-karta.vector.geometry">karta.vector.geometry (module)</a>
   </dt>
@@ -840,7 +873,15 @@
   </dt>
 
       
-  <dt><a href="reference.html#module-karta.vector.read">karta.vector.read (module)</a>
+  <dt><a href="reference.html#module-karta.vector.quadtree">karta.vector.quadtree (module)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#module-karta.vector.read">karta.vector.read (module)</a>, <a href="reference.html#module-karta.vector.read">[1]</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#module-karta.vector.rtree">karta.vector.rtree (module)</a>
   </dt>
 
       
@@ -858,11 +899,19 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.vector.geojson.LineString">LineString (class in karta.vector.geojson)</a>
+  <dt><a href="reference.html#karta.vector.rtree.linear_pick_next">linear_pick_next() (in module karta.vector.rtree)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.rtree.linear_pick_seeds">linear_pick_seeds() (in module karta.vector.rtree)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.vector.geojson.LineString">LineString (class in karta.vector.geojson)</a>
+  </dt>
+
       
   <dt><a href="reference.html#karta.vector.geojson.list_rec">list_rec() (in module karta.vector.geojson)</a>
   </dt>
@@ -878,45 +927,19 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.grid.mask_poly">mask_poly() (in module karta.raster.grid)</a>
+  <dt><a href="reference.html#karta.raster.grid.Grid.max">max() (karta.raster.grid.Grid method)</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.max">max() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.Grid.max">(karta.raster.grid.Grid method)</a>
-  </dt>
-
-      </dl></dd>
-      
-  <dt><a href="reference.html#karta.raster.grid.merge">merge() (in module karta.raster.grid)</a>
+  <dt><a href="reference.html#karta.raster.grid.Grid.min">min() (karta.raster.grid.Grid method)</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.min">min() (karta.raster.aaigrid.AAIGrid method)</a>
+  <dt><a href="reference.html#karta.raster.grid.Grid.minmax">minmax() (karta.raster.grid.Grid method)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.Grid.min">(karta.raster.grid.Grid method)</a>
-  </dt>
-
-      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.minmax">minmax() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.Grid.minmax">(karta.raster.grid.Grid method)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="reference.html#karta.vector.geojson.MultiLineString">MultiLineString (class in karta.vector.geojson)</a>
   </dt>
@@ -966,6 +989,10 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="reference.html#karta.raster._gtiff.numpy_dtype">numpy_dtype() (in module karta.raster._gtiff)</a>
+  </dt>
+
+      
   <dt><a href="reference.html#karta.vector.geojson.NumpyAwareJSONEncoder">NumpyAwareJSONEncoder (class in karta.vector.geojson)</a>
   </dt>
 
@@ -984,7 +1011,7 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.vector.read.ogr_parse_srs">ogr_parse_srs() (in module karta.vector.read)</a>
+  <dt><a href="reference.html#karta.vector.read.ogr_parse_srs">ogr_parse_srs() (in module karta.vector.read)</a>, <a href="reference.html#karta.vector.read.ogr_parse_srs">[1]</a>
   </dt>
 
       
@@ -1083,6 +1110,38 @@
   <dt><a href="reference.html#karta.vector.geojson.Feature.properties">properties (karta.vector.geojson.Feature attribute)</a>
   </dt>
 
+      
+  <dt><a href="reference.html#karta.raster._gtiff.py_type">py_type() (in module karta.raster._gtiff)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.vector.rtree.quadratic_pick_next">quadratic_pick_next() (in module karta.vector.rtree)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.rtree.quadratic_pick_seeds">quadratic_pick_seeds() (in module karta.vector.rtree)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.quadtree.QuadTree">QuadTree (class in karta.vector.quadtree)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.vector.quadtree.QuadTree.querypt">querypt() (karta.vector.quadtree.QuadTree method)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.quadtree.querypt_recursion">querypt_recursion() (in module karta.vector.quadtree)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -1090,23 +1149,19 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.read">read() (karta.raster.aaigrid.AAIGrid method)</a>
+  <dt><a href="reference.html#karta.raster._gtiff.read">read() (in module karta.raster._gtiff)</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.read.read_aai">read_aai() (in module karta.raster.read)</a>
+  <dt><a href="reference.html#karta.vector.read.read_geojson">read_geojson() (in module karta.vector.read)</a>, <a href="reference.html#karta.vector.read.read_geojson">[1]</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.vector.read.read_geojson">read_geojson() (in module karta.vector.read)</a>
+  <dt><a href="reference.html#karta.vector.read.read_xyfile">read_xyfile() (in module karta.vector.read)</a>, <a href="reference.html#karta.vector.read.read_xyfile">[1]</a>
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.read.read_gtiff">read_gtiff() (in module karta.raster.read)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.vector.read.read_xyfile">read_xyfile() (in module karta.vector.read)</a>
+  <dt><a href="reference.html#karta.geodesy.reduce_deg">reduce_deg() (in module karta.geodesy)</a>
   </dt>
 
       
@@ -1116,16 +1171,12 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.resample">resample() (karta.raster.aaigrid.AAIGrid method)</a>
+  <dt><a href="reference.html#karta.raster.grid.RegularGrid.resample">resample() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="reference.html#karta.raster.grid.RegularGrid.resample">(karta.raster.grid.RegularGrid method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.raster.grid.WarpedGrid.resample">(karta.raster.grid.WarpedGrid method)</a>
+  <dt><a href="reference.html#karta.raster.WarpedGrid.resample">(karta.raster.WarpedGrid method)</a>
   </dt>
 
       </dl></dd>
@@ -1134,17 +1185,11 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.resize">resize() (karta.raster.aaigrid.AAIGrid method)</a>
+  <dt><a href="reference.html#karta.raster.grid.RegularGrid.resize">resize() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.RegularGrid.resize">(karta.raster.grid.RegularGrid method)</a>
-  </dt>
-
-      </dl></dd>
       
-  <dt><a href="reference.html#karta.raster.grid.WarpedGrid.rotate">rotate() (karta.raster.grid.WarpedGrid method)</a>
+  <dt><a href="reference.html#karta.raster.WarpedGrid.rotate">rotate() (karta.raster.WarpedGrid method)</a>
   </dt>
 
       
@@ -1168,21 +1213,19 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.sample">sample() (karta.raster.aaigrid.AAIGrid method)</a>
+  <dt><a href="reference.html#karta.raster.grid.RegularGrid.sample">sample() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.raster.grid.RegularGrid.sample">(karta.raster.grid.RegularGrid method)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="reference.html#karta.raster.grid.RegularGrid.sample_bilinear">sample_bilinear() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
       
   <dt><a href="reference.html#karta.raster.grid.RegularGrid.sample_nearest">sample_nearest() (karta.raster.grid.RegularGrid method)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.rtree.search">search() (in module karta.vector.rtree)</a>
   </dt>
 
       
@@ -1205,8 +1248,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.vector.Line.shift">shift() (karta.vector.Line method)</a>
   </dt>
@@ -1235,12 +1276,34 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.raster.misc.slope">slope() (in module karta.raster.misc)</a>
   </dt>
 
       
+  <dt><a href="reference.html#karta.geodesy.solve_astroid">solve_astroid() (in module karta.geodesy)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.geodesy.solve_vicenty">solve_vicenty() (in module karta.geodesy)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.geodesy.spherical_area">spherical_area() (in module karta.geodesy)</a>
+  </dt>
+
+      
   <dt><a href="reference.html#karta.crs.SphericalCRS">SphericalCRS (class in karta.crs)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.vector.quadtree.split">split() (in module karta.vector.quadtree)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.raster._gtiff.SRS_from_WKT">SRS_from_WKT() (in module karta.raster._gtiff)</a>
   </dt>
 
       
@@ -1291,6 +1354,8 @@
   <dt><a href="reference.html#karta.vector.Line.to_polygon">to_polygon() (karta.vector.Line method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.vector.geometry.Geometry.to_shapefile">to_shapefile() (karta.vector.geometry.Geometry method)</a>
   </dt>
@@ -1313,8 +1378,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.vector.Line.to_vtk">to_vtk() (karta.vector.Line method)</a>
   </dt>
@@ -1344,19 +1407,21 @@
 
       </dl></dd>
       
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.toarray">toarray() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.raster.aaigrid.AAIGrid.tofile">tofile() (karta.raster.aaigrid.AAIGrid method)</a>
-  </dt>
-
-      
   <dt><a href="reference.html#karta.vector.metadata.tupleinsert">tupleinsert() (in module karta.vector.metadata)</a>
   </dt>
 
       
   <dt><a href="reference.html#karta.vector.metadata.tuplemut">tuplemut() (in module karta.vector.metadata)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#karta.geodesy.unroll_deg">unroll_deg() (in module karta.geodesy)</a>
   </dt>
 
   </dl></td>
@@ -1369,10 +1434,14 @@
   <dt><a href="reference.html#karta.raster.grid.RegularGrid.vertex_coords">vertex_coords() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
+      
+  <dt><a href="reference.html#karta.raster.misc.viewshed">viewshed() (in module karta.raster.misc)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#karta.raster.misc.viewshed">viewshed() (in module karta.raster.misc)</a>
+  <dt><a href="reference.html#karta.vector.rtree.volume_expanded">volume_expanded() (in module karta.vector.rtree)</a>
   </dt>
 
   </dl></td>
@@ -1386,7 +1455,7 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.raster.grid.WarpedGrid">WarpedGrid (class in karta.raster.grid)</a>
+  <dt><a href="reference.html#karta.raster.WarpedGrid">WarpedGrid (class in karta.raster)</a>
   </dt>
 
       
@@ -1415,6 +1484,10 @@
 
       
   <dt><a href="reference.html#karta.vector.Multipoint.within_radius">within_radius() (karta.vector.Multipoint method)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#karta.raster._gtiff.write">write() (in module karta.raster._gtiff)</a>
   </dt>
 
       
