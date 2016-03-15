@@ -83,7 +83,7 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Karta tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Package reference</a></li>
 </ul>
 
@@ -258,11 +258,15 @@
 <div class="viewcode-block" id="Point"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point">[docs]</a><span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">Geometry</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Point object instantiated with:</span>
 
-<span class="sd">    *coords*        2-tuple or 3-tuple</span>
-<span class="sd">    *data*          List, dictionary, or Metadata object for point-specific</span>
-<span class="sd">                    data [default None]</span>
-<span class="sd">    *properties*    Dictionary of geometry specific data [default None]</span>
-<span class="sd">    *crs*           Coordinate reference system instance [default CARTESIAN]</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coords : 2-tuple or 3-tuple</span>
+<span class="sd">    data : list, dict, Metadata object, or None</span>
+<span class="sd">        point-specific data [default None]</span>
+<span class="sd">    properties : dict or None</span>
+<span class="sd">        geometry specific data [default None]</span>
+<span class="sd">    crs : karta.crs.CRS subclass</span>
+<span class="sd">        [default CARTESIAN]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;vertex&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;rank&quot;</span><span class="p">]</span>
 
@@ -372,8 +376,12 @@
         <span class="sd">&quot;&quot;&quot; Returns the point reached when moving in a given direction for</span>
 <span class="sd">        a given distance from a specified starting location.</span>
 
-<span class="sd">            distance (float): distance to walk</span>
-<span class="sd">            direction (float): walk azimuth (clockwise with &quot;north&quot; at 0)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        distance : float</span>
+<span class="sd">            distance to walk</span>
+<span class="sd">        direction : float</span>
+<span class="sd">            walk azimuth (clockwise with &quot;north&quot; at 0)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">xg1</span><span class="p">,</span> <span class="n">yg1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">xg2</span><span class="p">,</span> <span class="n">yg2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">xg1</span><span class="p">,</span> <span class="n">yg1</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span>
@@ -412,10 +420,10 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        f : file-like object to recieve the GeoJSON string</span>
-
-<span class="sd">        *kwargs* include:</span>
-<span class="sd">        crs : coordinate reference system</span>
-<span class="sd">        bbox : an optional bounding box tuple in the form (w,e,s,n)</span>
+<span class="sd">        crs : karta.crs.CRS subclass</span>
+<span class="sd">            coordinate reference system, optional</span>
+<span class="sd">        bbox : 4-tuple</span>
+<span class="sd">            a bounding box in the form (w,e,s,n), optional</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="n">geojson</span><span class="o">.</span><span class="n">GeoJSONWriter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="n">print_json</span><span class="p">(</span><span class="n">indent</span><span class="p">)</span></div></div>
@@ -803,10 +811,12 @@
     <span class="k">def</span> <span class="nf">to_xyfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fnm</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Write data to a delimited ASCII table.</span>
 
-<span class="sd">        fnm         :   filename to write to</span>
-
-<span class="sd">        kwargs:</span>
-<span class="sd">        fields      :   specify the fields to be written (default all)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fnm : string</span>
+<span class="sd">            filename to write to</span>
+<span class="sd">        fields : list</span>
+<span class="sd">            specify the fields to be written (optional, default all)</span>
 
 <span class="sd">        Additional kwargs are passed to `xyfile.write_xy`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -818,8 +828,11 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        crs : coordinate reference system</span>
-<span class="sd">        bbox : an optional bounding box tuple in the form (w,e,s,n)</span>
+<span class="sd">        indent : int</span>
+<span class="sd">            spaces to intent JSON levels</span>
+<span class="sd">        bbox : 4-tuple</span>
+<span class="sd">            a bounding box in the form (w,e,s,n), optional</span>
+<span class="sd">        crs : karta.crs.CRS subclass</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="n">geojson</span><span class="o">.</span><span class="n">GeoJSONWriter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="n">print_json</span><span class="p">(</span><span class="n">indent</span><span class="p">)</span>
@@ -838,11 +851,15 @@
     <span class="sd">&quot;&quot;&quot; Point cloud with associated attributes. This is a base class for the</span>
 <span class="sd">    polyline and polygon classes.</span>
 
-<span class="sd">    *coords*        List of 2-tuples or 3-tuples</span>
-<span class="sd">    *data*          List, dictionary, or Metadata object for point-specific</span>
-<span class="sd">                    data [default None]</span>
-<span class="sd">    *properties*    Dictionary of geometry specific data [default None]</span>
-<span class="sd">    *crs*           Coordinate reference system instance [default CARTESIAN]</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coords : list of 2-tuples or 3-tuples</span>
+<span class="sd">    data : list, dict, Metadata object, or None</span>
+<span class="sd">        point-specific data [default None]</span>
+<span class="sd">    properties : dict or None</span>
+<span class="sd">        geometry specific data [default None]</span>
+<span class="sd">    crs : karta.crs.CRS subclass</span>
+<span class="sd">        [default CARTESIAN]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[]</span>
@@ -924,10 +941,13 @@
 <div class="viewcode-block" id="Multipoint.build_quadtree"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multipoint.build_quadtree">[docs]</a>    <span class="k">def</span> <span class="nf">build_quadtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buff</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Construct an internal quadtree with the current geometry data.</span>
 
-<span class="sd">        Optional *buff* keyword specifies a spatial buffer to create around</span>
-<span class="sd">        the current point bounding box, permitting the geometry to grow after</span>
-<span class="sd">        the quadtree has been initialized. *buff* may be a scalar or a</span>
-<span class="sd">        sequence of (left, right, bottom, top).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        buff : float or 4-tuple of floats</span>
+<span class="sd">            specifies a spatial buffer to create around the current point</span>
+<span class="sd">            bounding box, permitting the geometry to grow after the quadtree</span>
+<span class="sd">            has been initialized. *buff* may be a scalar or a sequence of</span>
+<span class="sd">            (left, right, bottom, top). (optional)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">bf</span> <span class="o">=</span> <span class="p">(</span><span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">buff</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">buff</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">buff</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
@@ -1115,11 +1135,15 @@
 <div class="viewcode-block" id="Line"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Line">[docs]</a><span class="k">class</span> <span class="nc">Line</span><span class="p">(</span><span class="n">ConnectedMultipoint</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Line composed of connected vertices.</span>
 
-<span class="sd">    *coords*        List of 2-tuples or 3-tuples</span>
-<span class="sd">    *data*          List, dictionary, or Metadata object for point-specific</span>
-<span class="sd">                    data [default None]</span>
-<span class="sd">    *properties*    Dictionary of geometry specific data [default None]</span>
-<span class="sd">    *crs*           Coordinate reference system instance [default CARTESIAN]</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coords : list of 2-tuples or 3-tuples</span>
+<span class="sd">    data : list, dict, Metadata object, or None</span>
+<span class="sd">        point-specific data [default None]</span>
+<span class="sd">    properties : dict or None</span>
+<span class="sd">        geometry specific data [default None]</span>
+<span class="sd">    crs : karta.crs.CRS subclass</span>
+<span class="sd">        [default CARTESIAN]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -1233,12 +1257,17 @@
 <div class="viewcode-block" id="Polygon"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Polygon">[docs]</a><span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">ConnectedMultipoint</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Polygon, composed of a closed sequence of vertices.</span>
 
-<span class="sd">    *coords*        List of 2-tuples or 3-tuples</span>
-<span class="sd">    *data*          List, dictionary, or Metadata object for point-specific</span>
-<span class="sd">                    data [default None]</span>
-<span class="sd">    *properties*    Dictionary of geometry specific data [default None]</span>
-<span class="sd">    *subs*          List of sub-polygons [default None]</span>
-<span class="sd">    *crs*           Coordinate reference system instance [default CARTESIAN]</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coords : list of 2-tuples or 3-tuples</span>
+<span class="sd">    data : list, dict, Metadata object, or None</span>
+<span class="sd">        point-specific data [default None]</span>
+<span class="sd">    properties : dict or None</span>
+<span class="sd">        geometry specific data [default None]</span>
+<span class="sd">    subs : list of Polygon instances or None</span>
+<span class="sd">        sub-polygons [default None]</span>
+<span class="sd">    crs : karta.crs.CRS subclass</span>
+<span class="sd">        [default CARTESIAN]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;subs&quot;</span><span class="p">]</span>
 
@@ -1299,9 +1328,6 @@
 <div class="viewcode-block" id="Polygon.ispolar"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Polygon.ispolar">[docs]</a>    <span class="k">def</span> <span class="nf">ispolar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pole</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return True if polygon contains one pole. If the polygon contains</span>
 <span class="sd">        neither or both poles, returns False.</span>
-
-<span class="sd">        Currently expects geographical coordinates with longitude ranging from</span>
-<span class="sd">        (-180, 180].</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">):</span>
@@ -1310,12 +1336,12 @@
         <span class="k">if</span> <span class="n">pole</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">pole</span> <span class="o">=</span> <span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="n">SphericalEarth</span><span class="p">)</span>
 
-        <span class="n">lon0</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lon0</span> <span class="o">=</span> <span class="n">geodesy</span><span class="o">.</span><span class="n">reduce_deg</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">sum_angle</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
 
-            <span class="n">lon1</span> <span class="o">=</span> <span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lon1</span> <span class="o">=</span> <span class="n">geodesy</span><span class="o">.</span><span class="n">reduce_deg</span><span class="p">(</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">sign</span><span class="p">(</span><span class="n">lon0</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="n">sign</span><span class="p">(</span><span class="n">lon1</span><span class="p">))</span> <span class="ow">and</span> \
                 <span class="p">((</span><span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lon0</span><span class="o">-</span><span class="mi">180</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lon0</span><span class="o">+</span><span class="mi">180</span><span class="p">))</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lon1</span><span class="o">-</span><span class="mi">180</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lon1</span><span class="o">+</span><span class="mi">180</span><span class="p">)))</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lon0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lon1</span><span class="p">))):</span>

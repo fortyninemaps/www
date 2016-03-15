@@ -83,7 +83,7 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Karta tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">Package reference</a></li>
 </ul>
 
@@ -352,7 +352,13 @@
 <div class="viewcode-block" id="GeographicalCRS"><a class="viewcode-back" href="../../reference.html#karta.crs.GeographicalCRS">[docs]</a><span class="k">class</span> <span class="nc">GeographicalCRS</span><span class="p">(</span><span class="n">CRS</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Reference systems with longitude-latitude (θ, φ) coordinates.</span>
 
-<span class="sd">    `spheroid` refers to a proj.4 spheroid identifier, e.g. &quot;+ellps=WGS84&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spheroid : string</span>
+<span class="sd">        proj.4 spheroid identifier, e.g. &quot;+ellps=WGS84&quot;</span>
+<span class="sd">    name : string</span>
+<span class="sd">    datum : string, optional</span>
+<span class="sd">        proj.4 datum identifier, default &quot;+datum=WGS84&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spheroid</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">datum</span><span class="o">=</span><span class="s2">&quot;+datum=WGS84&quot;</span><span class="p">):</span>
         <span class="n">ellipsoid</span> <span class="o">=</span> <span class="n">parse_ellipsoid</span><span class="p">(</span><span class="n">spheroid</span><span class="p">)</span>
@@ -391,7 +397,11 @@
     <span class="sd">&quot;&quot;&quot; Custom reference systems, which may be backed by a *pypoj.Proj* instance</span>
 <span class="sd">    or a custom projection function.</span>
 
-<span class="sd">    `proj` is a proj.4 string</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    proj : string</span>
+<span class="sd">        proj.4 string</span>
+<span class="sd">    name : string or None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">ellipsoid</span> <span class="o">=</span> <span class="n">parse_ellipsoid</span><span class="p">(</span><span class="n">proj</span><span class="p">)</span>
@@ -437,8 +447,12 @@
 
 <div class="viewcode-block" id="SphericalCRS"><a class="viewcode-back" href="../../reference.html#karta.crs.SphericalCRS">[docs]</a><span class="k">class</span> <span class="nc">SphericalCRS</span><span class="p">(</span><span class="n">GeographicalCRS</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Spherical geographic coordinate system defined by a radius.</span>
-<span class="sd">    </span>
-<span class="sd">    DEPRECATED </span>
+
+<span class="sd">    **DEPRECATED**</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radius : float</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Spherical&quot;</span>
 
@@ -507,7 +521,14 @@
     <span class="sd">&quot;&quot;&quot; Ellipsoidal geographic coordinate system defined by equatorial and</span>
 <span class="sd">    polar radii.</span>
 
-<span class="sd">    DEPRECATED</span>
+<span class="sd">    **DEPRECATED**</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    a : float</span>
+<span class="sd">        ellipsoid major axis dimension</span>
+<span class="sd">    b : float</span>
+<span class="sd">        ellipsoid minor axis dimension</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Ellipsoidal&quot;</span>
 
