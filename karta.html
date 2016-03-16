@@ -56,7 +56,7 @@
 
     <section id="raster">
       <div class="row">
-        <div class="pymodule">import karta.raster</div>
+        <div class="pymodule"><a href="kartadocs/reference.html#raster-package-karta-raster">import karta.raster</a></div>
         <a name="raster"></a>
 
         <h3 class="text-muted subtitle">Grid statistics, resizing, resampling,
@@ -74,12 +74,12 @@
           chunked and compressed in-memory array for space efficiency, or a
           simple Numpy ndarray for speed. Grids may also use GeoTiff-backed
           files for very large data. Experimental support exists for grids with
-          arbitrary spacing, which are represented by <code>WarpedGrid</code>.
+          arbitrary spacing, which are represented by <code>WarpedGrid</code>.</p>
 
-          Grids can be clipped, resampled, queried at geographical points, and
-          read or written to ESRI ASCII files or to GeoTiff via GDAL. Functions
-          are provided for computing DEM properties such as slope, aspect, and
-          hillshade.</p>
+          <p class="lead text-left">Grids can be clipped, resampled, queried at
+          geographical points, and read or written to ESRI ASCII files or to
+          GeoTiff via GDAL. Functions are provided for computing DEM properties
+          such as slope, aspect, and hillshade.</p>
 
           <pre class="text-left">
 # Read a grid and resample
@@ -100,7 +100,7 @@ hs = karta.raster.hillshade(grid_clipped)</pre>
     <section id="vector">
       <div class="row">
 
-        <div class="pymodule">import karta.vector</div>
+        <div class="pymodule"><a href="kartadocs/reference.html#vector-package-karta-vector">import karta.vector</a></div>
         <a name="vector"></a>
 
         <h3 class="text-muted subtitle">Bounding boxes, distances and lengths,
@@ -157,7 +157,7 @@ polygon.convex_hull().to_shapefile("outline.shp") </pre>
     <section id="geodesy">
       <div class="row">
 
-        <div class="pymodule">import karta.crs</div>
+        <div class="pymodule"><a href="kartadocs/reference.html#module-karta.crs">import karta.crs</a></div>
         <a name="geodesy"></a>
 
         <h3 class="text-muted subtitle">Placing data on Earth with coordinate reference systems</h3>
