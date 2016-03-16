@@ -224,10 +224,10 @@ attributes defined by all Grid-derived classed are _hdr and data.</p>
 <h3>RegularGrid<a class="headerlink" href="#regulargrid" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="karta.raster.grid.RegularGrid">
-<em class="property">class </em><code class="descclassname">karta.raster.grid.</code><code class="descname">RegularGrid</code><span class="sig-paren">(</span><em>transform</em>, <em>values=None</em>, <em>crs=None</em>, <em>nodata_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">karta.raster.grid.</code><code class="descname">RegularGrid</code><span class="sig-paren">(</span><em>transform</em>, <em>values=None</em>, <em>bands=None</em>, <em>crs=None</em>, <em>nodata_value=None</em>, <em>bandclass=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Regular (structured) grid class. A RegularGrid contains a fixed number
-of rows and columns with a constant spacing and a scalar or vector field
-defined as <cite>values</cite>.</p>
+of rows and columns with a constant spacing and a list of bands
+representing scalar fields.</p>
 <p>Positions on a RegularGrid are referenced to their array indices <em>(i,j)</em>
 using an affine transform <em>T</em> such that</p>
 <p>(a, b, c, d, e, f) = T</p>
@@ -261,9 +261,20 @@ flexible data layouts.</p>
 <dt id="karta.raster.grid.RegularGrid.clip">
 <code class="descname">clip</code><span class="sig-paren">(</span><em>xmin</em>, <em>xmax</em>, <em>ymin</em>, <em>ymax</em>, <em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.clip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a clipped version of grid with cell centers constrained to a
-bounding box defined by <em>xmin</em>, <em>xmax</em>, <em>ymin</em>, <em>ymax</em>.</p>
-<p>Optional <em>crs</em> argument defines the coordinate reference system of the
 bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xmin</strong> : float</p>
+<p><strong>xmax</strong> : float</p>
+<p><strong>ymin</strong> : float</p>
+<p><strong>ymax</strong> : float</p>
+<p class="last"><strong>crs</strong> : karta.crs.CRS subclass, optional</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -288,14 +299,40 @@ bounding box.</p>
 <dt id="karta.raster.grid.RegularGrid.get_data_extent">
 <code class="descname">get_data_extent</code><span class="sig-paren">(</span><em>reference='center'</em>, <em>nodata=None</em>, <em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.get_data_extent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.get_data_extent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the region characteristics as a tuple (xmin, xmax, ymin,
-ymax). <em>reference</em> is a string and may be &#8216;center&#8217; or &#8216;edge&#8217;.</p>
+ymax).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>reference</strong> : string</p>
+<blockquote>
+<div><p>either &#8216;center&#8217; or &#8216;edge&#8217;.</p>
+</div></blockquote>
+<p class="last"><strong>crs</strong> : karta.crs.CRS subclass</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.raster.grid.RegularGrid.get_extent">
 <code class="descname">get_extent</code><span class="sig-paren">(</span><em>reference='center'</em>, <em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.get_extent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.get_extent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the region characteristics as a tuple (xmin, xmax, ymin,
-ymax). <em>reference</em> is a string and may be &#8216;center&#8217; or &#8216;edge&#8217;.</p>
+ymax).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>reference</strong> : string</p>
+<blockquote>
+<div><p>either &#8216;center&#8217; or &#8216;edge&#8217;.</p>
+</div></blockquote>
+<p class="last"><strong>crs</strong> : karta.crs.CRS subclass</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -324,6 +361,24 @@ masked by nodata</p>
 <dt id="karta.raster.grid.RegularGrid.profile">
 <code class="descname">profile</code><span class="sig-paren">(</span><em>line</em>, <em>resolution=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample along a <em>line</em> at <em>resolution</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>line</strong> : karta.Line</p>
+<blockquote>
+<div><p>defines the sampling path</p>
+</div></blockquote>
+<p><strong>resolution</strong> : float, optional</p>
+<blockquote>
+<div><p>sample spacing, taken to be the minimum grid resolution by default</p>
+</div></blockquote>
+<p><strong>Additional keyword arguments passed to `RegularGrid.sample` (e.g. to</strong></p>
+<p class="last"><strong>specify sampling method)</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -335,9 +390,18 @@ in the same position.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : cell dimension, float</p>
-<p><strong>dy</strong> : cell dimension, float</p>
-<p class="last"><strong>method</strong> : interpolation method, string (&#8216;nearest&#8217;,)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
+<blockquote>
+<div><p>cell dimension 1</p>
+</div></blockquote>
+<p><strong>dy</strong> : float</p>
+<blockquote>
+<div><p>cell dimension 2</p>
+</div></blockquote>
+<p><strong>method</strong> : str, optional</p>
+<blockquote class="last">
+<div><p>interpolation method, currenlt only &#8216;nearest&#8217; supported</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -354,9 +418,18 @@ the built-in <cite>resample</cite> method matures.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : cell dimension, float</p>
-<p><strong>dy</strong> : cell dimension, float</p>
-<p class="last"><strong>method</strong> : interpolation method, string (&#8216;nearest&#8217;, &#8216;linear&#8217;)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
+<blockquote>
+<div><p>cell dimension 1</p>
+</div></blockquote>
+<p><strong>dy</strong> : float</p>
+<blockquote>
+<div><p>cell dimension 2</p>
+</div></blockquote>
+<p><strong>method</strong> : str, optional</p>
+<blockquote class="last">
+<div><p>interpolation method, one of &#8216;nearest&#8217;, &#8216;linear&#8217;</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -366,10 +439,21 @@ the built-in <cite>resample</cite> method matures.</p>
 <dl class="method">
 <dt id="karta.raster.grid.RegularGrid.resize">
 <code class="descname">resize</code><span class="sig-paren">(</span><em>bboxnew</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.resize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.resize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new grid grid with outer edges given by <em>bboxnew</em> (xmin,
-ymin, xmax, ymax).</p>
+<dd><p>Return a new grid grid with outer edges given by a bounding box.</p>
 <p>If the grid origin shifts by a non-integer factor of the grid
 resolution, nearest neighbour values are selected.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bboxnew</strong> : 4-tuple of floats</p>
+<blockquote class="last">
+<div><p>(xmin, ymin, xmax, ymax).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -381,10 +465,27 @@ resolution, nearest neighbour values are selected.</p>
 <li>a karta.Multipoint instance, or</li>
 <li>a pair of x, y coordinate lists</li>
 </ul>
-<p>Keyword <em>crs</em> used when coordinate lists are provided, otherwise the
-coordinate system is assumed to be the same as the grid&#8217;s coordinate
-system and no transformation is performed.</p>
-<p>Keyword <em>method</em> may be one of &#8216;nearest&#8217;, &#8216;bilinear&#8217; (default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>positions</strong> : karta.Point, karta.Multipoint, or two lists of floats</p>
+<blockquote>
+<div><p>see above</p>
+</div></blockquote>
+<p><strong>crs</strong> : karta.crs.CRS, optional</p>
+<blockquote>
+<div><p>used when coordinate lists are provided, otherwise the coordinate
+system is taken from the crs attribute of the geometry</p>
+</div></blockquote>
+<p><strong>method</strong> : string, optional</p>
+<blockquote class="last">
+<div><p>may be one of &#8216;nearest&#8217;, &#8216;bilinear&#8217; (default).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -406,6 +507,26 @@ sampling scheme.</p>
 <dd><p>Save internal data as an ASCII grid. Based on the ESRI standard,
 only isometric grids (i.e. <cite>hdr[&#8216;dx&#8217;] == hdr[&#8216;dy&#8217;]</cite> can be saved,
 otherwise <cite>GridIOError</cite> is thrown.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>f</strong> : str</p>
+<blockquote>
+<div><p>a file-like object or a filename</p>
+</div></blockquote>
+<p><strong>reference</strong> : str</p>
+<blockquote>
+<div><p>specify a header reference (&#8216;center&#8217; | &#8216;corner&#8217;)</p>
+</div></blockquote>
+<p><strong>nodata_value</strong> : number</p>
+<blockquote class="last">
+<div><p>specify how NaNs should be represented</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -416,8 +537,14 @@ otherwise <cite>GridIOError</cite> is thrown.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fnm: output file name</strong></p>
-<p class="last"><strong>compress: &#8220;PACKBITS&#8221; (default), &#8220;DEFLATE&#8221;, &#8220;LZW&#8221;, &#8220;LZMA&#8221;, or None</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fnm</strong> : str</p>
+<blockquote>
+<div><p>output file name</p>
+</div></blockquote>
+<p><strong>compress: str or None, optional</strong></p>
+<blockquote class="last">
+<div><p>&#8220;PACKBITS&#8221; (default), &#8220;DEFLATE&#8221;, &#8220;LZW&#8221;, &#8220;LZMA&#8221;, or None</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -438,10 +565,7 @@ otherwise <cite>GridIOError</cite> is thrown.</p>
 <dl class="class">
 <dt id="karta.raster.WarpedGrid">
 <em class="property">class </em><code class="descclassname">karta.raster.</code><code class="descname">WarpedGrid</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em>, <em>values</em>, <em>crs=None</em>, <em>nodata_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#WarpedGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.WarpedGrid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Warped Grid class. A WarpedGrid contains a fixed number of rows
-and columns and a scalar or vector field defined on the z-axis. Grid
-spacing is not necessarily constant.</p>
-<dl class="method">
+<dd><dl class="method">
 <dt id="karta.raster.WarpedGrid.resample">
 <code class="descname">resample</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#WarpedGrid.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.WarpedGrid.resample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resample internal grid to the points defined by <em>X</em>, <em>Y</em>.</p>
@@ -460,7 +584,7 @@ spacing is not necessarily constant.</p>
 <h3>SimpleBand<a class="headerlink" href="#simpleband" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="karta.raster.band.SimpleBand">
-<em class="property">class </em><code class="descclassname">karta.raster.band.</code><code class="descname">SimpleBand</code><span class="sig-paren">(</span><em>size</em>, <em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/band.html#SimpleBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.band.SimpleBand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">karta.raster.band.</code><code class="descname">SimpleBand</code><span class="sig-paren">(</span><em>size</em>, <em>dtype</em>, <em>initval=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/band.html#SimpleBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.band.SimpleBand" title="Permalink to this definition">¶</a></dt>
 <dd><p>SimpleBand wraps a numpy.ndarray for storage.</p>
 </dd></dl>
 
@@ -469,7 +593,7 @@ spacing is not necessarily constant.</p>
 <h3>CompressedBand<a class="headerlink" href="#compressedband" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="karta.raster.band.CompressedBand">
-<em class="property">class </em><code class="descclassname">karta.raster.band.</code><code class="descname">CompressedBand</code><span class="sig-paren">(</span><em>size</em>, <em>dtype</em>, <em>chunksize=(256</em>, <em>256)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/band.html#CompressedBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.band.CompressedBand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">karta.raster.band.</code><code class="descname">CompressedBand</code><span class="sig-paren">(</span><em>size</em>, <em>dtype</em>, <em>chunksize=(256</em>, <em>256)</em>, <em>initval=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/band.html#CompressedBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.band.CompressedBand" title="Permalink to this definition">¶</a></dt>
 <dd><p>CompressedBand is a chunked, blosc-compressed array.</p>
 </dd></dl>
 
