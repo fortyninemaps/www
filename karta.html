@@ -69,12 +69,17 @@
           classification maps.</p>
 
           <p class="lead text-left">Regularly-spaced grids are represented by
-          <code>RegularGrid</code>, with data backed by numpy arrays. Grids
-          with arbitrary spacing can be represented by the experimental
-          <code>WarpedGrid</code>. Grids can be clipped, resampled, queried at
-          geographical points, and read or written to ESRI ASCII files or to
-          GeoTiff via GDAL. Functions are provided for computing DEM properties
-          such as slope, aspect, and hillshade.</p>
+          <code>RegularGrid</code>, which can be created from Numpy ndarrays
+          and spatial reference information. Grid data is then stored in a
+          chunked and compressed in-memory array for space efficiency, or a
+          simple Numpy ndarray for speed. Grids may also use GeoTiff-backed
+          files for very large data. Experimental support exists for grids with
+          arbitrary spacing, which are represented by <code>WarpedGrid</code>.
+
+          Grids can be clipped, resampled, queried at geographical points, and
+          read or written to ESRI ASCII files or to GeoTiff via GDAL. Functions
+          are provided for computing DEM properties such as slope, aspect, and
+          hillshade.</p>
 
           <pre class="text-left">
 # Read a grid and resample
