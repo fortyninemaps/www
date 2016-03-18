@@ -77,6 +77,7 @@ a.button {
   font-size: 24px;
   color: white;
   text-decoration: none;
+  transition-duration: 0.3s;
 }
 
 a.button:hover {
@@ -86,6 +87,13 @@ a.button:hover {
 
 div.pymodule a {
   color: #333;
+  transition-duration: 0.3s;
+}
+
+div.pymodule a:hover {
+  color: #555;
+  text-decoration: none;
+  transition-duration: 0.2s;
 }
 
 footer {

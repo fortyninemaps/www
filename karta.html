@@ -106,7 +106,38 @@ hs = karta.raster.hillshade(grid_clipped)</pre>
         <h3 class="text-muted subtitle">Bounding boxes, distances and lengths,
         intersection calculations, convex hulls</h3>
 
-        <div class="col-md-7">
+        <div class="col-md-6">
+          <img class="img-responsive center-block" src="images/ontario_rtree.png">
+        </div>
+
+        <div class="col-md-6">
+
+          <pre class="text-left">
+# Create and manipulate geometries
+point = Point((-130.0, 52.0), crs=LonLatWGS84)
+line = read_geojson("linedata.json")
+polygon = Polygon([(-515005.78, -1301130.53),
+                   (-579174.89, -1282271.94),
+                   (-542977.83, -1221147.82),
+                   (-437864.05, -1251641.55),
+                   (-438160.72, -1252421.48),
+                   (-437961.28, -1285314.00)],
+                   crs=NSIDCNorth)
+
+print(polygon.area)
+polygon.convex_hull().to_shapefile("poly_hull.shp")
+
+# Build spatial indices
+sd = karta.read_shapefile("census_divisions.shp")
+sd_ont = [geom for geom in sd if "Ontario" in geom.properties["PRNAME"]]
+index = karta.vector.rtree.build_tree(sd_ont)
+          </pre>
+        </div>
+
+      </div>
+      <div class="row">
+
+        <div class="col-md-12">
 
           <p class="lead text-left">Karta provides Point, Line, Polygon, and
           Multipoint classes, and computes properties and relationships vector
@@ -127,27 +158,6 @@ hs = karta.raster.hillshade(grid_clipped)</pre>
           permitting interchange with other libraries such as <a
           href="http://toblerity.org/shapely/">Shapely</a>.</p>
 
-        </div>
-
-        <div class="col-md-5">
-            <pre class="text-left">
-point = Point((-130.0, 52.0), crs=LonLatWGS84)
-
-line = read_geojson("linedata.json")
-
-print(line.length)
-
-polygon = Polygon([(-515005.78, -1301130.53),
-                   (-579174.89, -1282271.94),
-                   (-542977.83, -1221147.82),
-                   (-437864.05, -1251641.55),
-                   (-438160.72, -1252421.48),
-                   (-437961.28, -1285314.00)],
-                   crs=NSIDCNorth)
-
-print(polygon.area)
-
-polygon.convex_hull().to_shapefile("outline.shp") </pre>
         </div>
 
       </div>
