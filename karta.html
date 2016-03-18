@@ -83,9 +83,9 @@
 
           <pre class="text-left">
 # Read a grid and resample
-grid = karta.read_gtiff("LC80360272015200.tif").resize(bbox)
-grid_clipped = grid.resize([-1940000, 519000, -1910000, 549000)])
-hs = karta.raster.hillshade(grid_clipped)</pre>
+grid = karta.read_gtiff("region_dem_UTM.tif").resize(bbox)
+grid_100m = grid.resample(100, 100)
+hs = karta.raster.hillshade(grid_100m)</pre>
 
         </div>
 
@@ -130,8 +130,7 @@ polygon.convex_hull().to_shapefile("poly_hull.shp")
 # Build spatial indices
 sd = karta.read_shapefile("census_divisions.shp")
 sd_ont = [geom for geom in sd if "Ontario" in geom.properties["PRNAME"]]
-index = karta.vector.rtree.build_tree(sd_ont)
-          </pre>
+index = karta.vector.rtree.build_tree(sd_ont) </pre>
         </div>
 
       </div>
