@@ -83,7 +83,11 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Karta tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#vector-data">Vector data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#associated-data">Associated data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#visualizing-and-importing-exporting-data">Visualizing and importing/exporting data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#raster-data">Raster data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Package reference</a></li>
 </ul>
 
@@ -200,28 +204,6 @@
   <dt><a href="reference.html#karta.vector.geojson.GeoJSONWriter.add_properties">add_properties() (karta.vector.geojson.GeoJSONWriter method)</a>
   </dt>
 
-      
-  <dt><a href="reference.html#karta.vector.geometry.Geometry.add_property">add_property() (karta.vector.geometry.Geometry method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.vector.Line.add_property">(karta.vector.Line method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.vector.Multipoint.add_property">(karta.vector.Multipoint method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.vector.Point.add_property">(karta.vector.Point method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.vector.Polygon.add_property">(karta.vector.Polygon method)</a>
-  </dt>
-
-      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
@@ -487,28 +469,6 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.vector.geometry.Geometry.delete_property">delete_property() (karta.vector.geometry.Geometry method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.vector.Line.delete_property">(karta.vector.Line method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.vector.Multipoint.delete_property">(karta.vector.Multipoint method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.vector.Point.delete_property">(karta.vector.Point method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.vector.Polygon.delete_property">(karta.vector.Polygon method)</a>
-  </dt>
-
-      </dl></dd>
-      
   <dt><a href="reference.html#karta.vector.Line.displacement">displacement() (karta.vector.Line method)</a>
   </dt>
 
@@ -562,7 +522,7 @@
 
       <dd><dl>
         
-  <dt><a href="reference.html#karta.vector.metadata.Metadata.extend">(karta.vector.metadata.Metadata method)</a>
+  <dt><a href="reference.html#karta.vector.table.Table.extend">(karta.vector.table.Table method)</a>
   </dt>
 
       </dl></dd>
@@ -677,7 +637,7 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.vector.metadata.Metadata.get">get() (karta.vector.metadata.Metadata method)</a>
+  <dt><a href="reference.html#karta.vector.table.Table.get">get() (karta.vector.table.Table method)</a>
   </dt>
 
       
@@ -753,7 +713,7 @@
 
       </dl></dd>
       
-  <dt><a href="reference.html#karta.vector.metadata.Metadata.getfield">getfield() (karta.vector.metadata.Metadata method)</a>
+  <dt><a href="reference.html#karta.vector.table.Table.getfield">getfield() (karta.vector.table.Table method)</a>
   </dt>
 
       
@@ -791,7 +751,7 @@
   </dt>
 
       
-  <dt><a href="reference.html#karta.vector.metadata.Indexer">Indexer (class in karta.vector.metadata)</a>
+  <dt><a href="reference.html#karta.vector.table.Indexer">Indexer (class in karta.vector.table)</a>
   </dt>
 
       
@@ -907,10 +867,6 @@
   </dt>
 
       
-  <dt><a href="reference.html#module-karta.vector.metadata">karta.vector.metadata (module)</a>
-  </dt>
-
-      
   <dt><a href="reference.html#module-karta.vector.quadtree">karta.vector.quadtree (module)</a>
   </dt>
 
@@ -924,6 +880,10 @@
 
       
   <dt><a href="reference.html#module-karta.vector.shp">karta.vector.shp (module)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#module-karta.vector.table">karta.vector.table (module)</a>
   </dt>
 
   </dl></td>
@@ -970,10 +930,6 @@
 
       
   <dt><a href="reference.html#karta.raster.grid.Grid.max">max() (karta.raster.grid.Grid method)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#karta.vector.metadata.Metadata">Metadata (class in karta.vector.metadata)</a>
   </dt>
 
       
@@ -1299,7 +1255,7 @@
 
       </dl></dd>
       
-  <dt><a href="reference.html#karta.vector.metadata.Metadata.setfield">setfield() (karta.vector.metadata.Metadata method)</a>
+  <dt><a href="reference.html#karta.vector.table.Table.setfield">setfield() (karta.vector.table.Table method)</a>
   </dt>
 
       
@@ -1385,6 +1341,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="reference.html#karta.vector.table.Table">Table (class in karta.vector.table)</a>
+  </dt>
+
+      
   <dt><a href="reference.html#karta.raster.grid.RegularGrid.to_aai">to_aai() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
@@ -1414,12 +1374,12 @@
   <dt><a href="reference.html#karta.raster.grid.RegularGrid.to_gtiff">to_gtiff() (karta.raster.grid.RegularGrid method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.vector.Polygon.to_line">to_line() (karta.vector.Polygon method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#karta.vector.Line.to_polygon">to_polygon() (karta.vector.Line method)</a>
   </dt>
@@ -1443,20 +1403,6 @@
 
         
   <dt><a href="reference.html#karta.vector.Polygon.to_shapefile">(karta.vector.Polygon method)</a>
-  </dt>
-
-      </dl></dd>
-      
-  <dt><a href="reference.html#karta.vector.Line.to_vtk">to_vtk() (karta.vector.Line method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="reference.html#karta.vector.Multipoint.to_vtk">(karta.vector.Multipoint method)</a>
-  </dt>
-
-        
-  <dt><a href="reference.html#karta.vector.Polygon.to_vtk">(karta.vector.Polygon method)</a>
   </dt>
 
       </dl></dd>

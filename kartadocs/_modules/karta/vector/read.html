@@ -83,7 +83,11 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Karta tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html#vector-data">Vector data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html#associated-data">Associated data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html#visualizing-and-importing-exporting-data">Visualizing and importing/exporting data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html#raster-data">Raster data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Package reference</a></li>
 </ul>
 
@@ -138,12 +142,10 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geojson</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">xyfile</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">shp</span>
-<span class="kn">from</span> <span class="nn">.metadata</span> <span class="kn">import</span> <span class="n">Metadata</span>
-<span class="kn">from</span> <span class="nn">..crs</span> <span class="kn">import</span> <span class="n">GeographicalCRS</span><span class="p">,</span> <span class="n">ProjectedCRS</span><span class="p">,</span> <span class="n">LonLatWGS84</span><span class="p">,</span> <span class="n">HASOSR</span><span class="p">,</span> <span class="n">crs_from_wkt</span>
+<span class="kn">from</span> <span class="nn">..crs</span> <span class="kn">import</span> <span class="n">GeographicalCRS</span><span class="p">,</span> <span class="n">ProjectedCRS</span><span class="p">,</span> <span class="n">LonLatWGS84</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">errors</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">osgeo</span>
     <span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">ogr</span>
     <span class="n">HAS_OSGEO</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -192,8 +194,13 @@
 <span class="c1">### GeoJSON functions ###</span>
 
 <div class="viewcode-block" id="read_geojson"><a class="viewcode-back" href="../../../reference.html#karta.vector.read.read_geojson">[docs]</a><span class="k">def</span> <span class="nf">read_geojson</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Read a GeoJSON file object and return a list of geometries &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; Parse GeoJSON and return a list of geometries.</span>
 
+<span class="sd">    f : file-like object or str</span>
+<span class="sd">        file object to read from or a GeoJSON string</span>
+<span class="sd">    crs : karta.crs.CRS</span>
+<span class="sd">        CRS object to bind to new geometries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">convert_crs</span><span class="p">(</span><span class="n">crsdict</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">crsdict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">):</span>
             <span class="n">crs</span> <span class="o">=</span> <span class="n">LonLatWGS84</span>

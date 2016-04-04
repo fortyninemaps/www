@@ -83,6 +83,10 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Karta tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#vector-data">Vector data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#associated-data">Associated data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#visualizing-and-importing-exporting-data">Visualizing and importing/exporting data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#raster-data">Raster data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Package reference</a></li>
 </ul>
 
@@ -136,28 +140,28 @@ capabilities of <em>Karta</em> by making data interchange with external modules
 simple. This example shows how the popular
 <a class="reference external" href="https://github.com/Toblerity/Shapely">shapely</a> package can to used
 to apply a buffer to a <em>Karta</em> polygon.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">karta.examples</span> <span class="kn">import</span> <span class="n">greenland</span>
-<span class="kn">from</span> <span class="nn">karta.vector.read</span> <span class="kn">import</span> <span class="n">from_shape</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">karta.examples</span> <span class="k">import</span> <span class="n">greenland</span>
+<span class="kn">from</span> <span class="nn">karta.vector.read</span> <span class="k">import</span> <span class="n">from_shape</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span>
 </pre></div>
 </div>
 <p>Pass the data in the <code class="docutils literal"><span class="pre">greenland</span></code> Polygon to shapely.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">shapely_poly</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">greenland</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">shapely_poly</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">greenland</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">shapely_poly</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">shapely_poly</span>
 </pre></div>
 </div>
 <img src="_images/geointerface_4_0.svg" /><p>Use shapely to call the GEOS library&#8217;s <code class="docutils literal"><span class="pre">GEOSBuffer</span></code> function (takes
 several seconds on my machine).</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">shapely_poly_buffered</span> <span class="o">=</span> <span class="n">shapely_poly</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">100e3</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">shapely_poly_buffered</span> <span class="o">=</span> <span class="n">shapely_poly</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">100</span><span class="n">e3</span><span class="p">)</span>
 <span class="n">shapely_poly_buffered</span>
 </pre></div>
 </div>
 <img src="_images/geointerface_6_0.svg" /><p>Convert the data back to a <em>Karta</em> Polygon. Since shapely doesn&#8217;t handle
 coordinate systems, we need to set the original coordinate system from
 the old Polygon.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">greenland_buffered</span> <span class="o">=</span> <span class="n">from_shape</span><span class="p">(</span><span class="n">shapely_poly_buffered</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">greenland_buffered</span> <span class="o">=</span> <span class="n">from_shape</span><span class="p">(</span><span class="n">shapely_poly_buffered</span><span class="p">)</span>
 <span class="n">greenland_buffered</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">greenland</span><span class="o">.</span><span class="n">crs</span>
 </pre></div>
 </div>
