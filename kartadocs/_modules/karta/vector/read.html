@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.vector.read &mdash; karta 0.6dev documentation</title>
+  <title>karta.vector.read &mdash; karta 0.6.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="karta 0.6dev documentation" href="../../../index.html"/>
+    <link rel="top" title="karta 0.6.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -140,8 +140,9 @@
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geometry</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geojson</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">xyfile</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">shp</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">gpx</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">xyfile</span>
 <span class="kn">from</span> <span class="nn">..crs</span> <span class="kn">import</span> <span class="n">GeographicalCRS</span><span class="p">,</span> <span class="n">ProjectedCRS</span><span class="p">,</span> <span class="n">LonLatWGS84</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">errors</span>
 
@@ -193,7 +194,7 @@
 
 <span class="c1">### GeoJSON functions ###</span>
 
-<div class="viewcode-block" id="read_geojson"><a class="viewcode-back" href="../../../reference.html#karta.vector.read.read_geojson">[docs]</a><span class="k">def</span> <span class="nf">read_geojson</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="read_geojson"><a class="viewcode-back" href="../../../reference.html#karta.vector.read.read_geojson">[docs]</a><span class="k">def</span> <span class="nf">read_geojson</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">LonLatWGS84</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Parse GeoJSON and return a list of geometries.</span>
 
 <span class="sd">    f : file-like object or str</span>
@@ -201,7 +202,8 @@
 <span class="sd">    crs : karta.crs.CRS</span>
 <span class="sd">        CRS object to bind to new geometries</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">convert_crs</span><span class="p">(</span><span class="n">crsdict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_convert_crs</span><span class="p">(</span><span class="n">crsdict</span><span class="p">):</span>
+        <span class="c1"># Deprecated</span>
         <span class="k">if</span> <span class="n">crsdict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">):</span>
             <span class="n">crs</span> <span class="o">=</span> <span class="n">LonLatWGS84</span>
         <span class="k">elif</span> <span class="n">crsdict</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span>
@@ -222,27 +224,25 @@
             <span class="n">res</span> <span class="o">=</span> <span class="n">convert_geometry</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
-    <span class="k">def</span> <span class="nf">convert_geometry</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">crs</span> <span class="o">=</span> <span class="n">convert_crs</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">convert_geometry</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">geojson</span><span class="o">.</span><span class="n">Point</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">geojson</span><span class="o">.</span><span class="n">LineString</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">geojson</span><span class="o">.</span><span class="n">Polygon</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                                     <span class="n">subs</span><span class="o">=</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
-                                    <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+                                    <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">geojson</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Multipoint</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Multipoint</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">geojson</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">geometry</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">geometry</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">coords</span> <span class="ow">in</span> <span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">geojson</span><span class="o">.</span><span class="n">MultiPolygon</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">subs</span><span class="o">=</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">subs</span><span class="o">=</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">coords</span> <span class="ow">in</span> <span class="n">geom</span><span class="o">.</span><span class="n">coordinates</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;{0} is a not a JSON geometry&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;{0} is a not a GeoJSON entity&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">geom</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">convert_feature</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span>
@@ -356,6 +356,30 @@
 <span class="c1"># convenience binding</span>
 <span class="n">read_shapefile</span> <span class="o">=</span> <span class="n">ogr_read_shapefile</span>
 
+
+<span class="c1">### GPX functions ###</span>
+
+<span class="k">def</span> <span class="nf">read_gpx_waypts</span><span class="p">(</span><span class="n">fnm</span><span class="p">):</span>
+    <span class="n">gpx_doc</span> <span class="o">=</span> <span class="n">gpx</span><span class="o">.</span><span class="n">GPX</span><span class="p">(</span><span class="n">fnm</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_waypt2pt</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">gpx_doc</span><span class="o">.</span><span class="n">waypts</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">read_gpx_tracks</span><span class="p">(</span><span class="n">fnm</span><span class="p">):</span>
+    <span class="n">gpx_doc</span> <span class="o">=</span> <span class="n">gpx</span><span class="o">.</span><span class="n">GPX</span><span class="p">(</span><span class="n">fnm</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_track2lines</span><span class="p">(</span><span class="n">trk</span><span class="p">)</span> <span class="k">for</span> <span class="n">trk</span> <span class="ow">in</span> <span class="n">gpx_doc</span><span class="o">.</span><span class="n">tracks</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_waypt2pt</span><span class="p">(</span><span class="n">waypt</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">waypt</span><span class="o">.</span><span class="n">lonlat</span><span class="p">,</span>
+                          <span class="n">properties</span><span class="o">=</span><span class="n">waypt</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
+                          <span class="n">crs</span><span class="o">=</span><span class="n">LonLatWGS84</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_seg2line</span><span class="p">(</span><span class="n">seg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Line</span><span class="p">([</span><span class="n">pt</span><span class="o">.</span><span class="n">lonlat</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">trkpts</span><span class="p">],</span>
+                         <span class="n">properties</span><span class="o">=</span><span class="n">seg</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
+                         <span class="n">crs</span><span class="o">=</span><span class="n">LonLatWGS84</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_track2lines</span><span class="p">(</span><span class="n">track</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_seg2line</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">track</span><span class="o">.</span><span class="n">trksegs</span><span class="p">]</span>
+
 </pre></div>
 
            </div>
@@ -389,7 +413,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.6dev',
+            VERSION:'0.6.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

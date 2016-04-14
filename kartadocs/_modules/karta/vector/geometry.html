@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.vector.geometry &mdash; karta 0.6dev documentation</title>
+  <title>karta.vector.geometry &mdash; karta 0.6.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="karta 0.6dev documentation" href="../../../index.html"/>
+    <link rel="top" title="karta 0.6.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -1000,15 +1000,21 @@
         <span class="sd">&quot;&quot;&quot; Return whether an intersection exists with another geometry. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">CartesianCRS</span><span class="p">):</span>
             <span class="n">interxbool</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">in</span> <span class="n">_cvectorgeo</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                                         <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                                                             <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
                         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">segments</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bbox_overlap</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">False</span> <span class="ow">in</span> <span class="n">interxbool</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">False</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;intersects&#39; method not implemented for &quot;</span>
-                                      <span class="s2">&quot;Geographical coordinate systems&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">segments</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">geodesy</span><span class="o">.</span><span class="n">intersection_spherical</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="n">geodesy</span><span class="o">.</span><span class="n">NoIntersection</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
 
     <span class="k">def</span> <span class="nf">intersections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">keep_duplicates</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the intersections with another geometry as a Multipoint. &quot;&quot;&quot;</span>
@@ -1026,8 +1032,7 @@
             <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="n">interx_points</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># FIXME: implement for ellipsoidal coordinate systems</span>
-            <span class="n">interx</span> <span class="o">=</span> <span class="p">(</span><span class="n">geodesy</span><span class="o">.</span><span class="n">intersection_spherical</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                                     <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">interx</span> <span class="o">=</span> <span class="p">(</span><span class="n">geodesy</span><span class="o">.</span><span class="n">intersection_spherical</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
                          <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">segments</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_duplicates</span><span class="p">:</span>
                 <span class="n">interx</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">interx</span><span class="p">)</span>
@@ -1047,8 +1052,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ptvertex</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
         <span class="n">segments</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">==</span> <span class="n">pt</span><span class="o">.</span><span class="n">crs</span><span class="p">):</span>
-            <span class="n">pt</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">_reproject</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">vertex</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">CartesianCRS</span><span class="p">):</span>
             <span class="n">func</span> <span class="o">=</span> <span class="n">_cvectorgeo</span><span class="o">.</span><span class="n">pt_nearest_planar</span>
@@ -1065,11 +1068,9 @@
         <span class="n">point_dist</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">segments</span><span class="p">)</span>
         <span class="n">minpt</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">mindist</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
-        <span class="c1"># Needs to be pt_ because in Python 3 assigning to pt alters subsequent</span>
-        <span class="c1"># values in the map</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">pt_</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">point_dist</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">point_dist</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">mindist</span> <span class="ow">or</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">minpt</span> <span class="o">=</span> <span class="n">pt_</span>
+                <span class="n">minpt</span> <span class="o">=</span> <span class="n">pt</span>
                 <span class="n">mindist</span> <span class="o">=</span> <span class="n">d</span>
 
         <span class="k">return</span> <span class="n">mindist</span><span class="p">,</span> <span class="n">minpt</span>
@@ -1531,7 +1532,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.6dev',
+            VERSION:'0.6.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

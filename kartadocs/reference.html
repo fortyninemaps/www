@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Package reference &mdash; karta 0.6dev documentation</title>
+  <title>Package reference &mdash; karta 0.6.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="karta 0.6dev documentation" href="index.html"/>
+    <link rel="top" title="karta 0.6.1 documentation" href="index.html"/>
         <link rel="prev" title="Karta tutorial" href="tutorial.html"/> 
 
   
@@ -506,6 +506,20 @@ sampling scheme.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="karta.raster.grid.RegularGrid.set_nodata_value">
+<code class="descname">set_nodata_value</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.set_nodata_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.set_nodata_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redefine value used to indicate nodata.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>val</strong> : number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="karta.raster.grid.RegularGrid.to_aai">
 <code class="descname">to_aai</code><span class="sig-paren">(</span><em>f</em>, <em>reference='corner'</em>, <em>nodata_value=-9999</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.to_aai"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.to_aai" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save internal data as an ASCII grid. Based on the ESRI standard,
@@ -678,7 +692,7 @@ object.</p>
 
 <dl class="function">
 <dt id="karta.vector.read.read_geojson">
-<code class="descclassname">karta.vector.read.</code><code class="descname">read_geojson</code><span class="sig-paren">(</span><em>f</em>, <em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/read.html#read_geojson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.read.read_geojson" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">karta.vector.read.</code><code class="descname">read_geojson</code><span class="sig-paren">(</span><em>f</em>, <em>crs=&lt;karta.crs.GeographicalCRS object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/read.html#read_geojson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.read.read_geojson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse GeoJSON and return a list of geometries.</p>
 <dl class="docutils">
 <dt>f</dt>
@@ -2053,7 +2067,7 @@ object.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">karta.vector.read.</code><code class="descname">read_geojson</code><span class="sig-paren">(</span><em>f</em>, <em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/read.html#read_geojson"><span class="viewcode-link">[source]</span></a></dt>
+<code class="descclassname">karta.vector.read.</code><code class="descname">read_geojson</code><span class="sig-paren">(</span><em>f</em>, <em>crs=&lt;karta.crs.GeographicalCRS object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/read.html#read_geojson"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Parse GeoJSON and return a list of geometries.</p>
 <dl class="docutils">
 <dt>f</dt>
@@ -2145,7 +2159,7 @@ using the <cite>href</cite> and <cite>linktype</cite> keyword arguments.</p>
 <dt id="karta.vector.geojson.GeoJSONWriter">
 <em class="property">class </em><code class="descclassname">karta.vector.geojson.</code><code class="descname">GeoJSONWriter</code><span class="sig-paren">(</span><em>gpobj</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geojson.html#GeoJSONWriter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geojson.GeoJSONWriter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for converting geometry objects to GeoJSON strings. Multipoint-based
-opbjects are written as &#8216;Features&#8217;.</p>
+opjects are written as &#8216;Features&#8217;.</p>
 <dl class="method">
 <dt id="karta.vector.geojson.GeoJSONWriter.add_bbox">
 <code class="descname">add_bbox</code><span class="sig-paren">(</span><em>bbox=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geojson.html#GeoJSONWriter.add_bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geojson.GeoJSONWriter.add_bbox" title="Permalink to this definition">¶</a></dt>
@@ -2336,17 +2350,18 @@ JSON serialization.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="karta.vector.geojson.asfixedlist">
+<code class="descclassname">karta.vector.geojson.</code><code class="descname">asfixedlist</code><span class="sig-paren">(</span><em>A</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geojson.html#asfixedlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geojson.asfixedlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively convert nested iterables or coordinates to nested lists at
+fixed precision.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="karta.vector.geojson.geojson2csv">
 <code class="descclassname">karta.vector.geojson.</code><code class="descname">geojson2csv</code><span class="sig-paren">(</span><em>fin</em>, <em>fout</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geojson.html#geojson2csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geojson.geojson2csv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a JSON file to a CSV. Only properties (attributes) common to
 all features are retained. The arguments <cite>fin</cite> and <cite>fout</cite> may be either
 filenames or file-like objects.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.geojson.list_rec">
-<code class="descclassname">karta.vector.geojson.</code><code class="descname">list_rec</code><span class="sig-paren">(</span><em>A</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geojson.html#list_rec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geojson.list_rec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recursively convert nested iterables to nested lists</p>
 </dd></dl>
 
 <dl class="function">
@@ -2847,6 +2862,18 @@ in a specified direction.</p>
 <dt id="karta.geodesy.intersection_spherical">
 <code class="descclassname">karta.geodesy.</code><code class="descname">intersection_spherical</code><span class="sig-paren">(</span><em>segment1</em>, <em>segment2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/geodesy.html#intersection_spherical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.geodesy.intersection_spherical" title="Permalink to this definition">¶</a></dt>
 <dd><p>compute the intersection between two great circle segments on a sphere</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>segment1, segment2</strong> : tuple of tuples</p>
+<blockquote class="last">
+<div><p>Tuples of the form ((x1, y1), (x2, y2)) describing line segements</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3008,7 +3035,7 @@ corresponding problem on a sphere.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.6dev',
+            VERSION:'0.6.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

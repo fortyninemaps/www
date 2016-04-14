@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Karta tutorial &mdash; karta 0.6dev documentation</title>
+  <title>Karta tutorial &mdash; karta 0.6.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="karta 0.6dev documentation" href="index.html"/>
+    <link rel="top" title="karta 0.6.1 documentation" href="index.html"/>
         <link rel="next" title="Package reference" href="reference.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
 
@@ -461,7 +461,6 @@ American state capitols are within 2000 km of Mexico City?</p>
 <p>All of the above calculations are performed on a geoid. The
 <code class="docutils literal"><span class="pre">LonLatWGS84</span></code> coordinate system means to use geographical (longitude
 and latitude) coordinates on the WGS 84 ellipsoid.</p>
-<p><strong>TODO: describe other geometries</strong></p>
 </div>
 <div class="section" id="associated-data">
 <h1>Associated data<a class="headerlink" href="#associated-data" title="Permalink to this headline">¶</a></h1>
@@ -497,10 +496,10 @@ geometry.</p>
                 <span class="p">(</span><span class="o">-</span><span class="mf">11.44</span><span class="p">,</span> <span class="mf">66.82</span><span class="p">)],</span>
                <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;geology&quot;</span><span class="p">:</span> <span class="s2">&quot;volcanic&quot;</span><span class="p">,</span>
                            <span class="s2">&quot;alcohol&quot;</span><span class="p">:</span> <span class="s2">&quot;brennivin&quot;</span><span class="p">})</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">poly</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">poly</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;class &#39;karta.vector.geometry.Line&#39;([(-25.41, 67.03), (-24.83, 62.92), (-12.76, 63.15)])&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;alcohol&#39;</span><span class="p">:</span> <span class="s1">&#39;brennivin&#39;</span><span class="p">,</span> <span class="s1">&#39;geology&#39;</span><span class="p">:</span> <span class="s1">&#39;volcanic&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -509,7 +508,7 @@ geometry.</p>
 <p>The <code class="docutils literal"><span class="pre">get_coordinate_lists</span></code> method and <code class="docutils literal"><span class="pre">coordinates</span></code> attribute
 provide lists of coordinates, which make it easy to visualize a
 geometry. Higher-level plotting operations are provided by the separate
-<a class="reference external" href="https://github.com/fortyninemaps/karta-map">karta.mapping</a>
+<code class="docutils literal"><span class="pre">`karta.mapping</span></code> &lt;<a class="reference external" href="https://github.com/fortyninemaps/karta-map">https://github.com/fortyninemaps/karta-map</a>&gt;`__
 submodule, not described here.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="o">%</span><span class="n">matplotlib</span>
@@ -519,7 +518,7 @@ submodule, not described here.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Using</span> <span class="n">matplotlib</span> <span class="n">backend</span><span class="p">:</span> <span class="n">Qt4Agg</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x7f25d4d25630</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x7fc1a3e2d390</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Data can be read from several common formats, including ESRI shapefiles
@@ -531,7 +530,7 @@ separated value tables. Convenience functions are kept in the
 <span class="n">poly</span><span class="o">.</span><span class="n">to_geojson</span><span class="p">(</span><span class="s2">&quot;my_json.json&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">karta</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">geojson</span><span class="o">.</span><span class="n">GeoJSONWriter</span> <span class="n">at</span> <span class="mh">0x7f25d4cd0da0</span><span class="o">&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">karta</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">geojson</span><span class="o">.</span><span class="n">GeoJSONWriter</span> <span class="n">at</span> <span class="mh">0x7fc1a3ddfe80</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -568,7 +567,7 @@ operations supported by the other band types.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">ls8</span><span class="o">.</span><span class="n">bands</span><span class="p">)</span>     <span class="c1"># list of one CompressedBand instance</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">karta</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">band</span><span class="o">.</span><span class="n">CompressedBand</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f25d4ccdac8</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">karta</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">band</span><span class="o">.</span><span class="n">CompressedBand</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fc1a3ddaac8</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Print grid dimensions</span>
@@ -610,12 +609,70 @@ apply, i.e. one can do things like:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">every_other</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">4571</span><span class="p">,</span> <span class="mi">4576</span><span class="p">)</span>
-</pre></div>
-</div>
+<pre class="literal-block">
+(4571, 4576)
+
+
+<strong>Note</strong> When getting raster data, the array provided by slicing is
+not necessarily a view of the underlying data, and may be a copy
+instead. Modifying the array is not guaranteed to modify the raster.
+When the raster data must be replaced by an element-wise
+computation, use the <code class="docutils literal"><span class="pre">Grid.apply(func)</span></code> method, which operates
+in-place. The <code class="docutils literal"><span class="pre">apply</span></code> method may be chained.
+
+::
+
+    # Example
+    grid.apply(lambda x: x**2)         .apply(np.sin)         .apply(lambda x: np.where(x &lt; 0.5, grid.nodata, x))
+
+This handles nodata pixels automatically. If the raster data must be
+replaced by arbitrary data, set it explicitly with
+<code class="docutils literal"><span class="pre">Grid[:,:]</span> <span class="pre">=</span> <span class="pre">...</span></code>.
+
+::
+
+    # Example
+    grid[:,:] = np.convolve(np.ones([3,3])/9.0, grid[:,:], mode='same')
+</pre>
 <p>The <code class="docutils literal"><span class="pre">RegularGrid</span></code> instance provides methods for sampling rasters,
 computing statistics, clipping and resizing, and resampling.</p>
-<p><strong>TODO: describe geotransform tuple and demstrate grid creation</strong></p>
+<p>New <code class="docutils literal"><span class="pre">RegularGrid</span></code> instances are created by specifying a geotransform.
+The geotransform is represented by a tuple of the form</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transform</span> <span class="o">=</span> <span class="p">(</span><span class="n">xll</span><span class="p">,</span> <span class="n">yll</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">xll</span></code> and <code class="docutils literal"><span class="pre">yll</span></code> are the coordinates of the lower left grid
+corner, <code class="docutils literal"><span class="pre">dx</span></code> and <code class="docutils literal"><span class="pre">dy</span></code> specify resolution, and <code class="docutils literal"><span class="pre">sx</span></code> and <code class="docutils literal"><span class="pre">sy</span></code>
+specify grid skew and rotation.</p>
+<p>Additional arguments define the grid size and coordinate reference
+system, and initialize grid data. The following creates a &#8220;north-up&#8221;
+orthogonal grid with uniform spacing of 10 meters and an origin at (0,
+0).</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">karta.crs</span> <span class="k">import</span> <span class="n">WebMercator</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">RegularGrid</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                   <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]),</span>
+                   <span class="n">nodata_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                   <span class="n">crs</span><span class="o">=</span><span class="n">WebMercator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">grid</span><span class="o">.</span><span class="n">resolution</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">grid</span><span class="o">.</span><span class="n">extent</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">9995.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">9995.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">grid</span><span class="o">.</span><span class="n">bbox</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10000.0</span><span class="p">,</span> <span class="mf">10000.0</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -660,7 +717,7 @@ computing statistics, clipping and resizing, and resampling.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.6dev',
+            VERSION:'0.6.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

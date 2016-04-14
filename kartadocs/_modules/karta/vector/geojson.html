@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.vector.geojson &mdash; karta 0.6dev documentation</title>
+  <title>karta.vector.geojson &mdash; karta 0.6.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="karta 0.6dev documentation" href="../../../index.html"/>
+    <link rel="top" title="karta 0.6.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -197,7 +197,7 @@
 
 <div class="viewcode-block" id="GeoJSONWriter"><a class="viewcode-back" href="../../../reference.html#karta.vector.geojson.GeoJSONWriter">[docs]</a><span class="k">class</span> <span class="nc">GeoJSONWriter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Class for converting geometry objects to GeoJSON strings. Multipoint-based</span>
-<span class="sd">    opbjects are written as &#39;Features&#39;.</span>
+<span class="sd">    opjects are written as &#39;Features&#39;.</span>
 
 <span class="sd">    Notes:</span>
 <span class="sd">    ------</span>
@@ -300,14 +300,14 @@
             <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supobj</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">:</span>
-            <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">list_rec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">())]</span>
+            <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">asfixedlist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">())]</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="p">,</span> <span class="s2">&quot;subs&quot;</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">poly</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
-                    <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">list_rec</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">()))</span>
+                    <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">asfixedlist</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">()))</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="p">,</span> <span class="s1">&#39;get_vertices&#39;</span><span class="p">):</span>
-            <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_rec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">())</span>
+            <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">asfixedlist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">())</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="p">,</span> <span class="s1">&#39;get_vertex&#39;</span><span class="p">):</span>
-            <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_rec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">())</span>
+            <span class="n">target</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">asfixedlist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpobj</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Geometry object has no vertex method&#39;</span><span class="p">)</span>
         <span class="k">return</span></div>
@@ -560,12 +560,13 @@
                 <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_asdict</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                              <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feature_collection</span><span class="o">.</span><span class="n">features</span><span class="p">]}</span></div>
 
-<div class="viewcode-block" id="list_rec"><a class="viewcode-back" href="../../../reference.html#karta.vector.geojson.list_rec">[docs]</a><span class="k">def</span> <span class="nf">list_rec</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Recursively convert nested iterables to nested lists &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="asfixedlist"><a class="viewcode-back" href="../../../reference.html#karta.vector.geojson.asfixedlist">[docs]</a><span class="k">def</span> <span class="nf">asfixedlist</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Recursively convert nested iterables or coordinates to nested lists at</span>
+<span class="sd">    fixed precision. &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">list_rec</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">A</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">asfixedlist</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">A</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">A</span></div>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="printGeometryCollection"><a class="viewcode-back" href="../../../reference.html#karta.vector.geojson.printGeometryCollection">[docs]</a><span class="k">def</span> <span class="nf">printGeometryCollection</span><span class="p">(</span><span class="n">gpobj_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Given an iterable that returns geometry objects, construct a GeoJSON</span>
@@ -666,7 +667,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.6dev',
+            VERSION:'0.6.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
