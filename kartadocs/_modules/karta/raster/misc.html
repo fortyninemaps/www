@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.raster.misc &mdash; karta 0.6.1 documentation</title>
+  <title>karta.raster.misc &mdash; Karta 0.7alpha0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="karta 0.6.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="Karta 0.7alpha0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../karta-manual.html" class="icon icon-home"> karta
+            <a href="../../../karta-manual.html" class="icon icon-home"> Karta
           
 
           
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.6
+                0.7
               </div>
             
           
@@ -102,7 +102,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../karta-manual.html">karta</a>
+        <a href="../../../karta-manual.html">Karta</a>
       </nav>
 
 
@@ -143,10 +143,24 @@
 
 <div class="viewcode-block" id="witch_of_agnesi"><a class="viewcode-back" href="../../../reference.html#karta.raster.misc.witch_of_agnesi">[docs]</a><span class="k">def</span> <span class="nf">witch_of_agnesi</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return a raster field defined by the equation</span>
+
+<span class="sd">    ::</span>
 <span class="sd">                    8 a^3</span>
 <span class="sd">            Z = --------------</span>
 <span class="sd">                 d^2 + 4 a*2</span>
+
 <span class="sd">    where d is the distance from the center.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nx, ny : int</span>
+<span class="sd">        raster size</span>
+<span class="sd">    a : float</span>
+<span class="sd">        magnitude</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">nx</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
     <span class="n">yc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ny</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
@@ -157,10 +171,21 @@
 
 <div class="viewcode-block" id="pad"><a class="viewcode-back" href="../../../reference.html#karta.raster.misc.pad">[docs]</a><span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Apply padding to a 2D array.</span>
-<span class="sd">            *A*         :   array to pad</span>
-<span class="sd">            *width*     :   thickness of padding</span>
-<span class="sd">            *edges*     :   &quot;all&quot;, &quot;left&quot;, &quot;right&quot;, &quot;top&quot;, &quot;bottom&quot;</span>
-<span class="sd">            *value&quot;     :   0.0, value to pad with</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : ndarray</span>
+<span class="sd">        array to pad</span>
+<span class="sd">    width : int</span>
+<span class="sd">        thickness of padding</span>
+<span class="sd">    edges : str</span>
+<span class="sd">        one of &quot;all&quot;, &quot;left&quot;, &quot;right&quot;, &quot;top&quot;, &quot;bottom&quot;</span>
+<span class="sd">    value : number</span>
+<span class="sd">        fill value for padding</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ny</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">nx</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -195,8 +220,7 @@
     <span class="k">return</span> <span class="n">B</span></div>
 
 <span class="k">def</span> <span class="nf">_slope</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)):</span>
-    <span class="sd">&quot;&quot;&quot; Return the scalar slope at each pixel. Use the neighbourhood</span>
-<span class="sd">    method.</span>
+    <span class="sd">&quot;&quot;&quot; Return the scalar slope at each pixel using the neighbourhood method.</span>
 <span class="sd">    http://webhelp.esri.com/arcgisdesktop/9.2/index.cfm?TopicName=How%20Slope%20works</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -209,8 +233,7 @@
     <span class="k">return</span> <span class="n">pad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Ddx</span><span class="o">*</span><span class="n">Ddx</span> <span class="o">+</span> <span class="n">Ddy</span><span class="o">*</span><span class="n">Ddy</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
 <div class="viewcode-block" id="slope"><a class="viewcode-back" href="../../../reference.html#karta.raster.misc.slope">[docs]</a><span class="k">def</span> <span class="nf">slope</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return the scalar slope at each pixel. Use the neighbourhood</span>
-<span class="sd">    method.</span>
+    <span class="sd">&quot;&quot;&quot; Return the scalar slope at each pixel using the neighbourhood method.</span>
 <span class="sd">    http://webhelp.esri.com/arcgisdesktop/9.2/index.cfm?TopicName=How%20Slope%20works</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
@@ -299,8 +322,8 @@
 <div class="viewcode-block" id="hillshade"><a class="viewcode-back" href="../../../reference.html#karta.raster.misc.hillshade">[docs]</a><span class="k">def</span> <span class="nf">hillshade</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">azimuth</span><span class="o">=</span><span class="mf">330.0</span><span class="p">,</span> <span class="n">elevation</span><span class="o">=</span><span class="mf">60.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return a hill-shaded version of *grid*.</span>
 
-<span class="sd">    Arguments</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    grid: RegularGrid instance</span>
 <span class="sd">    azimuth: float, optional</span>
 <span class="sd">        direction of light source (default 330.0)</span>
@@ -344,7 +367,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015, Nat Wilson.
+        &copy; Copyright 2016, Nat Wilson.
 
     </p>
   </div>
@@ -366,7 +389,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.6.1',
+            VERSION:'0.7alpha0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

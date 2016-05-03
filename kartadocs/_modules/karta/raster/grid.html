@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.raster.grid &mdash; karta 0.6.1 documentation</title>
+  <title>karta.raster.grid &mdash; Karta 0.7alpha0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="karta 0.6.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="Karta 0.7alpha0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../karta-manual.html" class="icon icon-home"> karta
+            <a href="../../../karta-manual.html" class="icon icon-home"> Karta
           
 
           
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.6
+                0.7
               </div>
             
           
@@ -102,7 +102,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../karta-manual.html">karta</a>
+        <a href="../../../karta-manual.html">Karta</a>
       </nav>
 
 
@@ -134,8 +134,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for karta.raster.grid</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot; Classes for basic grid types &quot;&quot;&quot;</span>
-
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Raster grid representations</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numbers</span>
@@ -156,12 +157,8 @@
 <span class="n">BAND_CLASS_DEFAULT</span> <span class="o">=</span> <span class="n">CompressedBand</span>
 <span class="n">CRS_DEFAULT</span> <span class="o">=</span> <span class="n">Cartesian</span>
 
-<span class="n">IntegerType</span> <span class="o">=</span> <span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-
 <div class="viewcode-block" id="Grid"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid">[docs]</a><span class="k">class</span> <span class="nc">Grid</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Grid base class. Intended only for implementing subclasses. The primary</span>
-<span class="sd">    attributes defined by all Grid-derived classed are _hdr and data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; Grid base class. &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nodata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -170,17 +167,26 @@
 <div class="viewcode-block" id="Grid.max"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.max">[docs]</a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the maximum non-nan in self.data. &quot;&quot;&quot;</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
 
 <div class="viewcode-block" id="Grid.min"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.min">[docs]</a>    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the minimum non-nan in self.data. &quot;&quot;&quot;</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">tmp</span><span class="o">.</span><span class="n">min</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tmp</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
 
 <div class="viewcode-block" id="Grid.minmax"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.minmax">[docs]</a>    <span class="k">def</span> <span class="nf">minmax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the minimum and maximum value of data array. &quot;&quot;&quot;</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">tmp</span><span class="o">.</span><span class="n">max</span><span class="p">())</span></div>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">tmp</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Grid.apply"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply a function *func* to grid values &quot;&quot;&quot;</span>
@@ -384,8 +390,16 @@
         <span class="k">return</span> <span class="n">xcoords</span><span class="p">,</span> <span class="n">ycoords</span></div>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">resolution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">skew</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">bbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -414,6 +428,7 @@
 <span class="sd">        reference : string</span>
 <span class="sd">            either &#39;center&#39; or &#39;edge&#39;.</span>
 <span class="sd">        crs : karta.crs.CRS subclass</span>
+<span class="sd">            coordinate system of output</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">reference</span> <span class="o">==</span> <span class="s1">&#39;center&#39;</span><span class="p">:</span>
             <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_llref</span><span class="p">()</span>
@@ -460,6 +475,7 @@
 <span class="sd">        reference : string</span>
 <span class="sd">            either &#39;center&#39; or &#39;edge&#39;.</span>
 <span class="sd">        crs : karta.crs.CRS subclass</span>
+<span class="sd">            coordinate system of output</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">nodata</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">nodata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodata</span>
@@ -537,7 +553,24 @@
         <span class="k">return</span> <span class="n">isdata</span><span class="p">(</span><span class="bp">self</span><span class="p">[:,:])</span>
 
 <div class="viewcode-block" id="RegularGrid.aschunks"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.aschunks">[docs]</a>    <span class="k">def</span> <span class="nf">aschunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">overlap</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Generator for grid chunks of *size* and *overlap*.</span>
+        <span class="sd">&quot;&quot;&quot; Generator for grid chunks, useful for parallel or memory-controlled</span>
+<span class="sd">        grid processing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        size : tuple of two integers, optional</span>
+<span class="sd">            size of the chunks ot return (default approximately one-quarter of</span>
+<span class="sd">            each dimension)</span>
+<span class="sd">        overlap : tuple of two integers, optional</span>
+<span class="sd">            number of pixels of overlap (default (0, 0))</span>
+<span class="sd">        copy : bool</span>
+<span class="sd">            whether to force returned grids to be copies</span>
+<span class="sd">            warning: output may be a copy regardless, depending on the band class</span>
+
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        RegularGrid</span>
+<span class="sd">            smaller grids</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
         <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
@@ -662,9 +695,16 @@
 
 <div class="viewcode-block" id="RegularGrid.mask_by_poly"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.mask_by_poly">[docs]</a>    <span class="k">def</span> <span class="nf">mask_by_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">polys</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a grid with all elements outside the bounds of a polygon</span>
-<span class="sd">        masked by nodata &quot;&quot;&quot;</span>
+<span class="sd">        masked by nodata</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">polys</span><span class="p">,</span> <span class="s2">&quot;_geotype&quot;</span><span class="p">):</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        polys : Polygon, Multipolygon or list of Polygon instances</span>
+<span class="sd">            region(s) defining clibing boundary</span>
+<span class="sd">        inplace : bool, optional</span>
+<span class="sd">            whether or not to perform masking in place (default False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">polys</span><span class="p">,</span> <span class="s2">&quot;_geotype&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
             <span class="n">polys</span> <span class="o">=</span> <span class="p">[</span><span class="n">polys</span><span class="p">]</span>
 
         <span class="n">msk</span> <span class="o">=</span> <span class="bp">None</span>
@@ -745,7 +785,7 @@
 <span class="sd">        dy : float</span>
 <span class="sd">            cell dimension 2</span>
 <span class="sd">        method : str, optional</span>
-<span class="sd">            interpolation method, currenlt only &#39;nearest&#39; supported</span>
+<span class="sd">            interpolation method, currently only &#39;nearest&#39; supported</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
         <span class="n">dx0</span><span class="p">,</span> <span class="n">dy0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
@@ -772,7 +812,13 @@
 
 <div class="viewcode-block" id="RegularGrid.get_positions"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.get_positions">[docs]</a>    <span class="k">def</span> <span class="nf">get_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the float column and row indices for the point nearest</span>
-<span class="sd">        geographical coordinates (x, y). &quot;&quot;&quot;</span>
+<span class="sd">        geographical coordinates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x, y : float or vector</span>
+<span class="sd">            vertices of points to compute indices for</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Calculate this by forming block matrices</span>
         <span class="c1">#       | dx sy          |</span>
         <span class="c1">#       | sx dy          |</span>
@@ -825,8 +871,20 @@
 
 <div class="viewcode-block" id="RegularGrid.get_indices"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.get_indices">[docs]</a>    <span class="k">def</span> <span class="nf">get_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the integer column and row indices for the point nearest</span>
-<span class="sd">        geographical coordinates (`x`, `y`). Raises GridError if points outside</span>
-<span class="sd">        grid bounding box. &quot;&quot;&quot;</span>
+<span class="sd">        geographical coordinates. Compared to get_positions, this method raises</span>
+<span class="sd">        and exception when points are out of range.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float or vector</span>
+<span class="sd">        y : float or vector</span>
+<span class="sd">            vertices of points to compute indices for</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        GridError</span>
+<span class="sd">            points outside of Grid bbox</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
@@ -842,14 +900,32 @@
         <span class="k">return</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span></div>
 
 <div class="viewcode-block" id="RegularGrid.sample_nearest"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.sample_nearest">[docs]</a>    <span class="k">def</span> <span class="nf">sample_nearest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the value nearest to (`x`, `y`). Nearest grid center</span>
-<span class="sd">        sampling scheme. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Return the value nearest to coordinates. Nearest grid center</span>
+<span class="sd">        sampling scheme.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float or vector</span>
+<span class="sd">        y : float or vector</span>
+<span class="sd">            vertices of points to compute indices for</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        GridError</span>
+<span class="sd">            points outside of Grid bbox</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indices</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[:,:][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="RegularGrid.sample_bilinear"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.sample_bilinear">[docs]</a>    <span class="k">def</span> <span class="nf">sample_bilinear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the value nearest to (`x`, `y`). Bilinear sampling scheme.</span>
+        <span class="sd">&quot;&quot;&quot; Return the value nearest to coordinates. Bilinear sampling scheme.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float or vector</span>
+<span class="sd">        y : float or vector</span>
+<span class="sd">            vertices of points to compute indices for</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">i0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -941,8 +1017,8 @@
 <span class="sd">        Additional keyword arguments passed to `RegularGrid.sample` (e.g. to</span>
 <span class="sd">        specify sampling method)</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">        --------</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 <span class="sd">        list of (x, y) tuples</span>
 <span class="sd">            sample points</span>
 <span class="sd">        ndarray</span>
@@ -1126,7 +1202,6 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-
 <span class="sd">    grids : iterable of Grid objects</span>
 <span class="sd">        grids to combine</span>
 <span class="sd">    weights : iterable of floats, optional</span>
@@ -1204,7 +1279,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">T</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
-    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
     <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Complex</span><span class="p">)):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
@@ -1334,7 +1409,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015, Nat Wilson.
+        &copy; Copyright 2016, Nat Wilson.
 
     </p>
   </div>
@@ -1356,7 +1431,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.6.1',
+            VERSION:'0.7alpha0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
