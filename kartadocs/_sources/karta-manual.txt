@@ -10,7 +10,6 @@ Table of Contents
    installation
    reference
 
-
 Indices and tables
 ------------------
 

@@ -391,7 +391,7 @@
 <span class="k">def</span> <span class="nf">ogr_write_string_geometry</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">gi</span><span class="p">):</span>
     <span class="n">geom</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Geometry</span><span class="p">(</span><span class="n">OGRTYPES</span><span class="p">[</span><span class="n">gi</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]])</span>
     <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">gi</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]:</span>
-        <span class="n">geom</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">geom</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">feature</span><span class="o">.</span><span class="n">SetGeometry</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
     <span class="k">return</span>
 
@@ -449,7 +449,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 05, 2016.
+      Last updated on May 15, 2016.
 
     </p>
   </div>

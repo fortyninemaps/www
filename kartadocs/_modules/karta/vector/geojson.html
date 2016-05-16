@@ -150,7 +150,7 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
-<span class="kn">from</span> <span class="nn">.utilities</span> <span class="kn">import</span> <span class="n">_reproject</span><span class="p">,</span> <span class="n">_reproject_nested</span>
+<span class="kn">from</span> <span class="nn">.utilities</span> <span class="kn">import</span> <span class="n">_reproject</span><span class="p">,</span> <span class="n">_reproject_nested</span><span class="p">,</span> <span class="n">_as_nested_lists</span>
 <span class="kn">from</span> <span class="nn">..crs</span> <span class="kn">import</span> <span class="n">CRS</span><span class="p">,</span> <span class="n">LonLatWGS84</span>
 
 <span class="n">Point</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">,</span> <span class="s1">&#39;crs&#39;</span><span class="p">])</span>
@@ -192,18 +192,18 @@
         <span class="k">if</span> <span class="n">geom</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
             <span class="n">g</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertex</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">geom</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="s2">&quot;Line&quot;</span><span class="p">:</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="n">crs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">geom</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
-            <span class="n">verts</span> <span class="o">=</span> <span class="p">[</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">]</span>
+            <span class="n">verts</span> <span class="o">=</span> <span class="p">[</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">)]</span>
             <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">geom</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
-                <span class="n">verts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+                <span class="n">verts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">vertices</span><span class="p">))</span>
             <span class="n">g</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">geom</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="s2">&quot;Multipoint&quot;</span><span class="p">:</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">MultiPoint</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">MultiPoint</span><span class="p">(</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="n">crs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">geom</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="s2">&quot;Multiline&quot;</span><span class="p">:</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">MultiLineString</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">MultiLineString</span><span class="p">(</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="n">crs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">geom</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="s2">&quot;Multipolygon&quot;</span><span class="p">:</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">MultiPolygon</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">MultiPolygon</span><span class="p">(</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="n">crs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;unhandled type: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">geom</span><span class="p">)))</span>
 
@@ -259,17 +259,16 @@
 <span class="sd">    JSON serialization. &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;int8&quot;</span><span class="p">,</span> <span class="s2">&quot;int16&quot;</span><span class="p">,</span> <span class="s2">&quot;int32&quot;</span><span class="p">,</span> <span class="s2">&quot;int64&quot;</span><span class="p">):</span>
-                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;float16&quot;</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span> <span class="s2">&quot;float128&quot;</span><span class="p">):</span>
-                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;complex64&quot;</span><span class="p">,</span> <span class="s2">&quot;complex128&quot;</span><span class="p">,</span> <span class="s2">&quot;complex256&quot;</span><span class="p">):</span>
-                <span class="k">return</span> <span class="nb">complex</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;not a recognized type&quot;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;int8&quot;</span><span class="p">,</span> <span class="s2">&quot;int16&quot;</span><span class="p">,</span> <span class="s2">&quot;int32&quot;</span><span class="p">,</span> <span class="s2">&quot;int64&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;float16&quot;</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span> <span class="s2">&quot;float128&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;complex64&quot;</span><span class="p">,</span> <span class="s2">&quot;complex128&quot;</span><span class="p">,</span> <span class="s2">&quot;complex256&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">complex</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;not a recognized type&quot;</span><span class="p">)</span></div>
 
 <span class="k">class</span> <span class="nc">GeoJSONReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
@@ -631,7 +630,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 05, 2016.
+      Last updated on May 15, 2016.
 
     </p>
   </div>

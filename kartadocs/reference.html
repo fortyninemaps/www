@@ -1168,7 +1168,7 @@ the same units as the real-world horizontal distance (i.e. meters).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shift_vector</strong> : iterable</p>
 <blockquote>
-<div><p>vector with length equal to Geometry.rank defining the shift</p>
+<div><p>vector with length equal to Geometry rank defining the shift</p>
 </div></blockquote>
 <p><strong>inplace</strong> : bool</p>
 <blockquote class="last">
@@ -1382,30 +1382,6 @@ dateline</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="karta.vector.Line.get_extent">
-<code class="descname">get_extent</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Line.get_extent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate geometry extent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>crs</strong> : karta.CRS</p>
-<blockquote>
-<div><p>coordinate system of output</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple</p>
-<blockquote class="last">
-<div><p>(xmin, xmax, ymin, ymax)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="karta.vector.Line.get_vertices">
 <code class="descname">get_vertices</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Line.get_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return vertices as an array.</p>
@@ -1516,7 +1492,7 @@ points are equidistant, only one will be returned.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shift_vector</strong> : iterable</p>
 <blockquote>
-<div><p>vector with length equal to Geometry.rank defining the shift</p>
+<div><p>vector with length equal to Geometry rank defining the shift</p>
 </div></blockquote>
 <p><strong>inplace</strong> : bool</p>
 <blockquote class="last">
@@ -1776,30 +1752,6 @@ dateline</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="karta.vector.Polygon.get_extent">
-<code class="descname">get_extent</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Polygon.get_extent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate geometry extent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>crs</strong> : karta.CRS</p>
-<blockquote>
-<div><p>coordinate system of output</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple</p>
-<blockquote class="last">
-<div><p>(xmin, xmax, ymin, ymax)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="karta.vector.Polygon.get_vertices">
 <code class="descname">get_vertices</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Polygon.get_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return vertices as an array.</p>
@@ -1943,7 +1895,7 @@ tuples.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shift_vector</strong> : iterable</p>
 <blockquote>
-<div><p>vector with length equal to Geometry.rank defining the shift</p>
+<div><p>vector with length equal to Geometry rank defining the shift</p>
 </div></blockquote>
 <p><strong>inplace</strong> : bool</p>
 <blockquote class="last">
@@ -2063,13 +2015,15 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <dl class="class">
 <dt id="karta.vector.Multipoint">
 <em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multipoint</code><span class="sig-paren">(</span><em>vertices</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Point cloud with associated attributes. This is a base class for the
-polyline and polygon classes.</p>
+<dd><p>Point cloud with associated attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coords</strong> : list of 2-tuples or 3-tuples</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coords</strong> : list</p>
+<blockquote>
+<div><p>list of 2-tuples or 3-tuples defining vertices</p>
+</div></blockquote>
 <p><strong>data</strong> : list, dict, Table object, or None</p>
 <blockquote>
 <div><p>point-specific data [default None]</p>
@@ -2188,30 +2142,6 @@ has been initialized. <em>buff</em> may be a scalar or a sequence of
 </dd></dl>
 
 <dl class="method">
-<dt id="karta.vector.Multipoint.get_extent">
-<code class="descname">get_extent</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipoint.get_extent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate geometry extent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>crs</strong> : karta.CRS</p>
-<blockquote>
-<div><p>coordinate system of output</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple</p>
-<blockquote class="last">
-<div><p>(xmin, xmax, ymin, ymax)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="karta.vector.Multipoint.get_vertices">
 <code class="descname">get_vertices</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipoint.get_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return vertices as an array.</p>
@@ -2283,7 +2213,7 @@ points are equidistant, only one will be returned.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shift_vector</strong> : iterable</p>
 <blockquote>
-<div><p>vector with length equal to Geometry.rank defining the shift</p>
+<div><p>vector with length equal to Geometry rank defining the shift</p>
 </div></blockquote>
 <p><strong>inplace</strong> : bool</p>
 <blockquote class="last">
@@ -2404,7 +2334,32 @@ given by (xmin, xymin, xmax, ymax).</p>
 <dl class="class">
 <dt id="karta.vector.Multiline">
 <em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multiline</code><span class="sig-paren">(</span><em>vertices</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multiline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multiline" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>Collection of lines with associated attributes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coords</strong> : list</p>
+<blockquote>
+<div><p>list of lists of 2-tuples or 3-tuples defining lines</p>
+</div></blockquote>
+<p><strong>data</strong> : list, dict, Table object, or None</p>
+<blockquote>
+<div><p>point-specific data [default None]</p>
+</div></blockquote>
+<p><strong>properties</strong> : dict or None</p>
+<blockquote>
+<div><p>geometry specific data [default None]</p>
+</div></blockquote>
+<p><strong>crs</strong> : karta.crs.CRS subclass</p>
+<blockquote class="last">
+<div><p>[default Cartesian]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="karta.vector.Multiline.as_geojson">
 <code class="descname">as_geojson</code><span class="sig-paren">(</span><em>indent=None</em>, <em>urn=None</em>, <em>force_wgs84=True</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multiline.as_geojson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output representation of internal data as a GeoJSON string.</p>
@@ -2427,6 +2382,24 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <p><strong>urn</strong> : str, optional</p>
 <blockquote class="last">
 <div><p>overrides GeoJSON CRS with provided URN string</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multiline.get_vertices">
+<code class="descname">get_vertices</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multiline.get_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multiline.get_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return vertices as a list of arrays.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>crs</strong> : karta.CRS, optional</p>
+<blockquote class="last">
+<div><p>coordinate system of output vertices</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2482,7 +2455,32 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <dl class="class">
 <dt id="karta.vector.Multipolygon">
 <em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multipolygon</code><span class="sig-paren">(</span><em>vertices</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipolygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipolygon" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>Collection of polygons with associated attributes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coords</strong> : list</p>
+<blockquote>
+<div><p>list of lists of polygon rings, each consisting of 2-tuples or 3-tuples</p>
+</div></blockquote>
+<p><strong>data</strong> : list, dict, Table object, or None</p>
+<blockquote>
+<div><p>point-specific data [default None]</p>
+</div></blockquote>
+<p><strong>properties</strong> : dict or None</p>
+<blockquote>
+<div><p>geometry specific data [default None]</p>
+</div></blockquote>
+<p><strong>crs</strong> : karta.crs.CRS subclass</p>
+<blockquote class="last">
+<div><p>[default Cartesian]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="karta.vector.Multipolygon.as_geojson">
 <code class="descname">as_geojson</code><span class="sig-paren">(</span><em>indent=None</em>, <em>urn=None</em>, <em>force_wgs84=True</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipolygon.as_geojson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output representation of internal data as a GeoJSON string.</p>
@@ -2505,6 +2503,24 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <p><strong>urn</strong> : str, optional</p>
 <blockquote class="last">
 <div><p>overrides GeoJSON CRS with provided URN string</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multipolygon.get_vertices">
+<code class="descname">get_vertices</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipolygon.get_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipolygon.get_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return vertices as a list of arrays.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>crs</strong> : karta.CRS, optional</p>
+<blockquote class="last">
+<div><p>coordinate system of output vertices</p>
 </div></blockquote>
 </td>
 </tr>
@@ -4083,7 +4099,7 @@ corresponding problem on a sphere.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 05, 2016.
+      Last updated on May 15, 2016.
 
     </p>
   </div>
