@@ -174,30 +174,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">return</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_distance</span><span class="p">(</span><span class="n">pos0</span><span class="p">,</span> <span class="n">pos1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Generic CRS-aware method for calculating distance between positions.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pos0, pos1 : Point</span>
-<span class="sd">            end points of distance computation</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span> <span class="o">=</span> <span class="n">pos0</span><span class="o">.</span><span class="n">vertex</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="o">=</span> <span class="n">pos1</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="n">pos0</span><span class="o">.</span><span class="n">crs</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pos0</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">):</span>
-            <span class="p">((</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">),</span> <span class="p">(</span><span class="n">y0</span><span class="p">,</span><span class="n">y1</span><span class="p">))</span> <span class="o">=</span> <span class="n">pos0</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">],</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">],</span>
-                                                  <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">pos0</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">radians</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">dist</span></div>
+        <span class="k">return</span></div>
 
 <div class="viewcode-block" id="Point"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point">[docs]</a><span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">Geometry</span><span class="p">,</span> <span class="n">GeoJSONOutMixin</span><span class="p">,</span> <span class="n">ShapefileOutMixin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Point object instantiated with:</span>
@@ -284,32 +261,43 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Point.azimuth"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.azimuth">[docs]</a>    <span class="k">def</span> <span class="nf">azimuth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Returns the compass azimuth from self to other in radians (i.e.</span>
-<span class="sd">        clockwise, with north at 0).</span>
+<div class="viewcode-block" id="Point.azimuth"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.azimuth">[docs]</a>    <span class="k">def</span> <span class="nf">azimuth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">projected</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the compass azimuth from self to other in degrees, measured</span>
+<span class="sd">        clockwise with north at 0.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        other : Point</span>
 <span class="sd">            second point defining direction</span>
+<span class="sd">        projected : bool</span>
+<span class="sd">            If True and self.crs is a ProjectedCRS, return the azimuth in the</span>
+<span class="sd">            projected cooridnate system. If False, return the geodetic azimuth.</span>
+<span class="sd">            if self.crs is a GeographicalCRS, result is always geodetic and this</span>
+<span class="sd">            option has no effect.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            value is NaN if points are coincident</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        return value is NaN if points are coincident</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
-            <span class="n">az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
-            <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="n">az</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">)</span>
-
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">CRSError</span><span class="p">(</span><span class="s2">&quot;Azimuth undefined for points in CRS {0} and &quot;</span>
-                           <span class="s2">&quot;{1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">crs</span><span class="p">))</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">):</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">elif</span> <span class="n">projected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">):</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="mf">90.0</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="mf">180.0</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="p">(</span><span class="n">az</span><span class="o">+</span><span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">az</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">az</span></div>
 
 <div class="viewcode-block" id="Point.walk"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.walk">[docs]</a>    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">radians</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -331,7 +319,7 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">xg2</span><span class="p">,</span> <span class="n">yg2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Point</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Point.distance"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.distance">[docs]</a>    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<div class="viewcode-block" id="Point.distance"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.distance">[docs]</a>    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">projected</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns a distance to another Point. If the coordinate system is</span>
 <span class="sd">        geographical and a third (z) coordinate exists, it is assumed to have</span>
 <span class="sd">        the same units as the real-world horizontal distance (i.e. meters).</span>
@@ -340,18 +328,29 @@
 <span class="sd">        ----------</span>
 <span class="sd">        other : Point</span>
 <span class="sd">            point to compute distance to</span>
+<span class="sd">        projected : bool</span>
+<span class="sd">            If True and self.crs is a ProjectedCRS, return the distance in the</span>
+<span class="sd">            projected cooridnate system. If False, return the geodetic distance.</span>
+<span class="sd">            if self.crs is a GeographicalCRS, result is always geodetic and this</span>
+<span class="sd">            option has no effect.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">CRSError</span><span class="p">(</span><span class="s2">&quot;Points must share the same coordinate system.&quot;</span><span class="p">)</span>
-        <span class="n">flat_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
-        <span class="k">if</span> <span class="mi">2</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">vertex</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">flat_dist</span>
+        <span class="k">if</span> <span class="n">projected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">):</span>
+            <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">flat_dist</span><span class="o">**</span><span class="mf">2.</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span></div>
+            <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="mi">2</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">vertex</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">dist</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dist</span><span class="o">**</span><span class="mf">2.</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Point.shift"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.shift">[docs]</a>    <span class="k">def</span> <span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift_vector</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Shift point in space.</span>
@@ -1037,10 +1036,17 @@
                 <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">}</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vertices_ring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># inefficient implementation</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">xy</span> <span class="k">for</span> <span class="n">xy</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">]</span>
+        <span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">CoordString</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">geomdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)]</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices_ring</span><span class="p">)]</span>
         <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
-            <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices</span><span class="p">))</span>
+            <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_as_nested_lists</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertices_ring</span><span class="p">))</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;bbox&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span>
                 <span class="s2">&quot;coordinates&quot;</span> <span class="p">:</span> <span class="n">coords</span><span class="p">}</span>
@@ -1490,6 +1496,19 @@
             <span class="k">return</span> <span class="n">Multipolygon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
                                 <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vertices_ring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># inefficient implementation</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">poly</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
+            <span class="n">rings</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="n">poly</span><span class="p">:</span>
+                <span class="n">xys</span> <span class="o">=</span> <span class="p">[</span><span class="n">xy</span> <span class="k">for</span> <span class="n">xy</span> <span class="ow">in</span> <span class="n">ring</span><span class="p">]</span>
+                <span class="n">xys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">rings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CoordString</span><span class="p">(</span><span class="n">xys</span><span class="p">))</span>
+            <span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rings</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vertices</span>
+
 <div class="viewcode-block" id="Multipolygon.get_vertices"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multipolygon.get_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return vertices as a list of arrays.</span>
 
@@ -1669,7 +1688,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 15, 2016.
+      Last updated on May 30, 2016.
 
     </p>
   </div>

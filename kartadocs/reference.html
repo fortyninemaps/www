@@ -1026,8 +1026,8 @@ centered and corner spatial references.</p>
 <div class="section" id="vector-package-karta-vector">
 <h2>Vector package (<code class="docutils literal"><span class="pre">karta.vector</span></code>)<a class="headerlink" href="#vector-package-karta-vector" title="Permalink to this headline">¶</a></h2>
 <p>The package <code class="docutils literal"><span class="pre">karta.vector</span></code> provides a <em>Geometry</em> class, subclasses for
-<em>Point</em>, <em>Line</em>, <em>Polygon</em>, and <em>Multipoint</em> types, as well as readers and
-writers for ESRI shapefiles, GeoJSON, and GPX files.</p>
+<em>Point</em>, <em>Line</em>, and <em>Polygon</em> types and their multipart counterparts, as well
+as readers and writers for ESRI shapefiles, GeoJSON, and GPX files.</p>
 <p>All concrete geometries support the <a class="reference external" href="https://gist.github.com/sgillies/2217756">__geo_interface__</a> attribute, and map to
 <em>Point</em>, <em>MultiPoint</em>, <em>LineString</em>, and <em>Polygon</em> types, respectively.</p>
 <div class="section" id="module-karta.vector.geometry">
@@ -1099,9 +1099,9 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 
 <dl class="method">
 <dt id="karta.vector.Point.azimuth">
-<code class="descname">azimuth</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Point.azimuth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Point.azimuth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the compass azimuth from self to other in radians (i.e.
-clockwise, with north at 0).</p>
+<code class="descname">azimuth</code><span class="sig-paren">(</span><em>other</em>, <em>projected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Point.azimuth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Point.azimuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the compass azimuth from self to other in degrees, measured
+clockwise with north at 0.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1110,16 +1110,22 @@ clockwise, with north at 0).</p>
 <blockquote>
 <div><p>second point defining direction</p>
 </div></blockquote>
+<p><strong>projected</strong> : bool</p>
+<blockquote>
+<div><p>If True and self.crs is a ProjectedCRS, return the azimuth in the
+projected cooridnate system. If False, return the geodetic azimuth.
+if self.crs is a GeographicalCRS, result is always geodetic and this
+option has no effect.</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
-<blockquote class="last">
-<div><p>value is NaN if points are coincident</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">float</p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>return value is NaN if points are coincident</p>
 </dd></dl>
 
 <dl class="method">
@@ -1131,7 +1137,7 @@ or &#8216;rad&#8217; for convenience.</p>
 
 <dl class="method">
 <dt id="karta.vector.Point.distance">
-<code class="descname">distance</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Point.distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Point.distance" title="Permalink to this definition">¶</a></dt>
+<code class="descname">distance</code><span class="sig-paren">(</span><em>other</em>, <em>projected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Point.distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Point.distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a distance to another Point. If the coordinate system is
 geographical and a third (z) coordinate exists, it is assumed to have
 the same units as the real-world horizontal distance (i.e. meters).</p>
@@ -1142,6 +1148,13 @@ the same units as the real-world horizontal distance (i.e. meters).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>other</strong> : Point</p>
 <blockquote>
 <div><p>point to compute distance to</p>
+</div></blockquote>
+<p><strong>projected</strong> : bool</p>
+<blockquote>
+<div><p>If True and self.crs is a ProjectedCRS, return the distance in the
+projected cooridnate system. If False, return the geodetic distance.
+if self.crs is a GeographicalCRS, result is always geodetic and this
+option has no effect.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2609,7 +2622,17 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <dl class="class">
 <dt id="karta.vector.table.Indexer">
 <em class="property">class </em><code class="descclassname">karta.vector.table.</code><code class="descname">Indexer</code><span class="sig-paren">(</span><em>metadata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/table.html#Indexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.table.Indexer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a pleasanter syntax for querying Table</p>
+<dd><p>Provides a pleasanter syntax for querying Table.</p>
+<p>The Indexer object can be used with standard indexing syntax, with integer,
+slice, or string keys.</p>
+<ul class="simple">
+<li><cite>Indexer[int]</cite> returns the table row at position <cite>int</cite> as a dictionary. It
+is equivalent to <cite>Table.get(int)</cite>.</li>
+<li><cite>Indexer[slice]</cite> returns the table rows at <cite>slice</cite> as a dictionary. It is
+equivalent to <cite>Table.get(slice)</cite>.</li>
+<li><cite>Indexer[str]</cite> returns the vector under column <cite>str</cite> as a list. It is
+equivalent to <cite>Table.getfield(str)</cite>.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -3230,14 +3253,6 @@ JSON serialization.</p>
 <code class="descclassname">karta.vector.geojson.</code><code class="descname">asfixedlist</code><span class="sig-paren">(</span><em>A</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geojson.html#asfixedlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geojson.asfixedlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively convert nested iterables or coordinates to nested lists at
 fixed precision.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.geojson.geojson2csv">
-<code class="descclassname">karta.vector.geojson.</code><code class="descname">geojson2csv</code><span class="sig-paren">(</span><em>fin</em>, <em>fout</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geojson.html#geojson2csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geojson.geojson2csv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a JSON file to a CSV. Only properties (attributes) common to
-all features are retained. The arguments <cite>fin</cite> and <cite>fout</cite> may be either
-filenames or file-like objects.</p>
 </dd></dl>
 
 </div>
@@ -4099,7 +4114,7 @@ corresponding problem on a sphere.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 15, 2016.
+      Last updated on May 30, 2016.
 
     </p>
   </div>
