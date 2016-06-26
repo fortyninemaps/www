@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.vector.geometry &mdash; Karta 0.7alpha0 documentation</title>
+  <title>karta.vector.geometry &mdash; Karta 0.7b2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7alpha0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Karta 0.7b2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -149,11 +149,13 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">xyfile</span>
 <span class="kn">from</span> <span class="nn">.table</span> <span class="kn">import</span> <span class="n">Table</span><span class="p">,</span> <span class="n">Indexer</span>
 <span class="kn">from</span> <span class="nn">.utilities</span> <span class="kn">import</span> <span class="n">_reproject</span><span class="p">,</span> <span class="n">_reproject_nested</span><span class="p">,</span> <span class="n">_flatten</span><span class="p">,</span> <span class="n">_as_nested_lists</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">quadtree</span>
 <span class="kn">from</span> <span class="nn">.coordstring</span> <span class="kn">import</span> <span class="n">CoordString</span>
+<span class="kn">from</span> <span class="nn">.rtree</span> <span class="kn">import</span> <span class="n">RTree</span>
+<span class="kn">from</span> <span class="nn">.quadtree</span> <span class="kn">import</span> <span class="n">QuadTree</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">vectorgeo</span> <span class="k">as</span> <span class="n">_cvectorgeo</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">dateline</span> <span class="k">as</span> <span class="n">_cdateline</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">intersection</span> <span class="k">as</span> <span class="n">_cintersection</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">contains</span> <span class="k">as</span> <span class="n">_ccontains</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">geodesy</span>
 <span class="kn">from</span> <span class="nn">..crs</span> <span class="kn">import</span> <span class="n">Cartesian</span><span class="p">,</span> <span class="n">CartesianCRS</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">,</span> <span class="n">LonLatWGS84</span>
 <span class="kn">from</span> <span class="nn">..crs</span> <span class="kn">import</span> <span class="n">SphericalEarth</span>
@@ -220,6 +222,9 @@
         <span class="n">hc</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">ht</span> <span class="o">+</span> <span class="p">(</span><span class="n">hd</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">hd</span> <span class="o">+</span> <span class="n">hc</span>
 
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Multipoint</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)],</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">__geo_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -269,7 +274,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        other : Point</span>
 <span class="sd">            second point defining direction</span>
-<span class="sd">        projected : bool</span>
+<span class="sd">        projected : bool, optional</span>
 <span class="sd">            If True and self.crs is a ProjectedCRS, return the azimuth in the</span>
 <span class="sd">            projected cooridnate system. If False, return the geodetic azimuth.</span>
 <span class="sd">            if self.crs is a GeographicalCRS, result is always geodetic and this</span>
@@ -300,23 +305,32 @@
             <span class="n">az</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">az</span></div>
 
-<div class="viewcode-block" id="Point.walk"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.walk">[docs]</a>    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">radians</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Point.walk"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.walk">[docs]</a>    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">projected</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the point reached when moving in a given direction for</span>
 <span class="sd">        a given distance from a specified starting location.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        distance : float</span>
-<span class="sd">            distance to walk</span>
-<span class="sd">        direction : float</span>
-<span class="sd">            walk azimuth (clockwise with &quot;north&quot; at 0)</span>
-<span class="sd">        radians : bool, optional</span>
-<span class="sd">            whether direction is given in radians (default False)</span>
+<span class="sd">            distance to shift point</span>
+<span class="sd">        azimuth: float</span>
+<span class="sd">            shift azimuth (clockwise with north at 0)</span>
+<span class="sd">        projected: bool, optional</span>
+<span class="sd">            If True and self.crs is a ProjectedCRS, return the compute new</span>
+<span class="sd">            position using the projected cooridnate system. If False, return</span>
+<span class="sd">            the geodetically correct new position. if self.crs is a</span>
+<span class="sd">            GeographicalCRS, result is always geodetic and this option has no</span>
+<span class="sd">            effect.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">xg1</span><span class="p">,</span> <span class="n">yg1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">xg2</span><span class="p">,</span> <span class="n">yg2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">xg1</span><span class="p">,</span> <span class="n">yg1</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span>
-                                       <span class="n">radians</span><span class="o">=</span><span class="n">radians</span><span class="p">)</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">xg2</span><span class="p">,</span> <span class="n">yg2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">projected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">):</span>
+            <span class="n">maz</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">azimuth</span><span class="o">+</span><span class="mi">90</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+            <span class="n">maz</span> <span class="o">=</span> <span class="p">(</span><span class="mi">90</span><span class="o">-</span><span class="n">azimuth</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">distance</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">maz</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">distance</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">maz</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">radians</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Point</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Point.distance"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Point.distance">[docs]</a>    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">projected</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
@@ -328,7 +342,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        other : Point</span>
 <span class="sd">            point to compute distance to</span>
-<span class="sd">        projected : bool</span>
+<span class="sd">        projected : bool, optional</span>
 <span class="sd">            If True and self.crs is a ProjectedCRS, return the distance in the</span>
 <span class="sd">            projected cooridnate system. If False, return the geodetic distance.</span>
 <span class="sd">            if self.crs is a GeographicalCRS, result is always geodetic and this</span>
@@ -339,8 +353,8 @@
 <span class="sd">        float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">projected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">):</span>
-            <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-            <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
             <span class="n">dist</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -374,20 +388,20 @@
 
 <span class="k">class</span> <span class="nc">MultiVertexBase</span><span class="p">(</span><span class="n">Geometry</span><span class="p">):</span>
 
-    <span class="c1">#__slots__ = [&quot;vertices&quot;, &quot;data&quot;, &quot;quadtree&quot;]</span>
+    <span class="c1">#__slots__ = [&quot;vertices&quot;, &quot;data&quot;]</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">ring</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MultiVertexBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="s2">&quot;__next__&quot;</span><span class="p">):</span>
             <span class="n">vertices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">([],</span> <span class="n">ring</span><span class="o">=</span><span class="n">ring</span><span class="p">)</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Point</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">(</span><span class="n">_flatten</span><span class="p">(</span><span class="n">vertices</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">(</span><span class="n">_flatten</span><span class="p">(</span><span class="n">vertices</span><span class="p">),</span> <span class="n">ring</span><span class="o">=</span><span class="n">ring</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">([</span><span class="n">point</span><span class="o">.</span><span class="n">vertex</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">([</span><span class="n">point</span><span class="o">.</span><span class="n">vertex</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">],</span> <span class="n">ring</span><span class="o">=</span><span class="n">ring</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;crs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span>
 
@@ -398,6 +412,7 @@
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_geotype</span><span class="p">)</span> <span class="ow">and</span> \
+                   <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">vertices</span><span class="p">))</span> <span class="ow">and</span> \
                    <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">vertices</span><span class="p">))</span> <span class="ow">and</span> \
                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span> <span class="ow">and</span> \
                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
@@ -421,7 +436,7 @@
             <span class="n">verts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">stride</span><span class="p">)</span>
             <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">verts</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">GGeoError</span><span class="p">(</span><span class="s1">&#39;Index must be an integer or a slice object&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;index must be integer or slice object&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -432,7 +447,7 @@
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot insert non-Point-like value: &quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cannot insert non-Point-like value: &quot;</span>
                              <span class="s2">&quot;{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
         <span class="k">return</span>
 
@@ -501,8 +516,11 @@
 <span class="sd">        tuple</span>
 <span class="sd">            (xmin, ymin, xmax, ymax)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coordinate_lists</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coordinate_lists</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">extent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -543,13 +561,12 @@
 <span class="sd">            whether shift should be in place (default False)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">GGeoError</span><span class="p">(</span><span class="s1">&#39;Cannot shift zero length geometry&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">GGeoError</span><span class="p">(</span><span class="s1">&#39;cannot shift zero length geometry&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shift_vector</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="n">GGeoError</span><span class="p">(</span><span class="s1">&#39;Shift vector length must equal geometry rank&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">GGeoError</span><span class="p">(</span><span class="s1">&#39;shift vector length must equal geometry rank&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span> <span class="o">+</span> <span class="n">shift_vector</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span> <span class="o">=</span> <span class="bp">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">return</span> <span class="bp">self</span>
         <span class="k">else</span><span class="p">:</span>
@@ -581,7 +598,6 @@
 
         <span class="c1"># Shift back</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="bp">self</span>
 
@@ -594,11 +610,13 @@
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idxs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a subset defined by indice. &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;attempted to extract a zero-length subset&quot;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot; Return a subset defined by indices. &quot;&quot;&quot;</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">]</span>
-        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">],</span> <span class="n">fields</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">flat_distances_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the &quot;flat Earth&quot; distance from each vertex to a point. &quot;&quot;&quot;</span>
@@ -751,17 +769,10 @@
     <span class="k">def</span> <span class="nf">intersects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return whether an intersection exists with another geometry. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">CartesianCRS</span><span class="p">):</span>
-            <span class="n">interxbool</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">in</span>
-                    <span class="n">_cintersection</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                                <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                                <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                                                <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-                            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segment_tuples</span>
-                            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">segment_tuples</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bbox_overlap</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">False</span> <span class="ow">in</span> <span class="n">interxbool</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">True</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bbox_overlap</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">False</span>
+            <span class="n">interx</span> <span class="o">=</span> <span class="n">_cintersection</span><span class="o">.</span><span class="n">all_intersections</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">interx</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segment_tuples</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">segment_tuples</span><span class="p">:</span>
@@ -775,34 +786,18 @@
     <span class="k">def</span> <span class="nf">intersections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">keep_duplicates</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the intersections with another geometry as a Multipoint. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">CartesianCRS</span><span class="p">):</span>
-            <span class="n">interx</span> <span class="o">=</span> <span class="p">(</span><span class="n">_cintersection</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                                  <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                                  <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                                                  <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-                            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segment_tuples</span>
-                            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">segment_tuples</span><span class="p">)</span>
+            <span class="n">interx</span> <span class="o">=</span> <span class="n">_cintersection</span><span class="o">.</span><span class="n">all_intersections</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_duplicates</span><span class="p">:</span>
-                <span class="n">interx</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">interx</span><span class="p">)</span>
-            <span class="n">interx_points</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">interx</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vertex</span><span class="p">:</span>
-                    <span class="n">interx_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
-                                               <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="n">interx_points</span><span class="p">)</span>
+                <span class="n">interx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">interx</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="n">interx</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># FIXME: implement for ellipsoidal coordinate systems</span>
             <span class="n">interx</span> <span class="o">=</span> <span class="p">(</span><span class="n">geodesy</span><span class="o">.</span><span class="n">intersection_spherical</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
                             <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segment_tuples</span>
                             <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">segment_tuples</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_duplicates</span><span class="p">:</span>
-                <span class="n">interx</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">interx</span><span class="p">)</span>
-            <span class="n">interx_points</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">interx</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vertex</span><span class="p">:</span>
-                    <span class="n">interx_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
-                                               <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="n">interx_points</span><span class="p">)</span>
-
+                <span class="n">interx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">interx</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="n">interx</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_nearest_to_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a tuple of the shortest distance on the geometry boundary to</span>
@@ -906,6 +901,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">=</span> <span class="s2">&quot;Line&quot;</span>
         <span class="k">return</span>
 
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Multiline</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)],</span>
+                         <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">__geo_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -945,14 +944,50 @@
             <span class="n">pta</span> <span class="o">=</span> <span class="n">ptb</span>
         <span class="k">return</span> <span class="n">d</span></div>
 
-<div class="viewcode-block" id="Line.subsection"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Line.subsection">[docs]</a>    <span class="k">def</span> <span class="nf">subsection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return *n* equally spaced Point instances along line. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Line.to_points"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Line.to_points">[docs]</a>    <span class="k">def</span> <span class="nf">to_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return equally spaced Point instances along line.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dx : float</span>
+<span class="sd">            spacing of points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">remainder</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">pt0</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt0</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">()]</span>
+
+        <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">while</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">seg</span><span class="o">.</span><span class="n">length</span><span class="p">:</span>
+                <span class="n">distance_to_endpt</span> <span class="o">=</span> <span class="n">pt0</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">distance_to_endpt</span> <span class="o">&gt;=</span> <span class="n">dx</span><span class="p">:</span>
+                    <span class="n">pt1</span> <span class="o">=</span> <span class="n">pt0</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">dx</span> <span class="o">-</span> <span class="n">remainder</span><span class="p">,</span> <span class="n">az</span><span class="p">)</span>
+                    <span class="n">pos</span> <span class="o">+=</span> <span class="n">dx</span> <span class="o">-</span> <span class="n">remainder</span>
+                    <span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pt1</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">())</span>
+                    <span class="n">remainder</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">pt0</span> <span class="o">=</span> <span class="n">pt1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">remainder</span> <span class="o">=</span> <span class="n">distance_to_endpt</span>
+                    <span class="n">pos</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">length</span>
+                    <span class="n">pt0</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Line.to_npoints"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Line.to_npoints">[docs]</a>    <span class="k">def</span> <span class="nf">to_npoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return *n* equally spaced Point instances along line.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : int</span>
+<span class="sd">            number of points to return</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">segments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span>
         <span class="n">Ltotal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cumulength</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">step</span> <span class="o">=</span> <span class="n">Ltotal</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">step_remaining</span> <span class="o">=</span> <span class="n">step</span>
 
-        <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">()]</span>
         <span class="n">x</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">seg</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
@@ -966,7 +1001,7 @@
                 <span class="n">x</span> <span class="o">+=</span> <span class="n">step_remaining</span>
                 <span class="n">seg_remaining</span> <span class="o">-=</span> <span class="n">step_remaining</span>
                 <span class="n">step_remaining</span> <span class="o">=</span> <span class="n">step</span>
-                <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+                <span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">())</span>
                 <span class="n">seg</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">vertex</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
@@ -980,9 +1015,9 @@
                 <span class="c1">#     if abs(Ltotal-x) &gt; 1e-8:       # tolerance for endpoint</span>
                 <span class="c1">#         raise e</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">points</span></div>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Line.displacement"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Line.displacement">[docs]</a>    <span class="k">def</span> <span class="nf">displacement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the distance between the first and last vertex. &quot;&quot;&quot;</span>
@@ -1010,7 +1045,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Partial init function that creates a metadata attribute.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Polygon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Polygon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">ring</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">=</span> <span class="s2">&quot;Polygon&quot;</span>
         <span class="k">if</span> <span class="n">subs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">subs</span><span class="p">)</span>
@@ -1026,6 +1061,10 @@
                             <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
                             <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Polygon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Multipolygon</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">],</span> <span class="p">[</span><span class="n">other</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)]],</span>
+                            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">__geo_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1081,18 +1120,12 @@
 
         <span class="n">lon0</span> <span class="o">=</span> <span class="n">geodesy</span><span class="o">.</span><span class="n">reduce_deg</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">sum_angle</span> <span class="o">=</span> <span class="mf">0.0</span>
-
         <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
-
             <span class="n">lon1</span> <span class="o">=</span> <span class="n">geodesy</span><span class="o">.</span><span class="n">reduce_deg</span><span class="p">(</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">_sign</span><span class="p">(</span><span class="n">lon0</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="n">_sign</span><span class="p">(</span><span class="n">lon1</span><span class="p">))</span> <span class="ow">and</span> \
-                <span class="p">((</span><span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lon0</span><span class="o">-</span><span class="mi">180</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lon0</span><span class="o">+</span><span class="mi">180</span><span class="p">))</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lon1</span><span class="o">-</span><span class="mi">180</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lon1</span><span class="o">+</span><span class="mi">180</span><span class="p">)))</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lon0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lon1</span><span class="p">))):</span>
-                <span class="c1"># Longitudes span the dateline</span>
+            <span class="k">if</span> <span class="n">_cdateline</span><span class="o">.</span><span class="n">crosses_dateline</span><span class="p">(</span><span class="n">lon0</span><span class="p">,</span> <span class="n">lon1</span><span class="p">):</span>
                 <span class="n">sum_angle</span> <span class="o">+=</span> <span class="mf">360.0</span> <span class="o">+</span> <span class="n">lon1</span> <span class="o">-</span> <span class="n">lon0</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sum_angle</span> <span class="o">+=</span> <span class="n">lon1</span> <span class="o">-</span> <span class="n">lon0</span>
-
             <span class="n">lon0</span> <span class="o">=</span> <span class="n">lon1</span>
 
         <span class="k">return</span> <span class="bp">True</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sum_angle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-4</span> <span class="k">else</span> <span class="bp">False</span></div>
@@ -1168,22 +1201,18 @@
         <span class="sd">&quot;&quot;&quot; Returns True if point is inside or on the boundary of the polygon, and</span>
 <span class="sd">        False otherwise. Uses a crossing number scheme.</span>
 
-<span class="sd">        Behaviour may not be defined for polar geographical polygons.</span>
+<span class="sd">        Note: When the polygon is polar in a geographical coordinate system, a</span>
+<span class="sd">        less efficient algorithm is used. For better performance, consider</span>
+<span class="sd">        projecting to an appropriate coordinate system such as NSIDCNorth or</span>
+<span class="sd">        NSIDCSouth beforehand.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ispolar</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                    <span class="s2">&quot;Membership tests on polar geographical polygons not &quot;</span>
-                    <span class="s2">&quot;implemented. As a workaround, transform to an appropriate &quot;</span>
-                    <span class="s2">&quot;ProjectedCRS first.&quot;</span><span class="p">)</span>
-
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segment_tuples</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="n">seg</span>
-            <span class="k">if</span> <span class="n">_cintersection</span><span class="o">.</span><span class="n">intersects_cn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">cnt</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">GeographicalCRS</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ispolar</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">_ccontains</span><span class="o">.</span><span class="n">contains_proj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span> \
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_ccontains</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> \
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Polygon.to_line"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Polygon.to_line">[docs]</a>    <span class="k">def</span> <span class="nf">to_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns a self-closing polyline. Discards sub-polygons. &quot;&quot;&quot;</span>
@@ -1196,7 +1225,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Multipart</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -1209,6 +1238,7 @@
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_geotype</span><span class="p">)</span> <span class="ow">and</span> \
+                   <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">vertices</span><span class="p">))</span> <span class="ow">and</span> \
                    <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">vertices</span><span class="p">))</span> <span class="ow">and</span> \
                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="ow">and</span> \
                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span> <span class="ow">and</span> \
@@ -1251,7 +1281,7 @@
 
     <span class="c1">#__slots__ = []</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">build_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="s2">&quot;__next__&quot;</span><span class="p">):</span>
             <span class="n">vertices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
 
@@ -1261,11 +1291,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CoordString</span><span class="p">([</span><span class="n">point</span><span class="o">.</span><span class="n">vertex</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s2">&quot;crs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crs&quot;</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">Multipoint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">build_index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span> <span class="o">=</span> <span class="n">QuadTree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">=</span> <span class="s2">&quot;Multipoint&quot;</span>
         <span class="k">return</span>
 
@@ -1279,6 +1309,8 @@
             <span class="k">return</span> <span class="n">Multipoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">stride</span><span class="p">),</span>
                               <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
                               <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
@@ -1310,7 +1342,8 @@
                 <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">}</span>
 
 <div class="viewcode-block" id="Multipoint.within_radius"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multipoint.within_radius">[docs]</a>    <span class="k">def</span> <span class="nf">within_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return subset of Multipoint within a radius.</span>
+        <span class="sd">&quot;&quot;&quot; Return subset of Multipoint within a radius. Items on the border</span>
+<span class="sd">        are excluded.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1323,72 +1356,50 @@
 <span class="sd">        -------</span>
 <span class="sd">        Multipoint</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances_to</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;quadtree&quot;</span><span class="p">):</span>
             <span class="n">search_bbox</span> <span class="o">=</span> <span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="o">-</span><span class="n">radius</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">radius</span><span class="p">,</span>
                            <span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">radius</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">radius</span><span class="p">)</span>
-            <span class="n">possible_point_tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span><span class="o">.</span><span class="n">getfrombbox</span><span class="p">(</span><span class="n">search_bbox</span><span class="p">)</span>
-            <span class="n">possible_points</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">possible_point_tuples</span><span class="p">:</span>
-                <span class="n">possible_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Point</span><span class="p">((</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
-                                             <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;idx&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]},</span>
-                                             <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">))</span>
-            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">possible_points</span>
-                       <span class="k">if</span> <span class="n">point</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span></div>
+            <span class="n">candidate_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span><span class="o">.</span><span class="n">search_within</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="o">-</span><span class="n">radius</span><span class="p">,</span>
+                                                            <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">radius</span><span class="p">,</span>
+                                                            <span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">radius</span><span class="p">,</span>
+                                                            <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">radius</span><span class="p">)</span>
+            <span class="n">confirmed_indices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">candidate_indices</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">point</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">radius</span><span class="p">:</span>
+                    <span class="n">confirmed_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">confirmed_indices</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">confirmed_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances_to</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+                                   <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">radius</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">confirmed_indices</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Multipoint.within_bbox"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multipoint.within_bbox">[docs]</a>    <span class="k">def</span> <span class="nf">within_bbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return Multipoint subset that is within a square bounding box</span>
 <span class="sd">        given by (xmin, xymin, xmax, ymax).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filtbbox</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">point</span><span class="p">:</span> <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">point</span><span class="o">.</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="ow">and</span> \
-                              <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">point</span><span class="o">.</span><span class="n">vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="n">filtbbox</span><span class="p">(</span><span class="n">point</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;quadtree&quot;</span><span class="p">):</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span><span class="o">.</span><span class="n">search_within</span><span class="p">(</span><span class="o">*</span><span class="n">bbox</span><span class="p">)</span>
+            <span class="n">indices</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pt</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                         <span class="k">if</span> <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">])]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Multipoint.within_polygon"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multipoint.within_polygon">[docs]</a>    <span class="k">def</span> <span class="nf">within_polygon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return Multipoint subset that is within a polygon.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-                       <span class="k">if</span> <span class="n">poly</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">point</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;quadtree&quot;</span><span class="p">):</span>
+            <span class="n">bbox</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">get_bbox</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+            <span class="n">candidate_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span><span class="o">.</span><span class="n">search_within</span><span class="p">(</span><span class="o">*</span><span class="n">bbox</span><span class="p">)</span>
+            <span class="n">confirmed_indices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">candidate_indices</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">poly</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                    <span class="n">confirmed_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">confirmed_indices</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ext</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
-            <span class="n">search_bbox</span> <span class="o">=</span> <span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ext</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-            <span class="n">possible_point_tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span><span class="o">.</span><span class="n">getfrombbox</span><span class="p">(</span><span class="n">search_bbox</span><span class="p">)</span>
-            <span class="n">possible_points</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">possible_point_tuples</span><span class="p">:</span>
-                <span class="n">possible_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Point</span><span class="p">((</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
-                                             <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;idx&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]},</span>
-                                             <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">))</span>
-            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">possible_points</span>
-                       <span class="k">if</span> <span class="n">poly</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Multipoint.build_quadtree"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multipoint.build_quadtree">[docs]</a>    <span class="k">def</span> <span class="nf">build_quadtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buff</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Construct an internal quadtree with the current geometry data.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        buff : float or 4-tuple of floats, optional</span>
-<span class="sd">            specifies a spatial buffer to create around the current point</span>
-<span class="sd">            bounding box, permitting the geometry to grow after the quadtree</span>
-<span class="sd">            has been initialized. *buff* may be a scalar or a sequence of</span>
-<span class="sd">            (left, right, bottom, top). (default 1e-8)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">bf</span> <span class="o">=</span> <span class="p">(</span><span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">buff</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">buff</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">buff</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-            <span class="n">bf</span> <span class="o">=</span> <span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span>
-
-        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bbox</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span> <span class="o">=</span> <span class="n">quadtree</span><span class="o">.</span><span class="n">QuadTree</span><span class="p">((</span><span class="n">x0</span><span class="o">-</span><span class="n">bf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y0</span><span class="o">-</span><span class="n">bf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x1</span><span class="o">+</span><span class="n">bf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">y1</span><span class="o">+</span><span class="n">bf</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">quadtree</span><span class="o">.</span><span class="n">addpt</span><span class="p">((</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
-        <span class="k">return</span></div></div>
+            <span class="n">confirmed_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                                   <span class="k">if</span> <span class="n">poly</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">point</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">confirmed_indices</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="Multiline"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multiline">[docs]</a><span class="k">class</span> <span class="nc">Multiline</span><span class="p">(</span><span class="n">Multipart</span><span class="p">,</span> <span class="n">GeoJSONOutMixin</span><span class="p">,</span> <span class="n">ShapefileOutMixin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Collection of lines with associated attributes.</span>
@@ -1405,9 +1416,17 @@
 <span class="sd">        [default Cartesian]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">CoordString</span><span class="p">(</span><span class="n">part</span><span class="p">)</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">build_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Line</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">vertices</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">]</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crs&quot;</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">CoordString</span><span class="p">(</span><span class="n">part</span><span class="p">)</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">]</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Multiline</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">build_index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rtree</span> <span class="o">=</span> <span class="n">RTree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">=</span> <span class="s2">&quot;Multiline&quot;</span>
         <span class="k">return</span>
 
@@ -1419,6 +1438,21 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">Multiline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
                              <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">geomdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;MultiLineString&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;bbox&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span>
+                <span class="s2">&quot;coordinates&quot;</span> <span class="p">:</span> <span class="n">_as_nested_lists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__geo_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_karta_proj4</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">get_proj4</span><span class="p">())</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">geomdict</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">}</span>
 
 <div class="viewcode-block" id="Multiline.get_vertices"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multiline.get_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return vertices as a list of arrays.</span>
@@ -1457,7 +1491,15 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">extent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_extent</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_extent</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">within</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rtree</span><span class="o">.</span><span class="n">search_within</span><span class="p">(</span><span class="n">bbox</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="n">max_results</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)([</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">touching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rtree</span><span class="o">.</span><span class="n">search_overlapping</span><span class="p">(</span><span class="n">bbox</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="n">max_results</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)([</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Multipolygon"><a class="viewcode-back" href="../../../reference.html#karta.vector.geometry.Multipolygon">[docs]</a><span class="k">class</span> <span class="nc">Multipolygon</span><span class="p">(</span><span class="n">Multipart</span><span class="p">,</span> <span class="n">GeoJSONOutMixin</span><span class="p">,</span> <span class="n">ShapefileOutMixin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Collection of polygons with associated attributes.</span>
@@ -1474,12 +1516,25 @@
 <span class="sd">        [default Cartesian]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
-            <span class="n">rings</span> <span class="o">=</span> <span class="p">[</span><span class="n">CoordString</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="n">part</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rings</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">build_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Polygon</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+                <span class="n">rings</span> <span class="o">=</span> <span class="p">[</span><span class="n">polygon</span><span class="o">.</span><span class="n">vertices</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">polygon</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
+                    <span class="n">rings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rings</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crs&quot;</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+                <span class="n">rings</span> <span class="o">=</span> <span class="p">[</span><span class="n">CoordString</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="n">part</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rings</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Multipolygon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">build_index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rtree</span> <span class="o">=</span> <span class="n">RTree</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_geotype</span> <span class="o">=</span> <span class="s2">&quot;Multipolygon&quot;</span>
         <span class="k">return</span>
 
@@ -1495,6 +1550,21 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">Multipolygon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">properties</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
                                 <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">geomdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;MultiPolygon&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;bbox&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span>
+                <span class="s2">&quot;coordinates&quot;</span> <span class="p">:</span> <span class="n">_as_nested_lists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__geo_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_karta_proj4</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">get_proj4</span><span class="p">())</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">geomdict</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">vertices_ring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1688,7 +1758,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 30, 2016.
+      Last updated on Jun 26, 2016.
 
     </p>
   </div>
@@ -1710,7 +1780,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7alpha0',
+            VERSION:'0.7b2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

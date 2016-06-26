@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.vector.table &mdash; Karta 0.7alpha0 documentation</title>
+  <title>karta.vector.table &mdash; Karta 0.7b2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7alpha0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Karta 0.7b2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -135,6 +135,7 @@
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <div class="viewcode-block" id="Table"><a class="viewcode-back" href="../../../reference.html#karta.vector.table.Table">[docs]</a><span class="k">class</span> <span class="nc">Table</span><span class="p">(</span><span class="n">Sequence</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Represents a metadata table. &quot;&quot;&quot;</span>
@@ -159,13 +160,17 @@
         <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;either `data` or `size` must be specified&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">=</span> <span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
         <span class="k">elif</span> <span class="n">fields</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;_fields&quot;</span><span class="p">):</span>
                 <span class="c1"># Data is Table-like</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">_fields</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">_data</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Data is empty dict or empty iterable</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">=</span> <span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;keys&quot;</span><span class="p">):</span>
                 <span class="c1"># Data is dict-like</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -185,9 +190,9 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[(</span><span class="n">data</span><span class="p">,)]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Length of data entries and fields don&#39;t match&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">))):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Length of data entries and fields don&#39;t match&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
 
@@ -203,7 +208,7 @@
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;D[&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;D[&quot;</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fields</span><span class="p">),</span> <span class="s2">&quot;]&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span>
@@ -261,7 +266,7 @@
 <div class="viewcode-block" id="Table.setfield"><a class="viewcode-back" href="../../../reference.html#karta.vector.table.Table.setfield">[docs]</a>    <span class="k">def</span> <span class="nf">setfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Modify or add a field with *values* &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__len__</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mismatch between metadata length and field values&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mismatch between table length and field values&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span><span class="p">:</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">tuplemut</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">values</span><span class="p">)]</span>
@@ -285,10 +290,18 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">([</span><span class="bp">None</span> <span class="k">if</span> <span class="n">idxs_other</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span>
                                           <span class="k">else</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">idxs_other</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
-                                          <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fields</span><span class="p">))]))</span></div></div>
+                                          <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fields</span><span class="p">))]))</span></div>
+
+<div class="viewcode-block" id="Table.asjson"><a class="viewcode-back" href="../../../reference.html#karta.vector.table.Table.asjson">[docs]</a>    <span class="k">def</span> <span class="nf">asjson</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a JSON-serialized string. &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">field</span><span class="p">:[]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getfield</span><span class="p">(</span><span class="n">field</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">NumpyAwareJSONEncoder</span><span class="p">)</span></div></div>
+
 
 <div class="viewcode-block" id="Indexer"><a class="viewcode-back" href="../../../reference.html#karta.vector.table.Indexer">[docs]</a><span class="k">class</span> <span class="nc">Indexer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Provides a pleasanter syntax for querying Table.</span>
+    <span class="sd">&quot;&quot;&quot; Provides a pleasanter syntax for querying a Table.</span>
 
 <span class="sd">    The Indexer object can be used with standard indexing syntax, with integer,</span>
 <span class="sd">    slice, or string keys.</span>
@@ -302,19 +315,39 @@
 <span class="sd">    - `Indexer[str]` returns the vector under column `str` as a list. It is</span>
 <span class="sd">      equivalent to `Table.getfield(str)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;cannot index data-less geometry&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Indexer({0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">getfield</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">getfield</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">Integral</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;invalid key type: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span></div>
+
+<span class="k">class</span> <span class="nc">NumpyAwareJSONEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Numpy-specific numbers prior to 1.9 don&#39;t inherit from Python numeric</span>
+<span class="sd">    ABCs. This class is a hack to coerce numpy values into Python types for</span>
+<span class="sd">    JSON serialization. &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;int8&quot;</span><span class="p">,</span> <span class="s2">&quot;int16&quot;</span><span class="p">,</span> <span class="s2">&quot;int32&quot;</span><span class="p">,</span> <span class="s2">&quot;int64&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;float16&quot;</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span> <span class="s2">&quot;float128&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">o</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;complex64&quot;</span><span class="p">,</span> <span class="s2">&quot;complex128&quot;</span><span class="p">,</span> <span class="s2">&quot;complex256&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">complex</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;not a recognized type&quot;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">tuplemut</span><span class="p">(</span><span class="n">tpl</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return a tuple with *idx* changed to *val* &quot;&quot;&quot;</span>
@@ -339,7 +372,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 30, 2016.
+      Last updated on Jun 26, 2016.
 
     </p>
   </div>
@@ -361,7 +394,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7alpha0',
+            VERSION:'0.7b2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Package reference &mdash; Karta 0.7alpha0 documentation</title>
+  <title>Package reference &mdash; Karta 0.7b2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7alpha0 documentation" href="index.html"/>
+    <link rel="top" title="Karta 0.7b2 documentation" href="index.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
 
   
@@ -101,7 +101,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#vector-package-karta-vector">Vector package (<code class="docutils literal"><span class="pre">karta.vector</span></code>)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#module-karta.vector.geometry">Geometry</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id5">Geometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Geometry</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#point">Point</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#line">Line</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#polygon">Polygon</a></li>
@@ -194,7 +194,7 @@ and profile extraction.</p>
 <dd><p>Grid base class.</p>
 <dl class="method">
 <dt id="karta.raster.grid.Grid.apply">
-<code class="descname">apply</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#Grid.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.Grid.apply" title="Permalink to this definition">¶</a></dt>
+<code class="descname">apply</code><span class="sig-paren">(</span><em>func</em>, <em>copy=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#Grid.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.Grid.apply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a function <em>func</em> to grid values</p>
 </dd></dl>
 
@@ -268,9 +268,15 @@ each dimension)</p>
 <div><p>number of pixels of overlap (default (0, 0))</p>
 </div></blockquote>
 <p><strong>copy</strong> : bool</p>
-<blockquote class="last">
+<blockquote>
 <div><p>whether to force returned grids to be copies
 warning: output may be a copy regardless, depending on the band class</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body"><p class="first">RegularGrid</p>
+<blockquote class="last">
+<div><p>smaller grids</p>
 </div></blockquote>
 </td>
 </tr>
@@ -489,35 +495,7 @@ in the same position.</p>
 </div></blockquote>
 <p><strong>method</strong> : str, optional</p>
 <blockquote class="last">
-<div><p>interpolation method, currently only &#8216;nearest&#8217; supported</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="karta.raster.grid.RegularGrid.resample_griddata">
-<code class="descname">resample_griddata</code><span class="sig-paren">(</span><em>dx</em>, <em>dy</em>, <em>method='nearest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/grid.html#RegularGrid.resample_griddata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.grid.RegularGrid.resample_griddata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resample array to have spacing <cite>dx</cite>, <a href="#id3"><span class="problematic" id="id4">`</span></a>dy&#8217; using <em>scipy.griddata</em></p>
-<p>Warning: This method is likely to be removed in the future, once
-the built-in <cite>resample</cite> method matures.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
-<blockquote>
-<div><p>cell dimension 1</p>
-</div></blockquote>
-<p><strong>dy</strong> : float</p>
-<blockquote>
-<div><p>cell dimension 2</p>
-</div></blockquote>
-<p><strong>method</strong> : str, optional</p>
-<blockquote class="last">
-<div><p>interpolation method, one of &#8216;nearest&#8217;, &#8216;linear&#8217;</p>
+<div><p>interpolation method, currently &#8216;nearest&#8217; and &#8216;linear&#8217; supported</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1035,8 +1013,8 @@ as readers and writers for ESRI shapefiles, GeoJSON, and GPX files.</p>
 <p>Geographical measurement and analysis</p>
 <p>Provides Point, Line, and Polygon classes, and their Multipart equivalents,
 with methods for simple measurements such as distance, area, and direction.</p>
-<div class="section" id="id5">
-<h4>Geometry<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id3">
+<h4>Geometry<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
 <dt id="karta.vector.geometry.Geometry">
 <em class="property">class </em><code class="descclassname">karta.vector.geometry.</code><code class="descname">Geometry</code><span class="sig-paren">(</span><em>properties=None</em>, <em>crs=&lt;karta.crs.CartesianCRS object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.geometry.Geometry" title="Permalink to this definition">¶</a></dt>
@@ -1110,7 +1088,7 @@ clockwise with north at 0.</p>
 <blockquote>
 <div><p>second point defining direction</p>
 </div></blockquote>
-<p><strong>projected</strong> : bool</p>
+<p><strong>projected</strong> : bool, optional</p>
 <blockquote>
 <div><p>If True and self.crs is a ProjectedCRS, return the azimuth in the
 projected cooridnate system. If False, return the geodetic azimuth.
@@ -1149,7 +1127,7 @@ the same units as the real-world horizontal distance (i.e. meters).</p>
 <blockquote>
 <div><p>point to compute distance to</p>
 </div></blockquote>
-<p><strong>projected</strong> : bool</p>
+<p><strong>projected</strong> : bool, optional</p>
 <blockquote>
 <div><p>If True and self.crs is a ProjectedCRS, return the distance in the
 projected cooridnate system. If False, return the geodetic distance.
@@ -1235,7 +1213,7 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 
 <dl class="method">
 <dt id="karta.vector.Point.walk">
-<code class="descname">walk</code><span class="sig-paren">(</span><em>distance</em>, <em>direction</em>, <em>radians=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Point.walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Point.walk" title="Permalink to this definition">¶</a></dt>
+<code class="descname">walk</code><span class="sig-paren">(</span><em>distance</em>, <em>azimuth</em>, <em>projected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Point.walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Point.walk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the point reached when moving in a given direction for
 a given distance from a specified starting location.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1244,15 +1222,19 @@ a given distance from a specified starting location.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>distance</strong> : float</p>
 <blockquote>
-<div><p>distance to walk</p>
+<div><p>distance to shift point</p>
 </div></blockquote>
-<p><strong>direction</strong> : float</p>
+<p><strong>azimuth: float</strong></p>
 <blockquote>
-<div><p>walk azimuth (clockwise with &#8220;north&#8221; at 0)</p>
+<div><p>shift azimuth (clockwise with north at 0)</p>
 </div></blockquote>
-<p><strong>radians</strong> : bool, optional</p>
+<p><strong>projected: bool, optional</strong></p>
 <blockquote class="last">
-<div><p>whether direction is given in radians (default False)</p>
+<div><p>If True and self.crs is a ProjectedCRS, return the compute new
+position using the projected cooridnate system. If False, return
+the geodetically correct new position. if self.crs is a
+GeographicalCRS, result is always geodetic and this option has no
+effect.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1533,12 +1515,6 @@ boundary to a point.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="karta.vector.Line.subsection">
-<code class="descname">subsection</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Line.subsection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Line.subsection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return <em>n</em> equally spaced Point instances along line.</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="karta.vector.Line.to_geojson">
 <code class="descname">to_geojson</code><span class="sig-paren">(</span><em>f</em>, <em>indent=None</em>, <em>urn=None</em>, <em>force_wgs84=True</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Line.to_geojson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write data as a GeoJSON string to a file-like object <cite>f</cite>.</p>
@@ -1565,6 +1541,42 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <p><strong>urn</strong> : str, optional</p>
 <blockquote class="last">
 <div><p>overrides GeoJSON CRS with provided URN string</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Line.to_npoints">
+<code class="descname">to_npoints</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Line.to_npoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Line.to_npoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>n</em> equally spaced Point instances along line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> : int</p>
+<blockquote class="last">
+<div><p>number of points to return</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Line.to_points">
+<code class="descname">to_points</code><span class="sig-paren">(</span><em>dx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Line.to_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Line.to_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return equally spaced Point instances along line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
+<blockquote class="last">
+<div><p>spacing of points</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1717,7 +1729,10 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <code class="descname">contains</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Polygon.contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Polygon.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if point is inside or on the boundary of the polygon, and
 False otherwise. Uses a crossing number scheme.</p>
-<p>Behaviour may not be defined for polar geographical polygons.</p>
+<p>Note: When the polygon is polar in a geographical coordinate system, a
+less efficient algorithm is used. For better performance, consider
+projecting to an appropriate coordinate system such as NSIDCNorth or
+NSIDCSouth beforehand.</p>
 </dd></dl>
 
 <dl class="method">
@@ -2027,7 +2042,7 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <h4>Multipoint<a class="headerlink" href="#multipoint" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
 <dt id="karta.vector.Multipoint">
-<em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multipoint</code><span class="sig-paren">(</span><em>vertices</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipoint" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multipoint</code><span class="sig-paren">(</span><em>vertices</em>, <em>build_index=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Point cloud with associated attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2089,27 +2104,6 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <p><strong>urn</strong> : str, optional</p>
 <blockquote class="last">
 <div><p>overrides GeoJSON CRS with provided URN string</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="karta.vector.Multipoint.build_quadtree">
-<code class="descname">build_quadtree</code><span class="sig-paren">(</span><em>buff=1e-08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipoint.build_quadtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipoint.build_quadtree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct an internal quadtree with the current geometry data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>buff</strong> : float or 4-tuple of floats, optional</p>
-<blockquote class="last">
-<div><p>specifies a spatial buffer to create around the current point
-bounding box, permitting the geometry to grow after the quadtree
-has been initialized. <em>buff</em> may be a scalar or a sequence of
-(left, right, bottom, top). (default 1e-8)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2317,7 +2311,8 @@ given by (xmin, xymin, xmax, ymax).</p>
 <dl class="method">
 <dt id="karta.vector.Multipoint.within_radius">
 <code class="descname">within_radius</code><span class="sig-paren">(</span><em>point</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipoint.within_radius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipoint.within_radius" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return subset of Multipoint within a radius.</p>
+<dd><p>Return subset of Multipoint within a radius. Items on the border
+are excluded.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2346,7 +2341,7 @@ given by (xmin, xymin, xmax, ymax).</p>
 <h4>Multiline<a class="headerlink" href="#multiline" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
 <dt id="karta.vector.Multiline">
-<em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multiline</code><span class="sig-paren">(</span><em>vertices</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multiline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multiline" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multiline</code><span class="sig-paren">(</span><em>vertices</em>, <em>build_index=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multiline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multiline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collection of lines with associated attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2467,7 +2462,7 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <h4>Multipolygon<a class="headerlink" href="#multipolygon" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
 <dt id="karta.vector.Multipolygon">
-<em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multipolygon</code><span class="sig-paren">(</span><em>vertices</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipolygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipolygon" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">karta.vector.</code><code class="descname">Multipolygon</code><span class="sig-paren">(</span><em>vertices</em>, <em>build_index=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Multipolygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Multipolygon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collection of polygons with associated attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2593,6 +2588,12 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <em class="property">class </em><code class="descclassname">karta.vector.table.</code><code class="descname">Table</code><span class="sig-paren">(</span><em>data=None</em>, <em>fields=None</em>, <em>size=None</em>, <em>checktypes=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/table.html#Table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.table.Table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a metadata table.</p>
 <dl class="method">
+<dt id="karta.vector.table.Table.asjson">
+<code class="descname">asjson</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/table.html#Table.asjson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.table.Table.asjson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a JSON-serialized string.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="karta.vector.table.Table.extend">
 <code class="descname">extend</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/table.html#Table.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.table.Table.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extend Table from another Table instance. If <em>other</em> has field f in
@@ -2621,8 +2622,8 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 
 <dl class="class">
 <dt id="karta.vector.table.Indexer">
-<em class="property">class </em><code class="descclassname">karta.vector.table.</code><code class="descname">Indexer</code><span class="sig-paren">(</span><em>metadata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/table.html#Indexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.table.Indexer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a pleasanter syntax for querying Table.</p>
+<em class="property">class </em><code class="descclassname">karta.vector.table.</code><code class="descname">Indexer</code><span class="sig-paren">(</span><em>table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/table.html#Indexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.table.Indexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a pleasanter syntax for querying a Table.</p>
 <p>The Indexer object can be used with standard indexing syntax, with integer,
 slice, or string keys.</p>
 <ul class="simple">
@@ -2640,263 +2641,11 @@ equivalent to <cite>Table.getfield(str)</cite>.</li>
 <h3>Trees<a class="headerlink" href="#trees" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="module-karta.vector.quadtree">
 <span id="quadtree"></span><h4>Quadtree<a class="headerlink" href="#module-karta.vector.quadtree" title="Permalink to this headline">¶</a></h4>
-<p>Implements a simple QuadTree datastructure.</p>
-<dl class="class">
-<dt id="karta.vector.quadtree.QuadTree">
-<em class="property">class </em><code class="descclassname">karta.vector.quadtree.</code><code class="descname">QuadTree</code><span class="sig-paren">(</span><em>bbox</em>, <em>maxchildren=20</em>, <em>maxdepth=999</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#QuadTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.QuadTree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements a convenience class that wraps a quadtree data structure and
-the methods needed to grow or query it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bbox</strong> : 4-tuple</p>
-<blockquote>
-<div><p>(xmin, xmax, ymin, ymax).</p>
-</div></blockquote>
-<p><strong>maxchildren</strong> : int, optional</p>
-<blockquote>
-<div><p>maximum number of points before a node is split</p>
-</div></blockquote>
-<p><strong>maxdepth</strong> : int, optional</p>
-<blockquote class="last">
-<div><p>maximum tree depth</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="karta.vector.quadtree.QuadTree.addpt">
-<code class="descname">addpt</code><span class="sig-paren">(</span><em>pt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#QuadTree.addpt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.QuadTree.addpt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add point to the QuadTree. Returns the depth at which the point was
-added.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="karta.vector.quadtree.QuadTree.getfrombbox">
-<code class="descname">getfrombbox</code><span class="sig-paren">(</span><em>bbox</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#QuadTree.getfrombbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.QuadTree.getfrombbox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract all points from a boundary box.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="karta.vector.quadtree.QuadTree.querypt">
-<code class="descname">querypt</code><span class="sig-paren">(</span><em>pt</em>, <em>method='hash'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#QuadTree.querypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.QuadTree.querypt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test whether QuadTree contains a point. <em>method</em> may be &#8220;recursion&#8221;
-[default] or &#8220;hash&#8221;.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.quadtree.addpt">
-<code class="descclassname">karta.vector.quadtree.</code><code class="descname">addpt</code><span class="sig-paren">(</span><em>node</em>, <em>pt</em>, <em>depth</em>, <em>maxchildren</em>, <em>maxdepth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#addpt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.addpt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add point to a node.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>node</strong> : Node</p>
-<p><strong>pt</strong> : tuple</p>
-<p><strong>depth</strong> : int</p>
-<blockquote>
-<div><p>current quadtree level</p>
-</div></blockquote>
-<p><strong>maxchildren</strong> : int</p>
-<p><strong>maxdepth</strong> : int</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Node</p>
-<blockquote>
-<div><p>updated node (which may or may not be the same as the starting node,
-depending on whether a split occurred)</p>
-</div></blockquote>
-<p>int</p>
-<blockquote class="last">
-<div><p>depth at which point was inserted</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.quadtree.getfrombbox">
-<code class="descclassname">karta.vector.quadtree.</code><code class="descname">getfrombbox</code><span class="sig-paren">(</span><em>parent</em>, <em>bbox</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#getfrombbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.getfrombbox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return all points in <em>parent</em> node that are in <em>bbox</em>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.quadtree.querypt_recursion">
-<code class="descclassname">karta.vector.quadtree.</code><code class="descname">querypt_recursion</code><span class="sig-paren">(</span><em>parent</em>, <em>pt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#querypt_recursion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.querypt_recursion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test whether a point exists at <em>pt</em> using recursion.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.quadtree.split">
-<code class="descclassname">karta.vector.quadtree.</code><code class="descname">split</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/quadtree.html#split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.quadtree.split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new node with the bbox of <em>node</em> and <em>node</em>&#8216;s children split
-between four child nodes.</p>
-</dd></dl>
-
+<p>Cython wrapper quadtree</p>
 </div>
 <div class="section" id="module-karta.vector.rtree">
 <span id="r-tree"></span><h4>R-Tree<a class="headerlink" href="#module-karta.vector.rtree" title="Permalink to this headline">¶</a></h4>
-<p>Implements an R-tree data structure</p>
-<dl class="class">
-<dt id="karta.vector.rtree.LeafNode">
-<em class="property">class </em><code class="descclassname">karta.vector.rtree.</code><code class="descname">LeafNode</code><span class="sig-paren">(</span><em>bbox</em>, <em>parent</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#LeafNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.LeafNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Leaf node</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bbox</strong> : 4-tuple</p>
-<blockquote>
-<div><p>(x-min, y-min, x-max, y-max)</p>
-</div></blockquote>
-<p><strong>parent</strong> : Node</p>
-<p class="last"><strong>max_children</strong> : int, optional</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="karta.vector.rtree.LeafNode.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#LeafNode.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.LeafNode.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a geometry and return a code and a list of any new nodes
-generated by splitting.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="karta.vector.rtree.LeafNode.split">
-<code class="descname">split</code><span class="sig-paren">(</span><em>kind='linear'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#LeafNode.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.LeafNode.split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split and return new nodes.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="karta.vector.rtree.Node">
-<em class="property">class </em><code class="descclassname">karta.vector.rtree.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>bbox</em>, <em>parent</em>, <em>max_children=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.Node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents an R-tree node</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="karta.vector.rtree.NonLeafNode">
-<em class="property">class </em><code class="descclassname">karta.vector.rtree.</code><code class="descname">NonLeafNode</code><span class="sig-paren">(</span><em>bbox</em>, <em>parent</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#NonLeafNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.NonLeafNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Non-leaf node</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bbox</strong> : 4-tuple</p>
-<blockquote>
-<div><p>(x-min, y-min, x-max, y-max)</p>
-</div></blockquote>
-<p><strong>parent</strong> : Node</p>
-<p class="last"><strong>max_children</strong> : int, optional</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="karta.vector.rtree.NonLeafNode.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#NonLeafNode.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.NonLeafNode.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a geometry and return a code and a list of any new nodes
-generated by splitting.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="karta.vector.rtree.NonLeafNode.split">
-<code class="descname">split</code><span class="sig-paren">(</span><em>kind='linear'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#NonLeafNode.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.NonLeafNode.split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split and return new nodes.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.build_tree">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">build_tree</code><span class="sig-paren">(</span><em>geoms</em>, <em>max_children=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#build_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.build_tree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct an R-tree</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>geoms</strong> : list of objects implementing a <cite>bbox</cite> attribute</p>
-<p class="last"><strong>max_children</strong> : int, optional</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.contains_geom">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">contains_geom</code><span class="sig-paren">(</span><em>tree</em>, <em>geom</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#contains_geom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.contains_geom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test whether tree contains <em>geom</em></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.itergeoms">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">itergeoms</code><span class="sig-paren">(</span><em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#itergeoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.itergeoms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterator for all geometry ojects in tree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.iterleaves">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">iterleaves</code><span class="sig-paren">(</span><em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#iterleaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.iterleaves" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterator for all leaf nodes in tree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.iternodes">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">iternodes</code><span class="sig-paren">(</span><em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#iternodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.iternodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterator for all nodes in tree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.linear_pick_next">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">linear_pick_next</code><span class="sig-paren">(</span><em>bb0</em>, <em>bb1</em>, <em>geoms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#linear_pick_next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.linear_pick_next" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simply return the last geometry, as well as the index of the bbox that
-it should be placed in.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.linear_pick_seeds">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">linear_pick_seeds</code><span class="sig-paren">(</span><em>geoms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#linear_pick_seeds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.linear_pick_seeds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Choose the seeds for splitting a list of geometries using the linear
-approximation of Guttman (1984).</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.quadratic_pick_next">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">quadratic_pick_next</code><span class="sig-paren">(</span><em>bb0</em>, <em>bb1</em>, <em>geoms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#quadratic_pick_next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.quadratic_pick_next" title="Permalink to this definition">¶</a></dt>
-<dd><p>Choose an index from <em>geoms</em> to place in one of <em>bb0</em>, <em>bb1</em>.
-Return the best entry to index next, and the bbox to place it in.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.quadratic_pick_seeds">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">quadratic_pick_seeds</code><span class="sig-paren">(</span><em>geoms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#quadratic_pick_seeds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.quadratic_pick_seeds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Choose the seeds for splitting a list of geometries using the quadratic
-approximation of Guttman (1984).</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.search">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">search</code><span class="sig-paren">(</span><em>tree</em>, <em>bbox</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.search" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return all geometries overlapping <em>bbox</em>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.rtree.volume_expanded">
-<code class="descclassname">karta.vector.rtree.</code><code class="descname">volume_expanded</code><span class="sig-paren">(</span><em>bb0</em>, <em>bb1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/rtree.html#volume_expanded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.rtree.volume_expanded" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the volume by which the union of two bounding boxes larger than
-the bounding box of geom0.</p>
-</dd></dl>
-
+<p>Cython wrapper for rtree</p>
 </div>
 </div>
 <div class="section" id="module-karta.vector.read">
@@ -3260,8 +3009,8 @@ fixed precision.</p>
 <div class="section" id="module-karta.vector.shp">
 <span id="esri-shapefile-gdal-interface"></span><h4>ESRI shapefile (GDAL interface)<a class="headerlink" href="#module-karta.vector.shp" title="Permalink to this headline">¶</a></h4>
 <p>Shapefile driver for Karta using OGR backend</p>
-<div class="section" id="id6">
-<h5>Overview<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id4">
+<h5>Overview<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
 <p><cite>ogr_write</cite> takes geointerface dictionaries or Karta objects and writes to ESRI
 shapefile</p>
 <p><cite>ogr_read_geometry</cite> converts an OGR geometry object to a geointerface dictionary</p>
@@ -3321,22 +3070,15 @@ dictionaries.</p>
 <dl class="function">
 <dt id="karta.vector.shp.ogr_write">
 <code class="descclassname">karta.vector.shp.</code><code class="descname">ogr_write</code><span class="sig-paren">(</span><em>fnm</em>, <em>*objs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/shp.html#ogr_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.shp.ogr_write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write features to shapefile using OGR backend. Features may be karta
-geometry objects or __geo_interface__ features.</p>
+<dd><p>Write features to shapefile using OGR backend. Features are
+__geo_interface__ Feature mappings.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="karta.vector.shp.ogr_write_feature">
 <code class="descclassname">karta.vector.shp.</code><code class="descname">ogr_write_feature</code><span class="sig-paren">(</span><em>lyr</em>, <em>gi</em>, <em>id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/shp.html#ogr_write_feature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.shp.ogr_write_feature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the geometry encoded in a __geointerface__ dictionary to a
-shapefile.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="karta.vector.shp.write_shapefile">
-<code class="descclassname">karta.vector.shp.</code><code class="descname">write_shapefile</code><span class="sig-paren">(</span><em>fnm</em>, <em>*objs</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.shp.write_shapefile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write features to shapefile using OGR backend. Features may be karta
-geometry objects or __geo_interface__ features.</p>
+<dd><p>Write the geometry encoded in a __geointerface__ dictionary to an OGR
+Layer.</p>
 </dd></dl>
 
 </div>
@@ -3344,8 +3086,8 @@ geometry objects or __geo_interface__ features.</p>
 <div class="section" id="module-karta.vector.gpx">
 <span id="gps-exchange"></span><h4>GPS Exchange<a class="headerlink" href="#module-karta.vector.gpx" title="Permalink to this headline">¶</a></h4>
 <p>GPX IO and manipulation (UNDER DEVELOPMENT)</p>
-<div class="section" id="id7">
-<h5>Overview<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id5">
+<h5>Overview<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
 <p><cite>GPX</cite> represents a GPX document that can be written to or read from</p>
 <dl class="docutils">
 <dt>To do:</dt>
@@ -4114,7 +3856,7 @@ corresponding problem on a sphere.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on May 30, 2016.
+      Last updated on Jun 26, 2016.
 
     </p>
   </div>
@@ -4136,7 +3878,7 @@ corresponding problem on a sphere.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.7alpha0',
+            VERSION:'0.7b2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
