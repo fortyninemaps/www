@@ -47,7 +47,7 @@
           </p>
         </div>
 
-        <small><a href="https://github.com/fortyninemaps/karta/archive/0.7.tar.gz">Download v0.7</a></small>
+        <small><a href="https://github.com/fortyninemaps/karta/archive/0.7.1.tar.gz">Download v0.7.1</a></small>
 
       </div>
 
@@ -128,11 +128,7 @@ polygon = Polygon([(-515005.78, -1301130.53),
 
 print(polygon.area)
 polygon.convex_hull().to_shapefile("poly_hull.shp")
-
-# Build spatial indices
-sd = karta.read_shapefile("census_divisions.shp")
-sd_ont = [geom for geom in sd if "Ontario" in geom.properties["PRNAME"]]
-index = karta.vector.rtree.build_tree(sd_ont) </pre>
+</pre>
         </div>
 
       </div>
@@ -150,9 +146,9 @@ index = karta.vector.rtree.build_tree(sd_ont) </pre>
             of geometry objects handle basic queries about geometry properties
             such as perimeter, area, and convex hull, and relationships such as
             distance, intersections, and membership. Fast quadtree and R-tree
-            datastructures are available for improving the efficiency of
-            indexing problems, and are used automatically by multi-part
-            collections.</p>
+            datastructures are automatically constructed to enable efficient
+            queries on multi-part collections (Multipoint, Multiline, and
+            Multipolygon). </p>
 
           <p class="lead text-left">GeoJSON I/O is handled natively while ESRI
             shapefile access is via <a
