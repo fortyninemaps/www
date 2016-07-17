@@ -58,11 +58,11 @@
 
       <h3>Services we provide</h3>
       <ul>
-        <li>Geospatial and scientific data analysis</li>
+        <li>Geospatial and scientific data processing</li>
         <li>Aerial and satellite image registration and orthorectification</li>
-        <li>Custom satellite image acquisition and monitoring</li>
+        <li>Custom satellite image acquisition, analysis, and monitoring</li>
         <li>Cartography</li>
-        <li>Data pipeline development using open source tools</li>
+        <li>Automated data pipeline development</li>
       </ul>
 
     </div> <!-- /copy -->
@@ -89,7 +89,7 @@
         <!--<p><a href="mailto:contact@fortyninemaps.com">contact@fortyninemaps.com</a></p>-->
         <p>&nbsp;</p>
         <p>Based in the Northwest</p>
-        <p><small>Imagery &copy; DigitalGlobe; <a href="http://bit.ly/mapsapiview">Terms of Use</a></small></p>
+        <p><small>Banner imagery &copy; DigitalGlobe; <a href="http://bit.ly/mapsapiview">Terms of Use</a></small></p>
       </div>
       <div style="float: right; width: 50%; text-align: right;">
         <!--<img src="map.svg" height="130">-->
@@ -115,7 +115,7 @@
         opacity = 1.0;
       }
 
-      displayElement.style["background-position"] = "center "+String(-0.2*yscroll)+"px";
+      displayElement.style["background-position"] = "center "+String(-0.2*yscroll-200)+"px";
 
       for (var i=0; i!=bannerElements.length; i++) {
         bannerElements[i].style["opacity"] = opacity;
