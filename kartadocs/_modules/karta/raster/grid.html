@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.raster.grid &mdash; Karta 0.7b2 documentation</title>
+  <title>karta.raster.grid &mdash; Karta 0.7.1 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7b2 documentation" href="../../../index.html"/>
+    <link rel="top" title="Karta 0.7.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7
+                0.7.1
               </div>
             
           
@@ -142,6 +142,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_gtiff</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">crfuncs</span>
 <span class="kn">from</span> <span class="nn">.band</span> <span class="kn">import</span> <span class="n">SimpleBand</span><span class="p">,</span> <span class="n">CompressedBand</span><span class="p">,</span> <span class="n">BandIndexer</span>
+<span class="kn">from</span> <span class="nn">.coordgen</span> <span class="kn">import</span> <span class="n">CoordinateGenerator</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">errors</span>
 <span class="kn">from</span> <span class="nn">..crs</span> <span class="kn">import</span> <span class="n">Cartesian</span>
 
@@ -149,14 +150,14 @@
 <span class="n">CRS_DEFAULT</span> <span class="o">=</span> <span class="n">Cartesian</span>
 
 <div class="viewcode-block" id="Grid"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid">[docs]</a><span class="k">class</span> <span class="nc">Grid</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Grid base class. &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; Grid base class &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nodata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodata</span>
 
 <div class="viewcode-block" id="Grid.max"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.max">[docs]</a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the maximum non-nan in self.data. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Return the maximum non-nan in self.data &quot;&quot;&quot;</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -164,7 +165,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
 
 <div class="viewcode-block" id="Grid.min"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.min">[docs]</a>    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the minimum non-nan in self.data. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Return the minimum non-nan in self.data &quot;&quot;&quot;</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">tmp</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -172,7 +173,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
 
 <div class="viewcode-block" id="Grid.minmax"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.minmax">[docs]</a>    <span class="k">def</span> <span class="nf">minmax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the minimum and maximum value of data array. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Return the minimum and maximum value of data array &quot;&quot;&quot;</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">tmp</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
@@ -181,7 +182,7 @@
 
 <div class="viewcode-block" id="Grid.apply"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply a function *func* to grid values &quot;&quot;&quot;</span>
-        <span class="n">msk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span>
+        <span class="n">msk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_mask_full</span>
         <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
             <span class="n">newgrid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">newgrid</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">msk</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">[:,:]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodata</span><span class="p">)</span>
@@ -191,28 +192,38 @@
             <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="Grid.copy"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.Grid.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a copy. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Return a deep copy &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="RegularGrid"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid">[docs]</a><span class="k">class</span> <span class="nc">RegularGrid</span><span class="p">(</span><span class="n">Grid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Regular (structured) grid class. A RegularGrid contains a fixed number</span>
+    <span class="sd">&quot;&quot;&quot; Regular  structured grid class. A RegularGrid contains a fixed number</span>
 <span class="sd">    of rows and columns with a constant spacing and a list of bands</span>
 <span class="sd">    representing scalar fields.</span>
 
-<span class="sd">    Positions on a RegularGrid are referenced to their array indices *(i,j)*</span>
+<span class="sd">    Positions on a RegularGrid are referenced to their array indices (i,j)</span>
 <span class="sd">    using an affine transform *T* such that</span>
 
-<span class="sd">    (a, b, c, d, e, f) = T</span>
+<span class="sd">        T = (a, b, c, d, e, f)</span>
 
-<span class="sd">    X = a + j * c + i * e</span>
-<span class="sd">    Y = b + i * d + j * f</span>
+<span class="sd">        x = a + j*c + i*e</span>
+<span class="sd">        y = b + i*d + j*f</span>
 
-<span class="sd">    in which *(a,b)* defines the lower-left grid cell corner, *(c,d)* defines</span>
-<span class="sd">    the resolution in the horizontal and vertical directions, and *(e,f)* can</span>
-<span class="sd">    be used to define a rotation. In the common case of a &quot;north-up&quot; grid,</span>
+<span class="sd">    or as a matrix transformation,</span>
 
-<span class="sd">    e = f = 0</span>
+<span class="sd">        |e  c  a|   |i|   |x|</span>
+<span class="sd">        |       | * |j| = | |</span>
+<span class="sd">        |d  f  b|   |1|   |y|</span>
+
+<span class="sd">    where (x,y) are the coordinates of the lower left corner of each pixel.</span>
+
+<span class="sd">    Meaning:</span>
+
+<span class="sd">    - (a,b) defines the lower-left grid cell corner</span>
+<span class="sd">    - (c,d) defines the resolution in the horizontal and vertical directions</span>
+<span class="sd">    - (e,f) can be used to define a rotation</span>
+
+<span class="sd">    In the common case of a &quot;east-right, north-up&quot; grid, e = f = 0.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
             <span class="n">nodata_value</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">bandclass</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -226,14 +237,14 @@
 <span class="sd">        values : ndarray (nrows x ncols), optional</span>
 <span class="sd">            grid data from which raster bands will be formed. A two-dimensional</span>
 <span class="sd">            array will be transformed into a single band, while a</span>
-<span class="sd">            three-dimension MxNxP array will become P MxN bands. The class used</span>
-<span class="sd">            to represent bands can be controlled by the *bandclass* keyword</span>
-<span class="sd">            argument.</span>
+<span class="sd">            three-dimension MxNxP array will become P MxN bands. The structure</span>
+<span class="sd">            used to store band data internally can be controlled by the</span>
+<span class="sd">            *bandclass* keyword argument.</span>
 <span class="sd">        bands : list of band types, optional</span>
 <span class="sd">            list of allocated Band-like objects. If provided, they are assumed</span>
 <span class="sd">            to be of a single type, which overrides *bandclass*.</span>
 <span class="sd">        crs : karta.crs.CRS subclass, optional</span>
-<span class="sd">            Grid coordinate reference system, default CRS_DEFAULT</span>
+<span class="sd">            Grid coordinate reference system. default CRS_DEFAULT</span>
 <span class="sd">        nodata_value : number, optional</span>
 <span class="sd">            specifies a value to represent NoData or null pixels. The default</span>
 <span class="sd">            is chosen depending on the input type of *values* or *bands*. If</span>
@@ -335,6 +346,10 @@
     <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nbands</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">)</span>
+
 <div class="viewcode-block" id="RegularGrid.set_nodata_value"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.set_nodata_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_nodata_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Redefine value used to indicate nodata.</span>
 
@@ -342,7 +357,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        val : number</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask</span><span class="p">,</span> <span class="bp">self</span><span class="p">[:,:],</span> <span class="n">val</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask_full</span><span class="p">,</span> <span class="bp">self</span><span class="p">[:,:],</span> <span class="n">val</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_nodata</span> <span class="o">=</span> <span class="n">val</span>
         <span class="k">return</span></div>
 
@@ -363,7 +378,32 @@
         <span class="sd">&quot;&quot;&quot; Alias for center_coords() &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_coords</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">center_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RegularGrid.coordinates"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.coordinates">[docs]</a>    <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a CoordinateGenerator instance for computing the coordinates</span>
+<span class="sd">        of indices in *crs*. This behaves like the array returned by</span>
+<span class="sd">        `center_coords()`, but computes coordinates on demand rather than at</span>
+<span class="sd">        once.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        crs : CRS, optional</span>
+<span class="sd">            Coordinate system of output coordinates. If None (default), output</span>
+<span class="sd">            coordinates are not transformed from *self.crs*.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        CoordinateGenerator</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This is an experimental replacement for coordmesh() and center_coords().</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">crs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span>
+        <span class="k">return</span> <span class="n">CoordinateGenerator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RegularGrid.center_coords"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.center_coords">[docs]</a>    <span class="k">def</span> <span class="nf">center_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the coordinates of cell centers. &quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span>
         <span class="n">xcoords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
         <span class="n">ycoords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
@@ -371,7 +411,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="n">xcoords</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">icol</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
             <span class="n">ycoords</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">icol</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">xcoords</span><span class="p">,</span> <span class="n">ycoords</span>
+        <span class="k">return</span> <span class="n">xcoords</span><span class="p">,</span> <span class="n">ycoords</span></div>
 
 <div class="viewcode-block" id="RegularGrid.vertex_coords"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.vertex_coords">[docs]</a>    <span class="k">def</span> <span class="nf">vertex_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the coordinates of cell vertices. &quot;&quot;&quot;</span>
@@ -539,8 +579,8 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">lx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">ty</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; 8-bit mask of valid data cells &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">data_mask_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; 8-bit mask of valid data cells by band &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodata</span><span class="p">):</span>
             <span class="n">isdata</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -548,14 +588,22 @@
                 <span class="k">return</span> <span class="n">a</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodata</span>
         <span class="k">return</span> <span class="n">isdata</span><span class="p">(</span><span class="bp">self</span><span class="p">[:,:])</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; 8-bit mask of valid data cells, collapsed across bands &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_mask_full</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_mask_full</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
 <div class="viewcode-block" id="RegularGrid.aschunks"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.aschunks">[docs]</a>    <span class="k">def</span> <span class="nf">aschunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">overlap</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Generator for grid chunks, useful for parallel or memory-controlled</span>
-<span class="sd">        grid processing.</span>
+        <span class="sd">&quot;&quot;&quot; Generator for grid chunks. This may be useful for parallel or</span>
+<span class="sd">        memory-controlled grid processing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        size : tuple of two integers, optional</span>
-<span class="sd">            size of the chunks ot return (default approximately one-quarter of</span>
+<span class="sd">            size of the chunks to return (default approximately one-quarter of</span>
 <span class="sd">            each dimension)</span>
 <span class="sd">        overlap : tuple of two integers, optional</span>
 <span class="sd">            number of pixels of overlap (default (0, 0))</span>
@@ -691,14 +739,14 @@
 
 <div class="viewcode-block" id="RegularGrid.mask_by_poly"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.mask_by_poly">[docs]</a>    <span class="k">def</span> <span class="nf">mask_by_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">polys</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a grid with all elements outside the bounds of a polygon</span>
-<span class="sd">        masked by nodata</span>
+<span class="sd">        masked as nodata.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        polys : Polygon, Multipolygon or list of Polygon instances</span>
-<span class="sd">            region(s) defining clibing boundary</span>
+<span class="sd">            region(s) defining masking boundary</span>
 <span class="sd">        inplace : bool, optional</span>
-<span class="sd">            whether or not to perform masking in place (default False)</span>
+<span class="sd">            if True, perform masking in-place (default False)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">polys</span><span class="p">,</span> <span class="s2">&quot;_geotype&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
             <span class="n">polys</span> <span class="o">=</span> <span class="p">[</span><span class="n">polys</span><span class="p">]</span>
@@ -706,15 +754,12 @@
         <span class="n">msk</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">for</span> <span class="n">poly</span> <span class="ow">in</span> <span class="n">polys</span><span class="p">:</span>
 
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">get_coordinate_lists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">poly</span><span class="o">.</span><span class="n">isclockwise</span><span class="p">():</span>
-                <span class="n">vertices</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">vertices</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">]</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">]</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
-
             <span class="n">_msk</span> <span class="o">=</span> <span class="n">mask_poly</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">msk</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -729,13 +774,12 @@
                 <span class="n">band</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">data</span>
             <span class="k">return</span> <span class="bp">self</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,:]</span>
             <span class="k">return</span> <span class="n">RegularGrid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
-                               <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">msk</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodata</span><span class="p">),</span>
+                               <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">msk</span><span class="p">,</span> <span class="bp">self</span><span class="p">[:,:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodata</span><span class="p">),</span>
                                <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">nodata_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodata</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RegularGrid.resample"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Resample array to have spacing `dx`, `dy&#39;. The grid origin remains</span>
+        <span class="sd">&quot;&quot;&quot; Resample array to have spacing *dx*, *dy*. The grid origin remains</span>
 <span class="sd">        in the same position.</span>
 
 <span class="sd">        Parameters</span>
@@ -756,8 +800,7 @@
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
             <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">dx</span><span class="p">),</span>
                                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">dy</span><span class="p">))</span>
-            <span class="n">Z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_bilinear</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_bilinear</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;method &quot;{0}&quot; unavailable&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
 
@@ -767,67 +810,34 @@
                            <span class="n">nodata_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodata</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RegularGrid.get_positions"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.get_positions">[docs]</a>    <span class="k">def</span> <span class="nf">get_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the float column and row indices for the point nearest</span>
+        <span class="sd">&quot;&quot;&quot; Return the float row and column indices for the point nearest</span>
 <span class="sd">        geographical coordinates.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x, y : float or vector</span>
 <span class="sd">            vertices of points to compute indices for</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            if inputs have unequal size</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Calculate this by forming block matrices</span>
-        <span class="c1">#       | dx sy          |</span>
-        <span class="c1">#       | sx dy          |</span>
-        <span class="c1">#   T = |      ....      |</span>
-        <span class="c1">#       |          dx sy |</span>
-        <span class="c1">#       |          sx dy |</span>
-        <span class="c1">#</span>
-        <span class="c1">#       | x0 + (dx+dy)/2 |</span>
-        <span class="c1">#       | y0 + (dx+dy)/2 |</span>
-        <span class="c1">#   S = |    .......     |</span>
-        <span class="c1">#       | x0 + (dx+dy)/2 |</span>
-        <span class="c1">#       | y0 + (dx+dy)/2 |</span>
-        <span class="c1">#</span>
-        <span class="c1"># where the grid transform is t = (x0, y0, dx, dy, sy, sx)</span>
-        <span class="c1">#</span>
-        <span class="c1"># Then the nearest indices J come from solving the system</span>
-        <span class="c1"># T J = X - S</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">npts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">npts</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-            <span class="n">npts</span> <span class="o">=</span> <span class="mi">1</span>
-
-        <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>    <span class="c1"># number to process at once</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span>
-        <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">([</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">n</span><span class="p">))</span> <span class="o">+</span>
-             <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">([</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span>
-             <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">([</span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">([</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">])],</span> <span class="n">n</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">npts</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span> <span class="o">-</span> <span class="n">S</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;inputs must have equal size&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">crfuncs</span><span class="o">.</span><span class="n">get_positions_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">npts</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">while</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">npts</span><span class="p">:</span>
-                <span class="n">ip</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
-                <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-                <span class="n">xy</span><span class="p">[:</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">ip</span><span class="o">-</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">ip</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">ip</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-                <span class="n">ind_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">S</span><span class="p">)</span>
-                <span class="n">ind</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">ip</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_</span><span class="p">[:</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">ip</span><span class="o">-</span><span class="n">i</span><span class="p">)]</span>
-                <span class="n">i</span> <span class="o">=</span> <span class="n">ip</span>
-
-        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span></div>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">I</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">crfuncs</span><span class="o">.</span><span class="n">get_positions_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">I</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="RegularGrid.get_indices"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.get_indices">[docs]</a>    <span class="k">def</span> <span class="nf">get_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the integer column and row indices for the point nearest</span>
-<span class="sd">        geographical coordinates. Compared to get_positions, this method raises</span>
+        <span class="sd">&quot;&quot;&quot; Return the integer row and column indices for the point nearest</span>
+<span class="sd">        geographical coordinates. Unlike `get_positions()`, this method raises</span>
 <span class="sd">        and exception when points are out of range.</span>
 
 <span class="sd">        Parameters</span>
@@ -842,20 +852,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">ny</span><span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="nb">min</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">max</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">GridError</span><span class="p">(</span><span class="s2">&quot;Coordinates outside grid region ({0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">ny</span><span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">j</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">j</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">GridError</span><span class="p">(</span><span class="s2">&quot;coordinates outside grid region &quot;</span>
+                                       <span class="s2">&quot;({0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">ny</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">GridError</span><span class="p">(</span><span class="s2">&quot;Coordinates outside grid region ({0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">))</span>
-
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">ny</span><span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">GridError</span><span class="p">(</span><span class="s2">&quot;coordinate outside grid region &quot;</span>
+                                       <span class="s2">&quot;({0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span></div>
 
 <div class="viewcode-block" id="RegularGrid.sample_nearest"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.sample_nearest">[docs]</a>    <span class="k">def</span> <span class="nf">sample_nearest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the value nearest to coordinates. Nearest grid center</span>
+        <span class="sd">&quot;&quot;&quot; Return the value nearest to coordinates using a nearest grid center</span>
 <span class="sd">        sampling scheme.</span>
 
 <span class="sd">        Parameters</span>
@@ -863,57 +874,133 @@
 <span class="sd">        x, y : float or vector</span>
 <span class="sd">            vertices of points to compute indices for</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float or vector</span>
+<span class="sd">            The size of the output has one more dimension than the input. If</span>
+<span class="sd">            the input are scalar, the output is a p-vector representing band</span>
+<span class="sd">            values. If the input is a n-vector, the ouput is p x n. If the</span>
+<span class="sd">            input is an m x n array, the output is p x m x n.</span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        GridError</span>
 <span class="sd">            points outside of Grid bbox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indices</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[:,:][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indices</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="n">dim</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span>
+        <span class="n">I</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indices</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+
+        <span class="n">Imn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">I</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">Imx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">I</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">Jmn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">Jmx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">Imn</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Imn</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">Jmn</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Jmn</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">Imx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Imx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">Jmx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Jmx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">I</span> <span class="o">-=</span> <span class="n">Imn</span>
+        <span class="n">J</span> <span class="o">-=</span> <span class="n">Jmn</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">Imn</span><span class="p">:</span><span class="n">Imx</span><span class="p">,</span><span class="n">Jmn</span><span class="p">:</span><span class="n">Jmx</span><span class="p">][</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RegularGrid.sample_bilinear"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.sample_bilinear">[docs]</a>    <span class="k">def</span> <span class="nf">sample_bilinear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the value nearest to coordinates. Bilinear sampling scheme.</span>
+        <span class="sd">&quot;&quot;&quot; Return the value nearest to coordinates using a bi-linear sampling</span>
+<span class="sd">        scheme.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x, y : float or vector</span>
 <span class="sd">            vertices of points to compute indices for</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float or vector</span>
+<span class="sd">            The size of the output has one more dimension than the input. If</span>
+<span class="sd">            the input are scalar, the output is a p-vector representing band</span>
+<span class="sd">            values. If the input is a n-vector, the ouput is p x n. If the</span>
+<span class="sd">            input is an m x n array, the output is p x m x n.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        GridError</span>
+<span class="sd">            points outside of Grid bbox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">i0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">i1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">j0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">j1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+            <span class="n">dim</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">dim</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dim</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span>
 
-        <span class="c1"># Handle case where interpolation point is exactly on a grid point</span>
-        <span class="n">mska</span> <span class="o">=</span> <span class="n">i0</span><span class="o">==</span><span class="n">i1</span>
-        <span class="n">mskb</span> <span class="o">=</span> <span class="n">i0</span><span class="o">==</span><span class="mi">0</span>
-        <span class="n">i0</span><span class="p">[</span><span class="n">mska</span><span class="o">&amp;~</span><span class="n">mskb</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="n">i1</span><span class="p">[</span><span class="n">mska</span><span class="o">&amp;</span><span class="n">mskb</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">I</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
 
-        <span class="n">mska</span> <span class="o">=</span> <span class="n">j0</span><span class="o">==</span><span class="n">j1</span>
-        <span class="n">mskb</span> <span class="o">=</span> <span class="n">j0</span><span class="o">==</span><span class="mi">0</span>
-        <span class="n">j0</span><span class="p">[</span><span class="n">mska</span><span class="o">&amp;~</span><span class="n">mskb</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="n">j1</span><span class="p">[</span><span class="n">mska</span><span class="o">&amp;</span><span class="n">mskb</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># If the grid is large, decompressing everthing is expensive, so</span>
+        <span class="c1"># compute only the region necessary</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">Imn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">I</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">Imx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">I</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">Jmn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">Jmx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 
-        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">i1</span><span class="o">&gt;=</span><span class="n">ny</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">j1</span><span class="o">&gt;=</span><span class="n">nx</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">i0</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">j0</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">GridError</span><span class="p">(</span><span class="s2">&quot;Coordinates outside grid extent({0})&quot;</span>
-                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_extent</span><span class="p">()))</span>
+            <span class="n">Imn</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Imn</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">Jmn</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Jmn</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">Imx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Imx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">Jmx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Jmx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,:]</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">i0</span><span class="p">,</span><span class="n">j0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">i1</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">j1</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">values</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">j0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">i0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">j1</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> \
-             <span class="n">values</span><span class="p">[</span><span class="n">i0</span><span class="p">,</span><span class="n">j1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">i1</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">j0</span><span class="p">)</span> <span class="o">+</span> <span class="n">values</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">j1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">i0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">j0</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">z</span></div>
+            <span class="n">I</span> <span class="o">-=</span> <span class="n">Imn</span>
+            <span class="n">J</span> <span class="o">-=</span> <span class="n">Jmn</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Imn</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">Imx</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">Jmn</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">Jmx</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">Imn</span><span class="p">:</span><span class="n">Imx</span><span class="p">,</span><span class="n">Jmn</span><span class="p">:</span><span class="n">Jmx</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crfuncs</span><span class="o">.</span><span class="n">sample_bilinear_double</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="n">band</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">):</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crfuncs</span><span class="o">.</span><span class="n">sample_bilinear_int</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="n">band</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">):</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crfuncs</span><span class="o">.</span><span class="n">sample_bilinear_uint</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;no sample_bilinear method for dtype:&quot;</span>
+                                          <span class="s2">&quot; {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RegularGrid.sample"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the values nearest positions. Positions may be:</span>
 
 <span class="sd">        - a karta.Point instance</span>
 <span class="sd">        - a karta.Multipoint instance, or</span>
-<span class="sd">        - a pair of x, y coordinate lists</span>
+<span class="sd">        - a pair of x, y coordinate arrays</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -924,6 +1011,19 @@
 <span class="sd">            system is taken from the crs attribute of the geometry</span>
 <span class="sd">        method : string, optional</span>
 <span class="sd">            may be one of &#39;nearest&#39;, &#39;bilinear&#39; (default).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float or vector</span>
+<span class="sd">            The size of the output has one more dimension than the input. If</span>
+<span class="sd">            the input are scalar, the output is a p-vector representing band</span>
+<span class="sd">            values. If the input is a n-vector, the ouput is p x n. If the</span>
+<span class="sd">            input is an m x n array, the output is p x m x n.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        GridError</span>
+<span class="sd">            points outside of Grid bbox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">crs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;crs&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
         <span class="n">method</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="s2">&quot;bilinear&quot;</span><span class="p">)</span>
@@ -941,6 +1041,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">y</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
                 <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="n">crs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -951,14 +1052,15 @@
                 <span class="k">raise</span> <span class="n">argerror</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_nearest</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_nearest</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;bilinear&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_bilinear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_bilinear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;method &#39;{0}&#39; not available&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;method &#39;{0}&#39; not available&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">v</span></div>
 
 <div class="viewcode-block" id="RegularGrid.profile"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.profile">[docs]</a>    <span class="k">def</span> <span class="nf">profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Sample along a *line* at *resolution*.</span>
+        <span class="sd">&quot;&quot;&quot; Sample along a *Line* at a specified interval.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -972,7 +1074,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        list of (x, y) tuples</span>
+<span class="sd">        Multipoint</span>
 <span class="sd">            sample points</span>
 <span class="sd">        ndarray</span>
 <span class="sd">            grid value at sample points</span>
@@ -981,6 +1083,11 @@
             <span class="n">resolution</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
         <span class="n">points</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">to_points</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span>
         <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="o">*</span><span class="n">points</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbands</span><span class="p">):</span>
+                <span class="n">points</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">setfield</span><span class="p">(</span><span class="s2">&quot;band_{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">points</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">setfield</span><span class="p">(</span><span class="s2">&quot;band_0&quot;</span><span class="p">,</span> <span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">points</span><span class="p">,</span> <span class="n">z</span></div>
 
 <div class="viewcode-block" id="RegularGrid.as_warpedgrid"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.as_warpedgrid">[docs]</a>    <span class="k">def</span> <span class="nf">as_warpedgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1005,8 +1112,7 @@
 
 <div class="viewcode-block" id="RegularGrid.to_aai"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.RegularGrid.to_aai">[docs]</a>    <span class="k">def</span> <span class="nf">to_aai</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="s1">&#39;corner&#39;</span><span class="p">,</span> <span class="n">nodata_value</span><span class="o">=-</span><span class="mi">9999</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save internal data as an ASCII grid. Based on the ESRI standard,</span>
-<span class="sd">        only isometric grids (i.e. `hdr[&#39;dx&#39;] == hdr[&#39;dy&#39;]` can be saved,</span>
-<span class="sd">        otherwise `GridIOError` is thrown.</span>
+<span class="sd">        only isometric grids (i.e. `hdr[&#39;dx&#39;] == hdr[&#39;dy&#39;]` can be saved.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1016,6 +1122,11 @@
 <span class="sd">            specify a header reference (&#39;center&#39; | &#39;corner&#39;)</span>
 <span class="sd">        nodata_value : number</span>
 <span class="sd">            specify how NaNs should be represented</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        GridIOError</span>
+<span class="sd">            input grid is not isometric and can therefore not be saved</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">reference</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;corner&#39;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">GridIOError</span><span class="p">(</span><span class="s2">&quot;reference in AAIGrid.tofile() must be &#39;center&#39; or &quot;</span>
@@ -1125,12 +1236,12 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="WarpedGrid.resample"><a class="viewcode-back" href="../../../reference.html#karta.raster.grid.WarpedGrid.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Resample internal grid to the points defined by *X*, *Y*. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Resample internal grid to the points defined by X, Y. &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">grids</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Perform a basic grid merge. Currently limited to grids whose sampling</span>
-<span class="sd">    is an integer translation from each other.</span>
+    <span class="sd">&quot;&quot;&quot; Construct a grid mosiac by averaging multiple grids. Currently limited</span>
+<span class="sd">    to grids whose sampling is an integer translation from each other.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1138,26 +1249,35 @@
 <span class="sd">        grids to combine</span>
 <span class="sd">    weights : iterable of floats, optional</span>
 <span class="sd">        weighting factors for computing grid averages</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    GridError, ValueError</span>
+<span class="sd">        input grids have inconsistent transform properties</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check grid class</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">RegularGrid</span><span class="p">)</span> <span class="k">for</span> <span class="n">grid</span> <span class="ow">in</span> <span class="n">grids</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;All grids must by type RegularGrid&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;all grids must be type RegularGrid&quot;</span><span class="p">)</span>
 
     <span class="n">T</span> <span class="o">=</span> <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span>
     <span class="c1"># Check grid stretch and skew</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grids</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
         <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">!=</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">6</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;grid </span><span class="si">%d</span><span class="s2"> transform stretch and skew &quot;</span>
+            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">GridError</span><span class="p">(</span><span class="s2">&quot;grid </span><span class="si">%d</span><span class="s2"> transform stretch and skew &quot;</span>
                     <span class="s2">&quot;does not match grid 1&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,))</span>
 
     <span class="c1"># Check grid offset</span>
     <span class="n">excmsg</span> <span class="o">=</span> <span class="s2">&quot;grid </span><span class="si">%d</span><span class="s2"> not an integer translation from grid 1&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grids</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
         <span class="k">if</span> <span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="mf">1e-15</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">excmsg</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">excmsg</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,))</span>
         <span class="k">if</span> <span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="mf">1e-15</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">excmsg</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">excmsg</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,))</span>
+
+    <span class="c1"># Check number of grid bands</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">bands</span><span class="p">)</span> <span class="k">for</span> <span class="n">grid</span> <span class="ow">in</span> <span class="n">grids</span><span class="p">]))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;all grids to mosaic must have the same number of bands&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute weighting coefficients by normalizing *weights*</span>
     <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -1181,24 +1301,34 @@
 
     <span class="c1"># Allocate data array and copy each grid&#39;s data</span>
     <span class="n">typ</span> <span class="o">=</span> <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">typ</span><span class="p">)</span>
-    <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">grid</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grids</span><span class="p">,</span> <span class="n">normalizedweights</span><span class="p">):</span>
-        <span class="n">_xmin</span><span class="p">,</span> <span class="n">_xmax</span><span class="p">,</span> <span class="n">_ymin</span><span class="p">,</span> <span class="n">_ymax</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
-        <span class="n">offx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">_xmin</span><span class="o">-</span><span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">offy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">_ymin</span><span class="o">-</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">_ny</span><span class="p">,</span> <span class="n">_nx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">outbands</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">data_mask</span>
-        <span class="n">counts</span><span class="p">[</span><span class="n">offy</span><span class="p">:</span><span class="n">offy</span><span class="o">+</span><span class="n">_ny</span><span class="p">,</span><span class="n">offx</span><span class="p">:</span><span class="n">offx</span><span class="o">+</span><span class="n">_nx</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span> <span class="o">+=</span> <span class="n">w</span>
-        <span class="n">values</span><span class="p">[</span><span class="n">offy</span><span class="p">:</span><span class="n">offy</span><span class="o">+</span><span class="n">_ny</span><span class="p">,</span><span class="n">offx</span><span class="p">:</span><span class="n">offx</span><span class="o">+</span><span class="n">_nx</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span> <span class="o">+=</span> <span class="n">typ</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
-        <span class="k">del</span> <span class="n">mask</span>
+    <span class="k">for</span> <span class="n">iband</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bands</span><span class="p">)):</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">typ</span><span class="p">)</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
-    <span class="n">validcountmask</span> <span class="o">=</span> <span class="p">(</span><span class="n">counts</span><span class="o">!=</span><span class="mf">0.0</span><span class="p">)</span>
-    <span class="n">values</span><span class="p">[</span><span class="n">validcountmask</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">validcountmask</span><span class="p">]</span> <span class="o">/</span> <span class="n">counts</span><span class="p">[</span><span class="n">validcountmask</span><span class="p">]</span>
-    <span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">validcountmask</span><span class="p">]</span> <span class="o">=</span> <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nodata</span>
+        <span class="k">for</span> <span class="n">grid</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grids</span><span class="p">,</span> <span class="n">normalizedweights</span><span class="p">):</span>
+            <span class="n">_xmin</span><span class="p">,</span> <span class="n">_xmax</span><span class="p">,</span> <span class="n">_ymin</span><span class="p">,</span> <span class="n">_ymax</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
+            <span class="n">offx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">_xmin</span><span class="o">-</span><span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">offy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">_ymin</span><span class="o">-</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">_ny</span><span class="p">,</span> <span class="n">_nx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">size</span>
+
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">data_mask</span>
+            <span class="n">counts</span><span class="p">[</span><span class="n">offy</span><span class="p">:</span><span class="n">offy</span><span class="o">+</span><span class="n">_ny</span><span class="p">,</span><span class="n">offx</span><span class="p">:</span><span class="n">offx</span><span class="o">+</span><span class="n">_nx</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span>
+            <span class="n">_bnd</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">iband</span><span class="p">]</span>
+            <span class="n">values</span><span class="p">[</span><span class="n">offy</span><span class="p">:</span><span class="n">offy</span><span class="o">+</span><span class="n">_ny</span><span class="p">,</span><span class="n">offx</span><span class="p">:</span><span class="n">offx</span><span class="o">+</span><span class="n">_nx</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span> <span class="o">+=</span> <span class="n">typ</span><span class="p">(</span><span class="n">_bnd</span><span class="p">[:,:][</span><span class="n">mask</span><span class="p">])</span> <span class="o">*</span> <span class="n">weight</span>
+            <span class="k">del</span> <span class="n">mask</span>
+
+        <span class="n">validcountmask</span> <span class="o">=</span> <span class="p">(</span><span class="n">counts</span><span class="o">!=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">values</span><span class="p">[</span><span class="n">validcountmask</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">validcountmask</span><span class="p">]</span> <span class="o">/</span> <span class="n">counts</span><span class="p">[</span><span class="n">validcountmask</span><span class="p">]</span>
+        <span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">validcountmask</span><span class="p">]</span> <span class="o">=</span> <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nodata</span>
+
+        <span class="n">band</span> <span class="o">=</span> <span class="n">CompressedBand</span><span class="p">((</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">typ</span><span class="p">)</span>
+        <span class="n">band</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">values</span>
+        <span class="n">outbands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
+
     <span class="n">Tmerge</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
-    <span class="k">return</span> <span class="n">RegularGrid</span><span class="p">(</span><span class="n">Tmerge</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+    <span class="k">return</span> <span class="n">RegularGrid</span><span class="p">(</span><span class="n">Tmerge</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="n">outbands</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
                        <span class="n">nodata_value</span><span class="o">=</span><span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nodata</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">get_nodata</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
@@ -1207,7 +1337,16 @@
 <span class="sd">    For unsigned integer types, returns largest representable value.</span>
 <span class="sd">    For signed integer types, returns smallest negative representable value.</span>
 <span class="sd">    For floating point types (incl. complex), returns NaN.</span>
-<span class="sd">    Otherwise, raises ValeError.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    T : type</span>
+<span class="sd">        numeric type to choose NODATA for</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        input is not an integer, real, or complex numeric type</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">T</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
@@ -1269,7 +1408,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    xpoly, ypoly : list of floats</span>
+<span class="sd">    xpoly, ypoly : lists of floats</span>
 <span class="sd">        sequences of points representing polygon</span>
 <span class="sd">    nx : int</span>
 <span class="sd">    ny : int</span>
@@ -1291,9 +1430,10 @@
     <span class="n">x0</span> <span class="o">=</span> <span class="n">xpoly</span><span class="p">[</span><span class="n">i_bot</span><span class="p">]</span>
     <span class="n">y0</span> <span class="o">=</span> <span class="n">ypoly</span><span class="p">[</span><span class="n">i_bot</span><span class="p">]</span>
 
+    <span class="c1"># compute the grid indices of the starting point</span>
     <span class="n">ta</span><span class="p">,</span> <span class="n">tb</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span> <span class="n">td</span><span class="p">,</span> <span class="n">te</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">transform</span>
-    <span class="n">i0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">y0</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span> <span class="o">-</span> <span class="n">tf</span><span class="o">/</span><span class="n">tc</span><span class="o">*</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">ta</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">td</span> <span class="o">-</span> <span class="n">tf</span><span class="o">*</span><span class="n">te</span><span class="o">/</span><span class="n">tc</span><span class="p">)))</span>
-    <span class="n">j0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">x0</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">ta</span><span class="p">)</span> <span class="o">-</span> <span class="n">te</span><span class="o">/</span><span class="n">td</span><span class="o">*</span><span class="p">(</span><span class="n">y0</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">tc</span> <span class="o">-</span> <span class="n">te</span><span class="o">*</span><span class="n">tf</span><span class="o">/</span><span class="n">td</span><span class="p">)))</span>
+    <span class="n">i0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">y0</span><span class="o">-</span><span class="n">tb</span> <span class="o">-</span> <span class="n">tf</span><span class="o">/</span><span class="n">tc</span><span class="o">*</span><span class="p">(</span><span class="n">x0</span><span class="o">-</span><span class="n">ta</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">td</span> <span class="o">-</span> <span class="n">tf</span><span class="o">*</span><span class="n">te</span><span class="o">/</span><span class="n">tc</span><span class="p">)))</span>
+    <span class="n">j0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">x0</span><span class="o">-</span><span class="n">ta</span> <span class="o">-</span> <span class="n">te</span><span class="o">/</span><span class="n">td</span><span class="o">*</span><span class="p">(</span><span class="n">y0</span><span class="o">-</span><span class="n">tb</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">tc</span> <span class="o">-</span> <span class="n">te</span><span class="o">*</span><span class="n">tf</span><span class="o">/</span><span class="n">td</span><span class="p">)))</span>
 
     <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">xpoly</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">el</span> <span class="o">+</span> <span class="n">i_bot</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">xpoly</span><span class="p">)</span>
@@ -1307,7 +1447,7 @@
         <span class="c1"># If segment is horizontal or off-grid, ignore</span>
         <span class="k">if</span> <span class="p">((</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i0</span> <span class="o">&lt;</span> <span class="n">ny</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i1</span> <span class="o">&lt;</span> <span class="n">ny</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">y1</span> <span class="o">!=</span> <span class="n">y0</span><span class="p">):</span>
 
-            <span class="k">if</span> <span class="n">y1</span> <span class="o">&gt;</span> <span class="n">y0</span><span class="p">:</span>     <span class="c1"># mark grid cells to the right</span>
+            <span class="k">if</span> <span class="n">y1</span> <span class="o">&gt;</span> <span class="n">y0</span><span class="p">:</span>     <span class="c1"># upward - mark grid cells to the right</span>
 
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i0</span><span class="p">,</span> <span class="n">i1</span><span class="p">):</span>
                     <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ny</span><span class="p">):</span>
@@ -1315,7 +1455,7 @@
                         <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nx</span><span class="p">:</span>
                             <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">):]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-            <span class="k">else</span><span class="p">:</span>           <span class="c1"># unmark grid cells to the right</span>
+            <span class="k">else</span><span class="p">:</span>           <span class="c1"># downward - unmark grid cells to the right</span>
 
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span> <span class="n">i0</span><span class="p">):</span>
                     <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ny</span><span class="p">):</span>
@@ -1342,7 +1482,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 07, 2016.
 
     </p>
   </div>
@@ -1364,7 +1504,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7b2',
+            VERSION:'0.7.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
