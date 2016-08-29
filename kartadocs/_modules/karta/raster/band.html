@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.raster.band &mdash; Karta 0.7.1 documentation</title>
+  <title>karta.raster.band &mdash; Karta 0.7.2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="Karta 0.7.2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.7.2
               </div>
             
           
@@ -142,10 +142,26 @@
 <span class="sd">`SimpleBand` use numpy arrays for data storage</span>
 
 <span class="sd">`CompressedBand` uses blosc compression to reduce in-memory footprint</span>
+
+<span class="sd">Implementation</span>
+<span class="sd">--------------</span>
+
+<span class="sd">Bands are expected to implement the following methods:</span>
+<span class="sd">    - `__getitem__(self, key)`, accepting as *key* any of</span>
+<span class="sd">        - an int</span>
+<span class="sd">        - a slice</span>
+<span class="sd">        - a 2-tuple of ints</span>
+<span class="sd">        - a 2-tuple of slices</span>
+<span class="sd">    - `__setitem__(self, key, value)`, accepting as *key* the same</span>
+<span class="sd">      possibilities as __getitem__</span>
+
+<span class="sd">Additionally, a Band should have a `dtype` attribute indicating the type of the</span>
+<span class="sd">stored data.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">blosc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
 
 <span class="k">class</span> <span class="nc">BandIndexer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -245,7 +261,7 @@
         <span class="k">if</span> <span class="n">initval</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">initval</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">initval</span><span class="p">,</span> <span class="n">dtype</span><span class="o">-</span><span class="n">dtype</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -260,11 +276,30 @@
     <span class="n">CHUNKSET</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">CHUNKUNSET</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">initval</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">initval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">unsetval</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize a CompressedBand instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        size : tuple of two ints</span>
+<span class="sd">            size of band in pixels</span>
+<span class="sd">        dtype : type</span>
+<span class="sd">            data type of pixel values</span>
+<span class="sd">        chunksize : tuple of two ints, optional</span>
+<span class="sd">            size of compressed chunks, default (256, 256)</span>
+<span class="sd">        initval : value, optional</span>
+<span class="sd">            if set, the entire grid is initialized with this value, which should</span>
+<span class="sd">            be of *dtype*</span>
+<span class="sd">        unsetval : value, optional</span>
+<span class="sd">            value to fill with when an unset block is requested</span>
+<span class="sd">            default 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_chunksize</span> <span class="o">=</span> <span class="n">chunksize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initval</span> <span class="o">=</span> <span class="n">initval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unsetval</span> <span class="o">=</span> <span class="n">unsetval</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nchunkrows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">chunksize</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nchunkcols</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">chunksize</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
@@ -276,14 +311,11 @@
         <span class="c1"># 0 =&gt; unset</span>
         <span class="c1"># 1 =&gt; set</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chunkstatus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchunks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">initval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">initval</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
             <span class="n">irow</span> <span class="o">=</span> <span class="n">key</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">icol</span> <span class="o">=</span> <span class="n">key</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getblock</span><span class="p">(</span><span class="n">irow</span><span class="p">,</span> <span class="n">icol</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
@@ -295,7 +327,7 @@
 
             <span class="n">kr</span><span class="p">,</span> <span class="n">kc</span> <span class="o">=</span> <span class="n">key</span>
 
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
                 <span class="n">yoff</span> <span class="o">=</span> <span class="n">kr</span>
                 <span class="n">ny</span> <span class="o">=</span> <span class="mi">1</span>
                 <span class="n">ystride</span> <span class="o">=</span> <span class="mi">1</span>
@@ -311,7 +343,7 @@
                 <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;slicing with instances of &#39;{0}&#39; not &quot;</span>
                                  <span class="s2">&quot;supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">kr</span><span class="p">)))</span>
 
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kc</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kc</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
                 <span class="n">xoff</span> <span class="o">=</span> <span class="n">kc</span>
                 <span class="n">nx</span> <span class="o">=</span> <span class="mi">1</span>
                 <span class="n">xstride</span> <span class="o">=</span> <span class="mi">1</span>
@@ -327,7 +359,7 @@
                 <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;slicing with instances of &#39;{0}&#39; not &quot;</span>
                                  <span class="s2">&quot;supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">kc</span><span class="p">)))</span>
 
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kc</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kc</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getblock</span><span class="p">(</span><span class="n">yoff</span><span class="p">,</span> <span class="n">xoff</span><span class="p">,</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">))[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getblock</span><span class="p">(</span><span class="n">yoff</span><span class="p">,</span> <span class="n">xoff</span><span class="p">,</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">))[::</span><span class="n">ystride</span><span class="p">,::</span><span class="n">xstride</span><span class="p">]</span>
@@ -477,7 +509,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunkstatus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CHUNKUNSET</span><span class="p">:</span>
                 <span class="n">chunkdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrieve</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">chunkdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chunksize</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="n">chunkdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chunksize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initval</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
             <span class="c1"># Compute region within chunk to place data in</span>
             <span class="n">cy0</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">yoff</span><span class="o">-</span><span class="n">yst</span><span class="p">)</span>
@@ -511,8 +543,9 @@
             <span class="n">ox1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xen</span><span class="o">-</span><span class="n">xoff</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunkstatus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">CHUNKUNSET</span><span class="p">:</span>
-                <span class="n">result</span><span class="p">[</span><span class="n">oy0</span><span class="p">:</span><span class="n">oy1</span><span class="p">,</span> <span class="n">ox0</span><span class="p">:</span><span class="n">ox1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">oy1</span><span class="o">-</span><span class="n">oy0</span><span class="p">,</span> <span class="n">ox1</span><span class="o">-</span><span class="n">ox0</span><span class="p">),</span>
-                                                    <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">oy0</span><span class="p">:</span><span class="n">oy1</span><span class="p">,</span> <span class="n">ox0</span><span class="p">:</span><span class="n">ox1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">oy1</span><span class="o">-</span><span class="n">oy0</span><span class="p">,</span> <span class="n">ox1</span><span class="o">-</span><span class="n">ox0</span><span class="p">),</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">_unsetval</span><span class="p">,</span>
+                                                   <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Compute the extents from the chunk to retain</span>
@@ -537,7 +570,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on Aug 07, 2016.
+      Last updated on Aug 29, 2016.
 
     </p>
   </div>
@@ -559,7 +592,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.1',
+            VERSION:'0.7.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

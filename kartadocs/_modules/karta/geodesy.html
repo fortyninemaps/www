@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.geodesy &mdash; Karta 0.7.1 documentation</title>
+  <title>karta.geodesy &mdash; Karta 0.7.2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7.1 documentation" href="../../index.html"/>
+    <link rel="top" title="Karta 0.7.2 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.7.2
               </div>
             
           
@@ -176,7 +176,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">theta</span> <span class="o">=</span> <span class="n">acos</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-4</span><span class="p">:</span>
-        <span class="n">lon</span> <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">lon</span> <span class="o">=</span> <span class="n">asin</span><span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">lat</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">pi</span> <span class="o">-</span> <span class="n">theta</span>
@@ -243,20 +243,7 @@
 <span class="nd">@recurse_iterables</span>
 <span class="k">def</span> <span class="nf">sphere_azimuth</span><span class="p">(</span><span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span><span class="p">):</span>
     <span class="n">dlon</span> <span class="o">=</span> <span class="n">lon2</span> <span class="o">-</span> <span class="n">lon1</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tan</span><span class="p">(</span><span class="n">lat2</span><span class="p">)</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">dlon</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">az</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">pi</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">az</span> <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">dlon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tan</span><span class="p">(</span><span class="n">lat2</span><span class="p">)</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">dlon</span><span class="p">)))</span>
-
-    <span class="k">if</span> <span class="n">unroll_rad</span><span class="p">(</span><span class="n">dlon</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">pi</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">lat2</span> <span class="o">&lt;</span> <span class="n">lat1</span><span class="p">:</span>
-            <span class="n">az</span> <span class="o">=</span> <span class="n">az</span> <span class="o">+</span> <span class="n">pi</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">lat1</span> <span class="o">&lt;</span> <span class="n">lat2</span><span class="p">:</span>
-            <span class="n">az</span> <span class="o">=</span> <span class="n">az</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">az</span> <span class="o">=</span> <span class="n">az</span> <span class="o">+</span> <span class="n">pi</span>
-    <span class="k">return</span> <span class="n">unroll_rad</span><span class="p">(</span><span class="n">az</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">atan2</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">_radians</span><span class="p">(</span><span class="n">dlon</span><span class="p">)),</span> <span class="n">cos</span><span class="p">(</span><span class="n">_radians</span><span class="p">(</span><span class="n">lat1</span><span class="p">))</span> <span class="o">*</span> <span class="n">tan</span><span class="p">(</span><span class="n">_radians</span><span class="p">(</span><span class="n">lat2</span><span class="p">))</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="n">_radians</span><span class="p">(</span><span class="n">lat1</span><span class="p">))</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">_radians</span><span class="p">(</span><span class="n">dlon</span><span class="p">)))</span>
 
 <div class="viewcode-block" id="spherical_area"><a class="viewcode-back" href="../../reference.html#karta.geodesy.spherical_area">[docs]</a><span class="k">def</span> <span class="nf">spherical_area</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Area between a geodesic and the equator on a sphere &quot;&quot;&quot;</span>
@@ -264,7 +251,7 @@
     <span class="n">phi1</span> <span class="o">=</span> <span class="n">_radians</span><span class="p">(</span><span class="n">y1</span><span class="p">)</span>
     <span class="n">phi2</span> <span class="o">=</span> <span class="n">_radians</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
     <span class="n">lambda12</span> <span class="o">=</span> <span class="p">(</span><span class="n">x2</span><span class="o">-</span><span class="n">x1</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span>
-    <span class="n">alpha1</span><span class="p">,</span> <span class="n">alpha2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">solve_vicenty</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lambda12</span><span class="p">,</span> <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">)</span>
+    <span class="n">alpha1</span><span class="p">,</span> <span class="n">alpha2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">solve_vincenty</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lambda12</span><span class="p">,</span> <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">r</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">alpha2</span><span class="o">-</span><span class="n">alpha1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="isbetween_circular"><a class="viewcode-back" href="../../reference.html#karta.geodesy.isbetween_circular">[docs]</a><span class="k">def</span> <span class="nf">isbetween_circular</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">):</span>
@@ -275,10 +262,11 @@
     <span class="n">x1</span> <span class="o">=</span> <span class="n">reduce_deg</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span>
     <span class="k">return</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">x1</span></div>
 
-<span class="k">def</span> <span class="nf">greatcircle_vec</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">):</span>
+<div class="viewcode-block" id="eulerpole"><a class="viewcode-back" href="../../reference.html#karta.geodesy.eulerpole">[docs]</a><span class="k">def</span> <span class="nf">eulerpole</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return the Euler pole of a geodesic passing through two points. &quot;&quot;&quot;</span>
     <span class="n">v1</span> <span class="o">=</span> <span class="n">sph2cart</span><span class="p">(</span><span class="o">*</span><span class="n">pt1</span><span class="p">)</span>
     <span class="n">v2</span> <span class="o">=</span> <span class="n">sph2cart</span><span class="p">(</span><span class="o">*</span><span class="n">pt2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">cross</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cross</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="check_in_segment_range"><a class="viewcode-back" href="../../reference.html#karta.geodesy.check_in_segment_range">[docs]</a><span class="k">def</span> <span class="nf">check_in_segment_range</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">segment</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Test whether *pt* is within the lon/lat range of *segment* &quot;&quot;&quot;</span>
@@ -304,8 +292,8 @@
 <span class="sd">    segment1, segment2 : tuple of tuples</span>
 <span class="sd">        Tuples of the form ((x1, y1), (x2, y2)) describing line segements</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">gc1</span> <span class="o">=</span> <span class="n">greatcircle_vec</span><span class="p">(</span><span class="o">*</span><span class="n">segment1</span><span class="p">)</span>
-    <span class="n">gc2</span> <span class="o">=</span> <span class="n">greatcircle_vec</span><span class="p">(</span><span class="o">*</span><span class="n">segment2</span><span class="p">)</span>
+    <span class="n">gc1</span> <span class="o">=</span> <span class="n">eulerpole</span><span class="p">(</span><span class="o">*</span><span class="n">segment1</span><span class="p">)</span>
+    <span class="n">gc2</span> <span class="o">=</span> <span class="n">eulerpole</span><span class="p">(</span><span class="o">*</span><span class="n">segment2</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">gc1</span><span class="p">,</span> <span class="n">gc2</span><span class="p">)</span>
     <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">cart2sph</span><span class="p">(</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
     <span class="n">lon_antipodal</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon</span><span class="o">+</span><span class="mi">360</span><span class="p">)</span><span class="o">%</span><span class="mi">360</span><span class="o">-</span><span class="mi">180</span>
@@ -360,7 +348,7 @@
     <span class="n">alpha1</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">mu</span><span class="p">),</span> <span class="n">y</span><span class="o">/</span><span class="n">mu</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">alpha1</span></div>
 
-<div class="viewcode-block" id="solve_vicenty"><a class="viewcode-back" href="../../reference.html#karta.geodesy.solve_vicenty">[docs]</a><span class="k">def</span> <span class="nf">solve_vicenty</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">lambda12</span><span class="p">,</span> <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">):</span>
+<div class="viewcode-block" id="solve_vincenty"><a class="viewcode-back" href="../../reference.html#karta.geodesy.solve_vincenty">[docs]</a><span class="k">def</span> <span class="nf">solve_vincenty</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">lambda12</span><span class="p">,</span> <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Used to provide an initial guess to the inverse problem by solving the</span>
 <span class="sd">    corresponding problem on a sphere.</span>
 
@@ -657,7 +645,7 @@
         <span class="c1"># Guess the azimuth</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambda12</span><span class="o">-</span><span class="n">pi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0087</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">phi1</span><span class="o">+</span><span class="n">phi2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0087</span><span class="p">):</span>
             <span class="c1"># not nearly antipodal</span>
-            <span class="n">alpha1</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">solve_vicenty</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">lambda12</span><span class="p">,</span> <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">)</span>
+            <span class="n">alpha1</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">solve_vincenty</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">lambda12</span><span class="p">,</span> <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">alpha1</span> <span class="o">=</span> <span class="n">solve_astroid</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">lambda12</span><span class="p">,</span> <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">)</span>
 
@@ -965,7 +953,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on Aug 07, 2016.
+      Last updated on Aug 29, 2016.
 
     </p>
   </div>
@@ -987,7 +975,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.1',
+            VERSION:'0.7.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.crs &mdash; Karta 0.7.1 documentation</title>
+  <title>karta.crs &mdash; Karta 0.7.2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7.1 documentation" href="../../index.html"/>
+    <link rel="top" title="Karta 0.7.2 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.7.2
               </div>
             
           
@@ -291,6 +291,10 @@
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;incomplete CRS definition (missing ref_proj4, ref_wkt attributes)&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">srs</span><span class="o">.</span><span class="n">ExportToProj4</span><span class="p">()</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">proj4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_proj4</span><span class="p">()</span>
+
     <span class="k">def</span> <span class="nf">get_wkt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;ref_wkt&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_wkt</span>
@@ -304,7 +308,11 @@
                 <span class="n">srs</span><span class="o">.</span><span class="n">ImportFromProj4</span><span class="p">(</span><span class="n">_proj4</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;incomplete CRS definition (missing ref_proj4, ref_wkt attributes)&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">srs</span><span class="o">.</span><span class="n">ExportToWkt</span><span class="p">()</span></div>
+            <span class="k">return</span> <span class="n">srs</span><span class="o">.</span><span class="n">ExportToWkt</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">wkt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_wkt</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CartesianCRS"><a class="viewcode-back" href="../../reference.html#karta.crs.CartesianCRS">[docs]</a><span class="k">class</span> <span class="nc">CartesianCRS</span><span class="p">(</span><span class="n">CRS</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Cartesian (flat-earth) reference systems with (x, y) coordinates &quot;&quot;&quot;</span>
@@ -688,7 +696,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on Aug 07, 2016.
+      Last updated on Aug 29, 2016.
 
     </p>
   </div>
@@ -710,7 +718,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.1',
+            VERSION:'0.7.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

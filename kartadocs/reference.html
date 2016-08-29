@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Package reference &mdash; Karta 0.7.1 documentation</title>
+  <title>Package reference &mdash; Karta 0.7.2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7.1 documentation" href="index.html"/>
+    <link rel="top" title="Karta 0.7.2 documentation" href="index.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.7.2
               </div>
             
           
@@ -93,7 +93,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#compressedband">CompressedBand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-karta.raster.misc">Miscellaneous raster functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-karta.raster.read">Raster IO modules</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#module-karta.raster._gtiff">GeoTiff (GDAL interface)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-karta.raster._gdal">GeoTiff (GDAL interface)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-karta.raster._aai">ESRI ASCII grids</a></li>
 </ul>
 </li>
@@ -234,16 +234,18 @@ of rows and columns with a constant spacing and a list of bands
 representing scalar fields.</p>
 <p>Positions on a RegularGrid are referenced to their array indices (i,j)
 using an affine transform <em>T</em> such that</p>
-<blockquote>
-<div><p>T = (a, b, c, d, e, f)</p>
-<p>x = a + j*c + i*e
-y = b + i*d + j*f</p>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">j</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">e</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="n">j</span><span class="o">*</span><span class="n">f</span>
+</pre></div>
+</div>
 <p>or as a matrix transformation,</p>
-<blockquote>
-<div><a href="#id4"><span class="problematic" id="id5">|e  c  a|</span></a>   <a href="#id6"><span class="problematic" id="id7">|i|</span></a>   <a href="#id8"><span class="problematic" id="id9">|x|</span></a>
-|       | * <a href="#id10"><span class="problematic" id="id11">|j|</span></a> = | |
-<a href="#id12"><span class="problematic" id="id13">|d  f  b|</span></a>   <a href="#id14"><span class="problematic" id="id15">|1|</span></a>   <a href="#id16"><span class="problematic" id="id17">|y|</span></a></div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">|</span><span class="n">e</span>  <span class="n">c</span>  <span class="n">a</span><span class="o">|</span>   <span class="o">|</span><span class="n">i</span><span class="o">|</span>   <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+<span class="o">|</span>       <span class="o">|</span> <span class="o">*</span> <span class="o">|</span><span class="n">j</span><span class="o">|</span> <span class="o">=</span> <span class="o">|</span> <span class="o">|</span>
+<span class="o">|</span><span class="n">d</span>  <span class="n">f</span>  <span class="n">b</span><span class="o">|</span>   <span class="o">|</span><span class="mi">1</span><span class="o">|</span>   <span class="o">|</span><span class="n">y</span><span class="o">|</span>
+</pre></div>
+</div>
 <p>where (x,y) are the coordinates of the lower left corner of each pixel.</p>
 <p>Meaning:</p>
 <ul class="simple">
@@ -350,6 +352,8 @@ coordinates are not transformed from <em>self.crs</em>.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>This is an experimental replacement for coordmesh() and center_coords().</p>
 </dd></dl>
 
 <dl class="method">
@@ -803,7 +807,7 @@ only isometric grids (i.e. <cite>hdr[&#8216;dx&#8217;] == hdr[&#8216;dy&#8217;]<
 <h3>CompressedBand<a class="headerlink" href="#compressedband" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="karta.raster.band.CompressedBand">
-<em class="property">class </em><code class="descclassname">karta.raster.band.</code><code class="descname">CompressedBand</code><span class="sig-paren">(</span><em>size</em>, <em>dtype</em>, <em>chunksize=(256</em>, <em>256)</em>, <em>initval=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/band.html#CompressedBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.band.CompressedBand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">karta.raster.band.</code><code class="descname">CompressedBand</code><span class="sig-paren">(</span><em>size</em>, <em>dtype</em>, <em>chunksize=(256</em>, <em>256)</em>, <em>initval=0</em>, <em>unsetval=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/band.html#CompressedBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.band.CompressedBand" title="Permalink to this definition">¶</a></dt>
 <dd><p>CompressedBand is a chunked, blosc-compressed array.</p>
 </dd></dl>
 
@@ -825,14 +829,15 @@ only isometric grids (i.e. <cite>hdr[&#8216;dx&#8217;] == hdr[&#8216;dy&#8217;]<
 <div><p>direction of light source (default 330.0)</p>
 </div></blockquote>
 <p><strong>elevation</strong> : float, optional</p>
-<blockquote>
+<blockquote class="last">
 <div><p>height of light source (default 60.0)</p>
 </div></blockquote>
-<p class="last"><strong>Note: Currently assumes orthogonal coordinates.</strong></p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>Currently assumes orthogonal coordinates.</p>
 </dd></dl>
 
 <dl class="function">
@@ -878,18 +883,8 @@ only isometric grids (i.e. <cite>hdr[&#8216;dx&#8217;] == hdr[&#8216;dy&#8217;]<
 <dl class="function">
 <dt id="karta.raster.misc.witch_of_agnesi">
 <code class="descclassname">karta.raster.misc.</code><code class="descname">witch_of_agnesi</code><span class="sig-paren">(</span><em>nx=100</em>, <em>ny=100</em>, <em>a=4.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/misc.html#witch_of_agnesi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.misc.witch_of_agnesi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a raster field defined by the equation</p>
-<dl class="docutils">
-<dt>::</dt>
-<dd><blockquote class="first">
-<div>8 a^3</div></blockquote>
-<dl class="last docutils">
-<dt>Z = &#8212;&#8212;&#8212;&#8212;&#8211;</dt>
-<dd>d^2 + 4 a*2</dd>
-</dl>
-</dd>
-</dl>
-<p>where d is the distance from the center.</p>
+<dd><p>Return a raster field defined by the equation Z = 8a^3 / (d^2 + 2a^2)
+where d is the distance from the center.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -923,6 +918,36 @@ instance.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="karta.raster.read.from_geotiffs">
+<code class="descclassname">karta.raster.read.</code><code class="descname">from_geotiffs</code><span class="sig-paren">(</span><em>*fnms</em>, <em>*</em>, <em>in_memory=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/read.html#from_geotiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.read.from_geotiffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read multiple GeoTiff files as bands within a single grid. Reads the
+first band within each GeoTiff, and checks that grids share the same
+spatial transform and coordinate system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fnm</strong> : list of str</p>
+<blockquote>
+<div><p>GeoTiff file paths</p>
+</div></blockquote>
+<p><strong>in_memory</strong> : bool</p>
+<blockquote>
+<div><p>if True (default), read entire dataset into memory</p>
+</div></blockquote>
+<p><strong>bandclass</strong> : Band class, optional</p>
+<blockquote class="last">
+<div><p>class of band used by returned grid (default karta.band.CompressedBand)
+if in_memory is True, this parameter is ignored and the returned grid
+will have bands of type karta.raster._gdal.GdalFileBand</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="karta.raster.read.gtiffread">
 <code class="descclassname">karta.raster.read.</code><code class="descname">gtiffread</code><span class="sig-paren">(</span><em>fnm</em>, <em>in_memory=True</em>, <em>ibands=-1</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.raster.read.gtiffread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function to open a GeoTIFF and return a RegularGrid
@@ -947,7 +972,7 @@ instance.</p>
 <blockquote class="last">
 <div><p>class of band used by returned grid (default karta.band.CompressedBand)
 if in_memory is True, this parameter is ignored and the returned grid
-will have bands of type karta.raster._gtiff.GdalFileBand</p>
+will have bands of type karta.raster._gdal.GdalFileBand</p>
 </div></blockquote>
 </td>
 </tr>
@@ -987,7 +1012,7 @@ instance.</p>
 <blockquote class="last">
 <div><p>class of band used by returned grid (default karta.band.CompressedBand)
 if in_memory is True, this parameter is ignored and the returned grid
-will have bands of type karta.raster._gtiff.GdalFileBand</p>
+will have bands of type karta.raster._gdal.GdalFileBand</p>
 </div></blockquote>
 </td>
 </tr>
@@ -995,73 +1020,43 @@ will have bands of type karta.raster._gtiff.GdalFileBand</p>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="karta.raster.read.read_gtiffs">
-<code class="descclassname">karta.raster.read.</code><code class="descname">read_gtiffs</code><span class="sig-paren">(</span><em>*fnms</em>, <em>*</em>, <em>in_memory=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/read.html#read_gtiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster.read.read_gtiffs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read multiple GeoTiff files as bands within a single grid. Reads the
-first band within each GeoTiff, and checks that grids share the same
-spatial transform and coordinate system.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fnm</strong> : list of str</p>
-<blockquote>
-<div><p>GeoTiff file paths</p>
-</div></blockquote>
-<p><strong>in_memory</strong> : bool</p>
-<blockquote>
-<div><p>if True (default), read entire dataset into memory</p>
-</div></blockquote>
-<p><strong>bandclass</strong> : Band class, optional</p>
-<blockquote class="last">
-<div><p>class of band used by returned grid (default karta.band.CompressedBand)
-if in_memory is True, this parameter is ignored and the returned grid
-will have bands of type karta.raster._gtiff.GdalFileBand</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<div class="section" id="module-karta.raster._gtiff">
-<span id="geotiff-gdal-interface"></span><h4>GeoTiff (GDAL interface)<a class="headerlink" href="#module-karta.raster._gtiff" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="module-karta.raster._gdal">
+<span id="geotiff-gdal-interface"></span><h4>GeoTiff (GDAL interface)<a class="headerlink" href="#module-karta.raster._gdal" title="Permalink to this headline">¶</a></h4>
 <p>IO interface to GeoTiffs using GDAL.</p>
 <dl class="class">
-<dt id="karta.raster._gtiff.GdalFileBand">
-<em class="property">class </em><code class="descclassname">karta.raster._gtiff.</code><code class="descname">GdalFileBand</code><span class="sig-paren">(</span><em>band</em>, <em>dataset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gtiff.html#GdalFileBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gtiff.GdalFileBand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Imitates an ndarray well-enough to back a Grid instance, but reads data
-from an disk-bound datasource</p>
+<dt id="karta.raster._gdal.GdalFileBand">
+<em class="property">class </em><code class="descclassname">karta.raster._gdal.</code><code class="descname">GdalFileBand</code><span class="sig-paren">(</span><em>band</em>, <em>dataset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gdal.html#GdalFileBand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gdal.GdalFileBand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read-only raster Band interface the reads data from a disk-bound
+datasource.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="karta.raster._gtiff.SRS_from_WKT">
-<code class="descclassname">karta.raster._gtiff.</code><code class="descname">SRS_from_WKT</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gtiff.html#SRS_from_WKT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gtiff.SRS_from_WKT" title="Permalink to this definition">¶</a></dt>
+<dt id="karta.raster._gdal.SRS_from_WKT">
+<code class="descclassname">karta.raster._gdal.</code><code class="descname">SRS_from_WKT</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gdal.html#SRS_from_WKT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gdal.SRS_from_WKT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return Proj.4 string, semimajor axis, and flattening</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="karta.raster._gtiff.gdal_type">
-<code class="descclassname">karta.raster._gtiff.</code><code class="descname">gdal_type</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gtiff.html#gdal_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gtiff.gdal_type" title="Permalink to this definition">¶</a></dt>
+<dt id="karta.raster._gdal.gdal_type">
+<code class="descclassname">karta.raster._gdal.</code><code class="descname">gdal_type</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gdal.html#gdal_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gdal.gdal_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a GDAL type that matches numpy dtype</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="karta.raster._gtiff.numpy_dtype">
-<code class="descclassname">karta.raster._gtiff.</code><code class="descname">numpy_dtype</code><span class="sig-paren">(</span><em>dt_int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gtiff.html#numpy_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gtiff.numpy_dtype" title="Permalink to this definition">¶</a></dt>
+<dt id="karta.raster._gdal.numpy_dtype">
+<code class="descclassname">karta.raster._gdal.</code><code class="descname">numpy_dtype</code><span class="sig-paren">(</span><em>dt_int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gdal.html#numpy_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gdal.numpy_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a numpy dtype that matches the band data type.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="karta.raster._gtiff.py_type">
-<code class="descclassname">karta.raster._gtiff.</code><code class="descname">py_type</code><span class="sig-paren">(</span><em>dt_int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gtiff.html#py_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gtiff.py_type" title="Permalink to this definition">¶</a></dt>
+<dt id="karta.raster._gdal.pytype">
+<code class="descclassname">karta.raster._gdal.</code><code class="descname">pytype</code><span class="sig-paren">(</span><em>dt_int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gdal.html#pytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gdal.pytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a fmt character based on a gdal type integer.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="karta.raster._gtiff.read">
-<code class="descclassname">karta.raster._gtiff.</code><code class="descname">read</code><span class="sig-paren">(</span><em>fnm</em>, <em>in_memory</em>, <em>ibands=-1</em>, <em>bandclass=&lt;class 'karta.raster.band.CompressedBand'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gtiff.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gtiff.read" title="Permalink to this definition">¶</a></dt>
+<dt id="karta.raster._gdal.read">
+<code class="descclassname">karta.raster._gdal.</code><code class="descname">read</code><span class="sig-paren">(</span><em>fnm</em>, <em>in_memory</em>, <em>ibands=-1</em>, <em>bandclass=&lt;class 'karta.raster.band.CompressedBand'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gdal.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gdal.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a GeoTiff file and return a numpy array and a dictionary of header
 information.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1092,8 +1087,8 @@ information.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="karta.raster._gtiff.write">
-<code class="descclassname">karta.raster._gtiff.</code><code class="descname">write</code><span class="sig-paren">(</span><em>fnm</em>, <em>grid</em>, <em>compress=None</em>, <em>tiled=False</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gtiff.html#write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gtiff.write" title="Permalink to this definition">¶</a></dt>
+<dt id="karta.raster._gdal.write">
+<code class="descclassname">karta.raster._gdal.</code><code class="descname">write</code><span class="sig-paren">(</span><em>fnm</em>, <em>grid</em>, <em>compress=None</em>, <em>tiled=False</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/raster/_gdal.html#write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.raster._gdal.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a grid-like object to <em>fnm</em></p>
 </dd></dl>
 
@@ -1226,7 +1221,11 @@ option has no effect.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>return value is NaN if points are coincident</p>
+<ul class="simple">
+<li>Return value is NaN if points are coincident</li>
+<li>If CRS is geographical, returns azimuth as defined by the CRS
+instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1239,9 +1238,19 @@ or &#8216;rad&#8217; for convenience.</p>
 <dl class="method">
 <dt id="karta.vector.Point.distance">
 <code class="descname">distance</code><span class="sig-paren">(</span><em>other</em>, <em>projected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Point.distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Point.distance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a distance to another Point. If the coordinate system is
-geographical and a third (z) coordinate exists, it is assumed to have
-the same units as the real-world horizontal distance (i.e. meters).</p>
+<dd><p>Returns a distance to another Point. Distances is computed in one
+of three ways:</p>
+<p>1. If <em>self</em> is in a geographical coordinate system, <em>other</em> is inverse
+projected to geographical coordinates if necessary, and the geodetic
+distance is computed on the ellipsoid of <em>self</em>.</p>
+<p>2. If <em>projected</em> is <cite>True</cite>, <em>other</em> is projected to the same
+coordinate system as <em>self</em> and flat-earth distance is computed.</p>
+<p>3. If <em>projected is `False`, both *self</em> and <em>other</em> are inverse
+projected to geographical coordinates, and the geodetic distance is
+computed on the ellipsoid of <em>self</em>.</p>
+<p>If the coordinate system is geographical and a third (z) coordinate
+exists, it is assumed to have the same units as the real-world
+horizontal distance (i.e. meters).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1252,10 +1261,10 @@ the same units as the real-world horizontal distance (i.e. meters).</p>
 </div></blockquote>
 <p><strong>projected</strong> : bool, optional</p>
 <blockquote>
-<div><p>If True and self.crs is a ProjectedCRS, return the distance in the
-projected cooridnate system. If False, return the geodetic distance.
-if self.crs is a GeographicalCRS, result is always geodetic and this
-option has no effect.</p>
+<div><p>If True and self.crs is a ProjectedCRS, return the flat distance in
+the projected coordinate system. If False, return the ellipsoidal
+distance. if self.crs is a GeographicalCRS, result is always
+ellipsoidal/geodetic and this switch is ignored.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1264,6 +1273,11 @@ option has no effect.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, returns distance as computed by the CRS
+instance (e.g. ellipsoidal or spherical).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1441,26 +1455,39 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <dt id="karta.vector.Line.convex_hull">
 <code class="descname">convex_hull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Line.convex_hull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a Polygon representing the convex hull.</p>
-<p>Not implemented for geographical coordinate systems.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, returns hull computed using a spherical
+approximation. Failure may occur if the vertices are not in euclidian
+position.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.vector.Line.crosses_dateline">
 <code class="descname">crosses_dateline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Line.crosses_dateline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a boolean that indicates whether any segment crosses the
-dateline</p>
+dateline.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.vector.Line.cumulength">
 <code class="descname">cumulength</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Line.cumulength"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Line.cumulength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the cumulative length by vertex.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.vector.Line.displacement">
 <code class="descname">displacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Line.displacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Line.displacement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the distance between the first and last vertex.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1521,12 +1548,48 @@ dateline</p>
 <dt id="karta.vector.Line.intersections">
 <code class="descname">intersections</code><span class="sig-paren">(</span><em>other</em>, <em>keep_duplicates=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Line.intersections" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the intersections with another geometry as a Multipoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>other</strong> : Geometry</p>
+<blockquote>
+<div><p>another geometry with multipl connected vertices</p>
+</div></blockquote>
+<p><strong>keep_duplicates</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>whether to retain duplicate intersections [default False]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses a spherical approximation.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.vector.Line.intersects">
 <code class="descname">intersects</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Line.intersects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return whether an intersection exists with another geometry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>other</strong> : Geometry</p>
+<blockquote class="last">
+<div><p>another geometry with multipl connected vertices</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses a spherical approximation.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1542,6 +1605,10 @@ a point. If two points are equidistant, only one will be returned.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1635,6 +1702,10 @@ boundary to a point.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1756,6 +1827,10 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -1809,6 +1884,11 @@ new geometry.</p>
 <code class="descname">area</code><a class="headerlink" href="#karta.vector.Polygon.area" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the two-dimensional area of the polygon, excluding
 sub-polygons.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses either a spherical or an ellipsoidal
+calculation.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1852,24 +1932,33 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <code class="descname">contains</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/vector/geometry.html#Polygon.contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.vector.Polygon.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if point is inside or on the boundary of the polygon, and
 False otherwise. Uses a crossing number scheme.</p>
-<p>Note: When the polygon is polar in a geographical coordinate system, a
-less efficient algorithm is used. For better performance, consider
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>When the polygon is polar in a geographical coordinate system, a less
+efficient algorithm is used. For better performance, consider
 projecting to an appropriate coordinate system such as NSIDCNorth or
-NSIDCSouth beforehand.</p>
+NSIDCSouth beforehand.</li>
+<li>Otherwise, a planar algorithm is used.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.vector.Polygon.convex_hull">
 <code class="descname">convex_hull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Polygon.convex_hull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a Polygon representing the convex hull.</p>
-<p>Not implemented for geographical coordinate systems.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, returns hull computed using a spherical
+approximation. Failure may occur if the vertices are not in euclidian
+position.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.vector.Polygon.crosses_dateline">
 <code class="descname">crosses_dateline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Polygon.crosses_dateline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a boolean that indicates whether any segment crosses the
-dateline</p>
+dateline.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1924,12 +2013,48 @@ dateline</p>
 <dt id="karta.vector.Polygon.intersections">
 <code class="descname">intersections</code><span class="sig-paren">(</span><em>other</em>, <em>keep_duplicates=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Polygon.intersections" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the intersections with another geometry as a Multipoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>other</strong> : Geometry</p>
+<blockquote>
+<div><p>another geometry with multipl connected vertices</p>
+</div></blockquote>
+<p><strong>keep_duplicates</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>whether to retain duplicate intersections [default False]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses a spherical approximation.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="karta.vector.Polygon.intersects">
 <code class="descname">intersects</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Polygon.intersects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return whether an intersection exists with another geometry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>other</strong> : Geometry</p>
+<blockquote class="last">
+<div><p>another geometry with multipl connected vertices</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses a spherical approximation.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1970,6 +2095,10 @@ a point. If two points are equidistant, only one will be returned.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1999,6 +2128,10 @@ points are equidistant, only one will be returned.</p>
 <code class="descname">perimeter</code><a class="headerlink" href="#karta.vector.Polygon.perimeter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the perimeter of the polygon. If there are sub-polygons,
 their perimeters are added recursively.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -2071,6 +2204,10 @@ boundary to a point.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -2156,6 +2293,10 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, uses distance defined by the CRS instance.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -2238,7 +2379,12 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <dt id="karta.vector.Multipoint.convex_hull">
 <code class="descname">convex_hull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipoint.convex_hull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a Polygon representing the convex hull.</p>
-<p>Not implemented for geographical coordinate systems.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If CRS is Geographical, returns hull computed using a spherical
+approximation. Failure may occur if the vertices are not in euclidian
+position.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -2584,6 +2730,76 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <dd><p>Save line to a shapefile</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="karta.vector.Multiline.touching">
+<code class="descname">touching</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multiline.touching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Multipart geometry representing member geometries that
+touch a Line or Polygon.</p>
+<p>Touching is defined as intersecting a Line or Polygon boundary, or
+being contained within a Polygon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>geom</strong> : Line or Polygon</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multiline.touching_bbox">
+<code class="descname">touching_bbox</code><span class="sig-paren">(</span><em>bbox</em>, <em>max_results=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multiline.touching_bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Multipart geometry representing member geometries that touch
+a bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bbox</strong> : tuple</p>
+<blockquote class="last">
+<div><p>(xmin, ymin, xmax, ymax)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multiline.within">
+<code class="descname">within</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multiline.within" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Multipart geometry representing member geometries
+contained within a Polygon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>geom</strong> : Polygon</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multiline.within_bbox">
+<code class="descname">within_bbox</code><span class="sig-paren">(</span><em>bbox</em>, <em>max_results=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multiline.within_bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Multipart geometry representing member geometries that are
+contained by a bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bbox</strong> : tuple</p>
+<blockquote class="last">
+<div><p>(xmin, ymin, xmax, ymax)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -2709,6 +2925,76 @@ If <em>urn</em> is not set, &#8220;<a class="reference external" href="urn:ogc:d
 <dt id="karta.vector.Multipolygon.to_shapefile">
 <code class="descname">to_shapefile</code><span class="sig-paren">(</span><em>fnm</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipolygon.to_shapefile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save line to a shapefile</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multipolygon.touching">
+<code class="descname">touching</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipolygon.touching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Multipart geometry representing member geometries that
+touch a Line or Polygon.</p>
+<p>Touching is defined as intersecting a Line or Polygon boundary, or
+being contained within a Polygon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>geom</strong> : Line or Polygon</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multipolygon.touching_bbox">
+<code class="descname">touching_bbox</code><span class="sig-paren">(</span><em>bbox</em>, <em>max_results=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipolygon.touching_bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Multipart geometry representing member geometries that touch
+a bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bbox</strong> : tuple</p>
+<blockquote class="last">
+<div><p>(xmin, ymin, xmax, ymax)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multipolygon.within">
+<code class="descname">within</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipolygon.within" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Multipart geometry representing member geometries
+contained within a Polygon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>geom</strong> : Polygon</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karta.vector.Multipolygon.within_bbox">
+<code class="descname">within_bbox</code><span class="sig-paren">(</span><em>bbox</em>, <em>max_results=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#karta.vector.Multipolygon.within_bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Multipart geometry representing member geometries that are
+contained by a bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bbox</strong> : tuple</p>
+<blockquote class="last">
+<div><p>(xmin, ymin, xmax, ymax)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -3796,6 +4082,12 @@ in a specified direction.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="karta.geodesy.eulerpole">
+<code class="descclassname">karta.geodesy.</code><code class="descname">eulerpole</code><span class="sig-paren">(</span><em>pt1</em>, <em>pt2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/geodesy.html#eulerpole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.geodesy.eulerpole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Euler pole of a geodesic passing through two points.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="karta.geodesy.fzero_brent">
 <code class="descclassname">karta.geodesy.</code><code class="descname">fzero_brent</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>f</em>, <em>tol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/geodesy.html#fzero_brent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.geodesy.fzero_brent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate a function to find a bracketed root</p>
@@ -3908,8 +4200,8 @@ nearly antipodal points.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="karta.geodesy.solve_vicenty">
-<code class="descclassname">karta.geodesy.</code><code class="descname">solve_vicenty</code><span class="sig-paren">(</span><em>a</em>, <em>f</em>, <em>lambda12</em>, <em>phi1</em>, <em>phi2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/geodesy.html#solve_vicenty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.geodesy.solve_vicenty" title="Permalink to this definition">¶</a></dt>
+<dt id="karta.geodesy.solve_vincenty">
+<code class="descclassname">karta.geodesy.</code><code class="descname">solve_vincenty</code><span class="sig-paren">(</span><em>a</em>, <em>f</em>, <em>lambda12</em>, <em>phi1</em>, <em>phi2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/karta/geodesy.html#solve_vincenty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#karta.geodesy.solve_vincenty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used to provide an initial guess to the inverse problem by solving the
 corresponding problem on a sphere.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -3991,7 +4283,7 @@ corresponding problem on a sphere.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on Aug 07, 2016.
+      Last updated on Aug 29, 2016.
 
     </p>
   </div>
@@ -4013,7 +4305,7 @@ corresponding problem on a sphere.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.7.1',
+            VERSION:'0.7.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

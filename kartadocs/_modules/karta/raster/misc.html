@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>karta.raster.misc &mdash; Karta 0.7.1 documentation</title>
+  <title>karta.raster.misc &mdash; Karta 0.7.2 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Karta 0.7.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="Karta 0.7.2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.7.2
               </div>
             
           
@@ -139,13 +139,7 @@
 <span class="kn">from</span> <span class="nn">.grid</span> <span class="kn">import</span> <span class="n">RegularGrid</span>
 
 <div class="viewcode-block" id="witch_of_agnesi"><a class="viewcode-back" href="../../../reference.html#karta.raster.misc.witch_of_agnesi">[docs]</a><span class="k">def</span> <span class="nf">witch_of_agnesi</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a raster field defined by the equation</span>
-
-<span class="sd">    ::</span>
-<span class="sd">                    8 a^3</span>
-<span class="sd">            Z = --------------</span>
-<span class="sd">                 d^2 + 4 a*2</span>
-
+    <span class="sd">&quot;&quot;&quot; Return a raster field defined by the equation Z = 8a^3 / (d^2 + 2a^2)</span>
 <span class="sd">    where d is the distance from the center.</span>
 
 <span class="sd">    Parameters</span>
@@ -211,9 +205,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">xf</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="n">B</span> <span class="o">=</span> <span class="n">value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">])</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
     <span class="n">B</span><span class="p">[</span><span class="n">y0</span><span class="p">:</span><span class="n">yf</span><span class="p">,</span> <span class="n">x0</span><span class="p">:</span><span class="n">xf</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span>
-
     <span class="k">return</span> <span class="n">B</span></div>
 
 <span class="k">def</span> <span class="nf">_slope</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)):</span>
@@ -337,7 +330,9 @@
 <span class="sd">    elevation : float, optional</span>
 <span class="sd">        height of light source (default 60.0)</span>
 
-<span class="sd">    Note: Currently assumes orthogonal coordinates.</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Currently assumes orthogonal coordinates.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">nbands</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;input grid must be single-banded&quot;</span><span class="p">)</span>
@@ -345,15 +340,15 @@
     <span class="n">dx</span> <span class="o">=</span> <span class="n">dxgrid</span><span class="p">[:,:]</span>
     <span class="n">dy</span> <span class="o">=</span> <span class="n">dygrid</span><span class="p">[:,:]</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">resolution</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">dx</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dx</span><span class="p">),</span> <span class="n">dx</span><span class="p">))</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dy</span><span class="p">),</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">dy</span><span class="p">),</span> <span class="n">dy</span><span class="p">))</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dx</span><span class="p">),</span> <span class="n">dx</span><span class="p">))</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dy</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">dy</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dy</span><span class="p">))</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">axisa</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axisb</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">wunit</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_3d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span>
 
     <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azimuth</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span><span class="p">),</span>
                   <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azimuth</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span><span class="p">),</span>
                   <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">elevation</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span><span class="p">)))</span>
-    <span class="n">smat</span> <span class="o">=</span> <span class="n">s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">wunit</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wunit</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">smat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">wunit</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wunit</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">dprod</span> <span class="o">=</span> <span class="p">(</span><span class="n">wunit</span><span class="o">*</span><span class="n">smat</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">dprod</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dprod</span><span class="p">)],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">98</span><span class="p">])</span>
@@ -373,7 +368,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Nat Wilson.
-      Last updated on Aug 07, 2016.
+      Last updated on Aug 29, 2016.
 
     </p>
   </div>
@@ -395,7 +390,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.1',
+            VERSION:'0.7.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
