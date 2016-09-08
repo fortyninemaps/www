@@ -30,8 +30,8 @@
 <body>
 
   <style>
-    .display {
-      background: url(images/smithrock16.jpg);
+    body {
+      background-image: url(images/bearlake12.jpg);
     }
   </style>
 
@@ -44,43 +44,45 @@
     </div>
   </div>
 
-  <div class="container">
-    <div class="copy">
+  <div class="section main">
+    <div class="container">
+      <div class="copy">
 
-      <h3>We do geospatial</h3>
+        <h3>We do geospatial</h3>
 
-      <p>We provide mapping, analysis, and programming expertise to businesses,
-        nonprofits, and researchers.<p>
+        <p>We provide mapping, analysis, and programming expertise to businesses,
+          nonprofits, and researchers.<p>
 
-      <p>We can help you to leverage increasingly important spatial and
-        satellite data sources to develop insights about your operations and
-        the world.</p>
+        <p>We can help you to leverage increasingly important spatial and
+          satellite data sources to develop insights about your operations and
+          the world.</p>
 
-      <h3>Services we provide</h3>
-      <ul>
-        <li>Geospatial and scientific data processing</li>
-        <li>Aerial and satellite image registration and orthorectification</li>
-        <li>Custom satellite image acquisition, analysis, and monitoring</li>
-        <li>Cartography</li>
-        <li>Automated data pipeline development</li>
-      </ul>
+        <h3>Services we provide</h3>
+        <ul>
+          <li>Geospatial and scientific data processing</li>
+          <li>Aerial and satellite image registration and orthorectification</li>
+          <li>Custom satellite image acquisition, analysis, and monitoring</li>
+          <li>Cartography</li>
+          <li>Automated data pipeline development</li>
+        </ul>
 
-    </div> <!-- /copy -->
+      </div> <!-- /copy -->
 
-    <div class="social">
+      <div class="social">
 
-      <p><a href="https://twitter.com/fortyninemaps"><img src="TwitterLogo_white.png"></a></p>
-      <p><a href="https://github.com/fortyninemaps"><img src="GitHub-Mark-Light-64px.png"></a></p>
+        <p><a href="https://twitter.com/fortyninemaps"><img src="TwitterLogo_white.png"></a></p>
+        <p><a href="https://github.com/fortyninemaps"><img src="GitHub-Mark-Light-64px.png"></a></p>
 
-      <p><a href="https://twitter.com/fortyninemaps" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @fortyninemaps</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+        <p><a href="https://twitter.com/fortyninemaps" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @fortyninemaps</a>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
 
-    </div> <!-- social -->
-  </div> <!-- /container -->
+      </div> <!-- /social -->
+      <div style="clear: both;"></div>
+    </div> <!-- /container -->
+  </div> <!-- /section main -->
 
-  <div style="clear: both;"></div>
 
-  <div class="footer">
+  <div class="section footer">
     <div class="container">
       <div style="float: left; width: 50%">
         <!--<p>Accepting projects</p>-->
@@ -89,7 +91,7 @@
         <!--<p><a href="mailto:contact@fortyninemaps.com">contact@fortyninemaps.com</a></p>-->
         <p>&nbsp;</p>
         <p>Based in the Northwest</p>
-        <p><small>Banner imagery &copy; DigitalGlobe; <a href="http://bit.ly/mapsapiview">Terms of Use</a></small></p>
+        <p><small>Banner imagery &copy; DigitalGlobe &mdash; <a href="http://bit.ly/mapsapiview">Terms of Use</a></small></p>
       </div>
       <div style="float: right; width: 50%; text-align: right;">
         <!--<img src="map.svg" height="130">-->
@@ -114,8 +116,6 @@
       } else {
         opacity = 1.0;
       }
-
-      displayElement.style["background-position"] = "center "+String(-0.2*yscroll-200)+"px";
 
       for (var i=0; i!=bannerElements.length; i++) {
         bannerElements[i].style["opacity"] = opacity;
