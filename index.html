@@ -105,20 +105,26 @@
 
     function setBannerStyle(yscroll) {
       var height = window.innerHeight,
-          opacity,
+          bannerOpacity,
           bannerElements = document.getElementsByClassName("bannerText"),
           displayElement = document.getElementsByClassName("display")[0];
 
       if (yscroll > 0.5*height) {
-        opacity = 0.0;
+        bannerOpacity = 0.0;
+        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.8)";
+        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.6)";
       } else if (yscroll > 0.1*height) {
-        opacity = 0.8;
+        bannerOpacity = 0.8;
+        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.6)";
+        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.4)";
       } else {
-        opacity = 1.0;
+        bannerOpacity = 1.0;
+        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.2)";
+        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.0)";
       }
 
       for (var i=0; i!=bannerElements.length; i++) {
-        bannerElements[i].style["opacity"] = opacity;
+        bannerElements[i].style["opacity"] = bannerOpacity;
       }
     }
 
