@@ -62,7 +62,7 @@ h3 {
   opacity: 0;
 
   transition-duration: 0.5s;
-  transition-delay: 0.2s;
+  /*transition-delay: 0.2s;*/
   -moz-transition-duration: 0.5s;
   -moz-transition-delay: 0.2s;
   -webkit-transition-duration: 0.5s;
@@ -106,7 +106,7 @@ h3 {
   background-color: rgba(0, 0, 0, 0.2);
 
   transition-duration: 0.5s;
-  transition-delay: 0.2s;
+  /*transition-delay: 0.2s;*/
   -moz-transition-duration: 0.5s;
   -moz-transition-delay: 0.2s;
   -webkit-transition-duration: 0.5s;
@@ -128,7 +128,7 @@ h3 {
   padding-bottom: 10px;
 
   transition-duration: 0.5s;
-  transition-delay: 0.2s;
+  /*transition-delay: 0.2s;*/
   -moz-transition-duration: 0.5s;
   -moz-transition-delay: 0.2s;
   -webkit-transition-duration: 0.5s;
@@ -193,6 +193,7 @@ a:hover {
     float: right;
     width: 16%;
   }
+  
 }
 
 @media screen and (min-width: 1200px) {

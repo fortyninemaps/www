@@ -1,0 +1,13 @@
+*.old
+*.ipynb
+*.zip
+*.shp
+*.dbf
+*.prj
+*.shx
+*.xmp
+bootstrap-3.3.6-dist/*
+darktable_exported/*
+logo/Raleway/*
+logo/Lato/*
+logo/Josefin_Sans/*
