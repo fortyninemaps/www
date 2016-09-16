@@ -3,7 +3,7 @@
   font-style:normal;
   font-weight:200;
   src:local('Lato Thin'),
-    url(http://brick.a.ssl.fastly.net/fonts/lato/200.woff) format('woff')
+    url(https://brick.a.ssl.fastly.net/fonts/lato/200.woff) format('woff')
 }
 
 @font-face{
@@ -11,7 +11,7 @@
   font-style:normal;
   font-weight:300;
   src:local('Lato'),
-    url(http://brick.a.ssl.fastly.net/fonts/lato/300.woff) format('woff')
+    url(https://brick.a.ssl.fastly.net/fonts/lato/300.woff) format('woff')
 }
 
 @font-face{
@@ -19,7 +19,7 @@
   font-style:normal;
   font-weight:400;
   src:local('Raleway Regular'),
-    url(http://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
+    url(https://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
 }
 
 @font-face{
@@ -27,7 +27,7 @@
   font-style:normal;
   font-weight:700;
   src:local('Raleway Regular'),
-    url(http://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
+    url(https://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
 }
 
 body {
