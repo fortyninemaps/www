@@ -138,6 +138,27 @@
     });
   </script>
 
+  <script>
+    // Lazy load fonts after content
+    function loadFont(url) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          var style = document.createElement('style');
+          style.innerHTML = xhr.responseText;
+          document.head.appendChild(style);
+        }
+      };
+      xhr.send();
+    }
+
+    document.body.onload = function() {
+      var url = "//brick.a.ssl.fastly.net/Lato:200,300/Raleway:400";
+      loadFont(url);
+    }
+  </script>
+
   <noscript>
     <style>
       .bannerText {

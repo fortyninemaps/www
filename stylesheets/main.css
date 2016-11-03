@@ -1,42 +1,10 @@
-@font-face{
-  font-family:'Lato Thin';
-  font-style:normal;
-  font-weight:200;
-  src:local('Lato Thin'),
-    url(https://brick.a.ssl.fastly.net/fonts/lato/200.woff) format('woff')
-}
-
-@font-face{
-  font-family:'Lato';
-  font-style:normal;
-  font-weight:300;
-  src:local('Lato'),
-    url(https://brick.a.ssl.fastly.net/fonts/lato/300.woff) format('woff')
-}
-
-@font-face{
-  font-family:'Raleway';
-  font-style:normal;
-  font-weight:400;
-  src:local('Raleway Regular'),
-    url(https://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
-}
-
-@font-face{
-  font-family:'Raleway Bold';
-  font-style:normal;
-  font-weight:700;
-  src:local('Raleway Regular'),
-    url(https://brick.a.ssl.fastly.net/fonts/raleway/400.woff) format('woff')
-}
-
 body {
   font-family: 'Lato', sans-serif;
+  font-weight: 300;
   font-size: 14pt;
   color: rgba(220, 220, 220, 1);
   margin: 0;
   background-color: rgba(10,25,40,1);
-  /*background-image: url(.);*/
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
@@ -62,20 +30,11 @@ h3 {
   opacity: 0;
 
   transition-duration: 0.5s;
-  /*transition-delay: 0.2s;*/
+  transition-delay: 0.2s;
   -moz-transition-duration: 0.5s;
   -moz-transition-delay: 0.2s;
   -webkit-transition-duration: 0.5s;
   -webkit-transition-delay: 0.2s;
-}
-
-#FORTYNINE {
-  font-family: 'Lato Thin';
-}
-
-#MAPS {
-  font-family: 'Raleway Bold';
-  font-weight: 700;
 }
 
 #topname {
@@ -83,12 +42,23 @@ h3 {
   text-align: center;
 }
 
+#FORTYNINE {
+  font-family: 'Lato';
+  font-weight: 200;
+}
+
+#MAPS {
+  font-family: 'Raleway';
+  font-weight: 400;
+}
+
 .slogan {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Raleway';
+  font-weight: 400;
   font-style: italic;
-  margin-bottom: 1em;
   font-size: 16pt;
   text-align: center;
+  margin-bottom: 1em;
   padding-left: 0.2em;
 }
 
