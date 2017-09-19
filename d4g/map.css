@@ -1,0 +1,25 @@
+div#map {
+  width: 96vw;
+  height: 90vh;
+  max-width: 1000px;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+}
+
+div#scatterplot {
+  width: 43vw;
+  height: 60vh;
+  max-width: 500px;
+  /*float: left;*/
+}
+
+div#barplot {
+  width: 43vw;
+  height: 60vh;
+  max-width: 500px;
+  flex-grow: 1;
+  /*margin-left: 40vw;*/
+}
