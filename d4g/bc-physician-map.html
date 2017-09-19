@@ -14,7 +14,6 @@
             integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
             crossorigin="">
     </script>
-    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
   <body>
@@ -27,7 +26,8 @@
 
    <script>
 
-    var layer = new L.StamenTileLayer("terrain");
+     var layer = new L.tileLayer("https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
+         {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'});
     var map = new L.Map("map", {
         center: new L.LatLng(52, -123),
         zoom: 6
@@ -124,8 +124,6 @@
       type: "bar",
       name: "Accepting new patients"
     };
-
-    console.log(acceptingNewPatientsByRegion);
 
     var barLayout = {
       barmode: "stack",
