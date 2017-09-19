@@ -126,7 +126,8 @@
 
     var barLayout = {
       barmode: "stack",
-      showlegend: false
+      showlegend: false,
+      title: "Doctors accepting new patients by Regional District"
     };
 
     Plotly.newPlot("barplot", [doctorsByRegion, acceptingNewPatientsByRegion], barLayout);
