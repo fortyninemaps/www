@@ -5,21 +5,14 @@ div#map {
   overflow: hidden;
 }
 
-.container {
-  display: flex;
-}
-
 div#scatterplot {
-  width: 43vw;
+  width: 96vw;
   height: 60vh;
-  max-width: 500px;
-  /*float: left;*/
+  max-width: 1000px;
 }
 
 div#barplot {
-  width: 43vw;
+  width: 96vw;
   height: 60vh;
-  max-width: 500px;
-  flex-grow: 1;
-  /*margin-left: 40vw;*/
+  max-width: 1000px;
 }
