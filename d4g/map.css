@@ -16,3 +16,9 @@ div#barplot {
   height: 60vh;
   max-width: 1000px;
 }
+
+.content {
+  width: 98vw;
+  max-width: 1050px;
+  margin: auto;
+}
