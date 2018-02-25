@@ -53,27 +53,23 @@
     <div class="container">
       <div class="copy">
 
-        <h3>We help with data</h3>
+        <h3>Leverage your spatial data</h3>
 
-        <p>We provide analysis, machine learning, mapping and technical
-          expertise to businesses, nonprofits, and researchers.<p>
-
-        <p>We will help you to leverage the rich data you have access to
-          develop insights about your operations and the world.</p>
+        <p>Data is a valuable commodity. We provide analysis and machine
+          learning expertise, mapping and technical resources to businesses,
+          nonprofits, and researchers.<p>
 
         <h3>Services we provide</h3>
         <ul>
-          <li>Scientific and geospatial data analysis</li>
+          <li>Geospatial data analysis</li>
           <li>Custom satellite image acquisition and monitoring</li>
           <li>Aerial and satellite image registration and orthorectification</li>
-          <li>"Big data" architecture and processing</li>
+          <li>Data architecture design and implementation</li>
         </ul>
 
       </div> <!-- /copy -->
 
       <div class="social">
-
-        <p><a href="https://www.stickermule.com/marketplace/9913-bc-love"><img id="bcsticker" src="https://www.stickermule.com/marketplace/embed_img/9913"></a></p>
 
         <p><a href="https://twitter.com/fortyninemaps"><img src="TwitterLogo_white.png"></a></p>
         <p><a href="https://github.com/fortyninemaps"><img src="GitHub-Mark-Light-64px.png"></a></p>
@@ -131,12 +127,10 @@
 
     setBannerStyle(window.scrollY);    // initialize
 
-    window.addEventListener('scroll', function(event) {
+    window.addEventListener('scroll', () => {
       setBannerStyle(window.scrollY);
     });
-  </script>
 
-  <script>
     // Lazy load fonts after content
     function loadFont(url) {
       var xhr = new XMLHttpRequest();
@@ -151,7 +145,7 @@
       xhr.send();
     }
 
-    document.body.onload = function() {
+    document.body.onload = () => {
       var url = "//brick.a.ssl.fastly.net/Lato:200,300/Raleway:400";
       loadFont(url);
     }
