@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="theme-color" content="#ffffff" />
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="theme-color" content="#ffffff">
-
-  <title>49MAPS</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
   <link rel="stylesheet" href="stylesheets/main.css">
 
   <script>
@@ -22,9 +20,8 @@
 
     ga('create', 'UA-75313828-2', 'auto');
     ga('send', 'pageview');
-
   </script>
-
+  <title>49MAPS</title>
 </head>
 
 <body>
@@ -41,7 +38,7 @@
   </style>
 
   <div class="display">
-    <div class="bannerText">
+    <div class="banner">
       <div id="topname">
         <span id="FORTYNINE">49</span><span id="MAPS">MAPS</span>
       </div>
@@ -103,13 +100,13 @@
     function setBannerStyle(yscroll) {
       var height = window.innerHeight,
           bannerOpacity,
-          bannerElements = document.getElementsByClassName("bannerText"),
+          bannerElements = document.getElementsByClassName("banner"),
           displayElement = document.getElementsByClassName("display")[0];
 
       if (yscroll > 0.5*height) {
         bannerOpacity = 0.0;
-        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.8)";
-        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.6)";
+        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.9)";
+        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.8)";
       } else if (yscroll > 0.1*height) {
         bannerOpacity = 0.8;
         document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.6)";
@@ -153,7 +150,7 @@
 
   <noscript>
     <style>
-      .bannerText {
+      .banner {
         opacity: 1.0;
       }
     </style>
