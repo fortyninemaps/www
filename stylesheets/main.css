@@ -18,14 +18,14 @@ h3 {
 }
 
 .display {
-  display: table;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   height: 100vh;
 }
 
 .banner {
-  display: table-cell;
-  vertical-align: middle;
   color: rgba(255,255,255,1.0);
   text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
 
@@ -54,7 +54,6 @@ h3 {
 
 .banner .slogan {
   font-family: 'Lato';
-  font-style: italic;
   font-size: 1em;
   letter-spacing: 0.2em;
   text-align: center;
@@ -62,12 +61,12 @@ h3 {
 
 @media screen and (min-width: 800px) {
   .banner #topname { font-size: 8em; }
-  .banner .slogan { font-size: 2em; }
+  .banner .slogan { font-size: 1.5em; }
 }
 
 @media screen and (min-width: 1200px) {
   .banner #topname { font-size: 10em; }
-  .banner .slogan { font-size: 2.2em; }
+  .banner .slogan { font-size: 2em; }
 }
 
 .section {
