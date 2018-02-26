@@ -91,7 +91,6 @@
         <p><small>Banner imagery &copy; DigitalGlobe &mdash; <a href="http://bit.ly/mapsapiview">Terms of Use</a></small></p>
       </div>
       <div style="float: right; width: 50%; text-align: right;">
-        <!--<img src="map.svg" height="130">-->
       </div>
 
       <div style="clear: both;"></div>
@@ -103,26 +102,17 @@
     function setBannerStyle(yscroll) {
       var height = window.innerHeight,
           bannerOpacity,
-          bannerElements = document.getElementsByClassName("banner"),
-          displayElement = document.getElementsByClassName("display")[0];
+          bannerElements = [...document.getElementsByClassName("banner")];
 
       if (yscroll > 0.5*height) {
         bannerOpacity = 0.0;
-        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.9)";
-        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.8)";
       } else if (yscroll > 0.1*height) {
         bannerOpacity = 0.8;
-        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.6)";
-        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.4)";
       } else {
         bannerOpacity = 1.0;
-        document.getElementsByClassName("main")[0].style["background-color"] = "rgba(0,0,0,0.2)";
-        document.getElementsByClassName("footer")[0].style["background-color"] = "rgba(0,0,0,0.0)";
       }
 
-      for (var i=0; i!=bannerElements.length; i++) {
-        bannerElements[i].style["opacity"] = bannerOpacity;
-      }
+      bannerElements.forEach((el) => (el.style["opacity"] = bannerOpacity));
     }
 
     setBannerStyle(window.scrollY);    // initialize

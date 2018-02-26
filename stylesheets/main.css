@@ -81,7 +81,7 @@ h3 {
 }
 
 .main {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.9);
 
   transition-duration: 0.5s;
   /*transition-delay: 0.2s;*/
@@ -96,7 +96,7 @@ h3 {
 }
 
 .footer {
-  background-color: rgba(0, 0, 0, 0.0);
+  background-color: rgba(0, 0, 0, 0.8);
   font-size: 16pt;
   padding-top: 10px;
   padding-bottom: 10px;
