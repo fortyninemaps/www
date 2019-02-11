@@ -30,10 +30,11 @@
     .display {
       background-image: url(images/bearlake12.jpg);
     }
+  </style>
 
-    #bcsticker {
-      width: 70%;
-      max-width: 100px;
+  <style>
+    .main {
+      background-image: url(images/victoria_ls8.jpg);
     }
   </style>
 
@@ -42,26 +43,48 @@
       <div id="topname">
         <span id="FORTYNINE">49</span><span id="MAPS">MAPS</span>
       </div>
-      <p class="slogan">Spatial data intelligence</p>
+      <p class="slogan">Location data and software</p>
     </div>
   </div>
 
   <div class="section main">
-    <div class="container">
+    <div class="shade container">
       <div class="copy">
 
-        <h3>Leverage your spatial data</h3>
+        <h3>Leverage geospatial data</h3>
 
-        <p>Data is a valuable commodity. We provide analysis and machine
-          learning expertise, mapping and technical resources to businesses,
-          nonprofits, and researchers.<p>
+        <p>Data is a valuable asset, but geospatial data in particular is
+          challenging to use effectively. Whether by deriving insights from
+          vehicle travel patterns, planning future advertising or measurement
+          campaigns, or setting up remote monitoring with satellite imagery,
+          geospatial data delivers an advantage across a wide range of
+        applications in business, research, public policy and the non-profit
+        sector.</p>
+
+        <p>49maps provides analysis and machine learning expertise, software
+          development, and technical resources to commercial, non-profit, and
+          government clients.<p>
+
+        <h3>Spatial is different</h3>
+
+        <p>Accurate and performant spatial data analysis requires deep
+          knowledge of unique of indexing, aggregation, and interpolation
+          methodologies different from those provided in most off-the-shelf
+          data science solutions. There is a rich ecosystem of geospatial
+          tools, but they can be difficult to integrate for specific business
+          needs.</p>
+
+        <p>We help organizations built effective solutions for unique problems
+          by prototyping custom methodologies and implementing robust
+          production systems.<p>
 
         <h3>Services we provide</h3>
         <ul>
-          <li>Geospatial data programming and analysis</li>
+          <li>Geospatial data consulting and tool development</li>
           <li>Custom satellite image acquisition and monitoring</li>
           <li>Aerial and satellite image registration and orthorectification</li>
-          <li>Data architecture design and implementation</li>
+          <li>Data-driven application development and maintenance</li>
+          <li>Data pipeline architecture and implementation</li>
         </ul>
 
       </div> <!-- /copy -->
@@ -69,10 +92,13 @@
       <div class="social">
 
         <p><a href="https://twitter.com/fortyninemaps"><img src="TwitterLogo_white.png"></a></p>
-        <p><a href="https://github.com/fortyninemaps"><img src="GitHub-Mark-Light-64px.png"></a></p>
 
-        <p style="margin-bottom: 0px;"><a href="https://twitter.com/fortyninemaps" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @fortyninemaps</a>
-          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+        <a href="https://twitter.com/fortyninemaps?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @fortyninemaps</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        <!--<p><a href="https://github.com/fortyninemaps"><img src="GitHub-Mark-Light-64px.png"></a></p>-->
+
+        <!--<p style="margin-bottom: 0px;"><a href="https://twitter.com/fortyninemaps" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @fortyninemaps</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>-->
 
       </div> <!-- /social -->
       <div style="clear: both;"></div>
@@ -115,10 +141,30 @@
       bannerElements.forEach((el) => (el.style["opacity"] = bannerOpacity));
     }
 
+    function setShadeStyle(yscroll) {
+      var height = window.innerHeight,
+          shadeOpacity,
+          shadeElements = [...document.getElementsByClassName("shade")];
+
+      if (yscroll < 0.5*height) {
+        shadeOpacity = 0.0;
+      } else if (yscroll < 0.7*height) {
+        shadeOpacity = 0.5;
+      } else if (yscroll < 0.9*height) {
+        shadeOpacity = 0.8;
+      } else {
+        shadeOpacity = 0.9;
+      }
+
+      shadeElements.forEach((el) => (el.style["opacity"] = shadeOpacity));
+    }
+
     setBannerStyle(window.scrollY);    // initialize
+    setShadeStyle(window.scrollY);
 
     window.addEventListener('scroll', () => {
       setBannerStyle(window.scrollY);
+      setShadeStyle(window.scrollY);
     });
 
     // Lazy load fonts after content
