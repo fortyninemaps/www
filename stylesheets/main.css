@@ -81,15 +81,13 @@ h3 {
   margin-right: auto;
   padding-top: 1px;
   padding-bottom: 0.5em;
-  padding-left: 2em;
-  padding-right: 2em;
 }
 
 .shade {
-  width: 100%;
+  padding-left: .5em;
+  padding-right: .5em;
 
   box-shadow: 0px 0em 2em 0em black;
-
   background-color: rgba(0, 0, 0, 1.0);
 
   transition-duration: 0.5s;
@@ -102,6 +100,7 @@ h3 {
 .main {
   padding-top: 1em;
   padding-bottom: 1em;
+
   background-color: rgba(0, 0, 0, 1.0);
   background-repeat: no-repeat;
   background-position: center center;
@@ -151,6 +150,9 @@ a:hover {
     width: 80%;
     min-width: 500px;
     max-width: 800px;
+
+    padding-left: 2em;
+    padding-right: 2em;
   }
 
   .copy {
