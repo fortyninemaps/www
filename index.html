@@ -95,11 +95,6 @@
 
         <a href="https://twitter.com/fortyninemaps?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @fortyninemaps</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-        <!--<p><a href="https://github.com/fortyninemaps"><img src="GitHub-Mark-Light-64px.png"></a></p>-->
-
-        <!--<p style="margin-bottom: 0px;"><a href="https://twitter.com/fortyninemaps" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @fortyninemaps</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>-->
-
       </div> <!-- /social -->
       <div style="clear: both;"></div>
     </div> <!-- /container -->
@@ -125,46 +120,47 @@
 
   <script>
 
-    function setBannerStyle(yscroll) {
-      var height = window.innerHeight,
-          bannerOpacity,
-          bannerElements = [...document.getElementsByClassName("banner")];
+    const elementReferenceHeight = (el) => {
+      const bounds = el.getBoundingClientRect();
+      const v = (bounds.top < 0) ? bounds.bottom : bounds.top;
+      return Math.min(
+        Math.max(window.innerHeight - bounds.top, 0),
+        window.innerHeight
+      ) / window.innerHeight;
+    };
 
-      if (yscroll > 0.5*height) {
-        bannerOpacity = 0.0;
-      } else if (yscroll > 0.1*height) {
-        bannerOpacity = 0.8;
-      } else {
-        bannerOpacity = 1.0;
-      }
+    // specs is an array of objects with shape {frac: Number, opacity: Number},
+    // ordered from bottom to top
+    const setElementOpacity = (className, specs) => {
+      const els = [...document.getElementsByClassName(className)];
 
-      bannerElements.forEach((el) => (el.style["opacity"] = bannerOpacity));
-    }
+      els.forEach((el) => {
+        const h = elementReferenceHeight(el);
+        spec = specs.reduce((left, right) => right.frac <= h ? right : left);
+        el.style.opacity = spec.opacity;
+      });
+    };
 
-    function setShadeStyle(yscroll) {
-      var height = window.innerHeight,
-          shadeOpacity,
-          shadeElements = [...document.getElementsByClassName("shade")];
+    const bannerSpecs = [
+      {frac: 0.0, opacity: 1.0},
+      {frac: 0.5, opacity: 1.0},
+      {frac: 0.8, opacity: 0.5},
+      {frac: 1.0, opacity: 0.0},
+    ];
 
-      if (yscroll < 0.5*height) {
-        shadeOpacity = 0.0;
-      } else if (yscroll < 0.7*height) {
-        shadeOpacity = 0.5;
-      } else if (yscroll < 0.9*height) {
-        shadeOpacity = 0.8;
-      } else {
-        shadeOpacity = 0.9;
-      }
+    const shadeSpecs = [
+      {frac: 0.0, opacity: 0.0},
+      {frac: 0.2, opacity: 0.7},
+      {frac: 0.3, opacity: 0.9},
+    ];
 
-      shadeElements.forEach((el) => (el.style["opacity"] = shadeOpacity));
-    }
-
-    setBannerStyle(window.scrollY);    // initialize
-    setShadeStyle(window.scrollY);
+    // initialize
+    setElementOpacity("banner", bannerSpecs);
+    setElementOpacity("shade", shadeSpecs);
 
     window.addEventListener('scroll', () => {
-      setBannerStyle(window.scrollY);
-      setShadeStyle(window.scrollY);
+      setElementOpacity("banner", bannerSpecs);
+      setElementOpacity("shade", shadeSpecs);
     });
 
     // Lazy load fonts after content
@@ -186,14 +182,6 @@
       loadFont(url);
     }
   </script>
-
-  <noscript>
-    <style>
-      .banner {
-        opacity: 1.0;
-      }
-    </style>
-  </noscript>
 
 </body>
 </html>
